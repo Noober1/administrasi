@@ -1,15 +1,55 @@
-import { Alert, Button, Paper, TextField, Typography } from '@mui/material'
+import { Alert, Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 import localization from '../../../constants/localization'
+import { connect } from 'react-redux'
+import { selectConfig } from '../../../lib/redux/slices/configSlice'
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
-const handleSubmitForm = event => {
-    event.preventDefault()
-    console.log('submitted')
-}
+{/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={handleChange('password')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl> */}
 
 const LoginBox = () => {
+    const config = useSelector(selectConfig)
+    const strings = localization(config.language)
+    const [loginValue, setloginValue] = useState({
+        username: '',
+        password: ''
+    })
+    const [showPassword, setshowPassword] = useState(false)
 
-    const local = localization()
+    const handleSubmitForm = event => {
+        event.preventDefault()
+        console.log('submitted')
+    }
+
+    const formChangeHandler = event => setloginValue({
+        ...loginValue,
+        [event.target.name]: event.target.value
+    })
+
+    const toggleShowPassword = () => setshowPassword(!showPassword)
 
     return(
         <Paper
@@ -27,33 +67,56 @@ const LoginBox = () => {
                 severity="info"
                 className="mb-5"
             >
-                {local.loginBoxTopMessage}
+                {strings.loginBoxTopMessage}
             </Alert>
             <TextField
                 className="mb-5"
                 fullWidth
-                label={local.username}
+                name="username"
+                value={loginValue.username}
+                onChange={formChangeHandler}
+                label={strings.username}
                 variant="outlined"
-                helperText={local.loginBoxUsernameHelperText}
+                helperText={strings.loginBoxUsernameHelperText}
                 inputProps={{
                     maxLength:20
                 }}
                 name="username"
                 required
             />
-            <TextField
+            <FormControl
+                variant="outlined"
                 className="mb-5"
                 fullWidth
-                label={local.password}
-                variant="outlined"
-                helperText={local.loginBoxPasswordHelperText}
-                name="password"
-                type="password"
-                inputProps={{
-                    maxLength:50
-                }}
-                required
-            />
+            >
+                <InputLabel htmlFor="login-box-password">{strings.password}</InputLabel>
+                <OutlinedInput
+                    id="login-box-password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={loginValue.password}
+                    onChange={formChangeHandler}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label={strings.togglePasswordVisibilityText}
+                                onClick={toggleShowPassword}
+                                onMouseDown={event => event.preventDefault()}
+                            >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                    inputProps={{
+                        maxLength:50
+                    }}
+                    label="Password"
+                    required
+                />
+                <FormHelperText>
+                    {strings.loginBoxPasswordHelperText}
+                </FormHelperText>
+            </FormControl>
             <Button
                 size="large"
                 type="submit"
@@ -62,10 +125,10 @@ const LoginBox = () => {
                 startIcon={<LoginIcon/>}
                 className="w-full"
             >
-                {local.loginBoxButtonText}
+                {strings.loginBoxButtonText}
             </Button>
         </Paper>
     )
 }
 
-export default LoginBox
+export default connect(state => state)(LoginBox)

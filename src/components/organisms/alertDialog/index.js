@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types'
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { localization } from '../../../constants';
+import useLocalization from '../../../lib/useLocalization';
 
 const AlertDialog = ({
 	children,
@@ -27,7 +27,7 @@ const AlertDialog = ({
 	const [open, setOpen] = useState(false);
 	const theme = useTheme()
 	const fullscreen = useMediaQuery(theme.breakpoints.down(sizeOnFullscreen))
-	const local = localization()
+	const strings = useLocalization()
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -57,7 +57,7 @@ const AlertDialog = ({
 	}
 
 	const handleCancel = () => {
-		if (typeof onConfirm === 'function') {
+		if (typeof onCancel === 'function') {
 			onCancel({
 				...events,
 				action: 'cancel'
@@ -94,10 +94,10 @@ const AlertDialog = ({
 				</DialogContent>
 				<DialogActions>
 					{showConfirmButton &&
-						<Button onClick={handleConfirm}>{confirmLabel ?? local.default.alertDialogConfirmButtonText}</Button>
+						<Button onClick={handleConfirm}>{confirmLabel ?? strings.default.alertDialogConfirmButtonText}</Button>
 					}
 					{showCancelButton &&
-						<Button onClick={handleCancel}>{cancelLabel ?? 'Batal'}</Button>
+						<Button onClick={handleCancel}>{cancelLabel ?? strings.default.alertDialogCancelButtonText}</Button>
 					}
 				</DialogActions>
 			</Dialog>
