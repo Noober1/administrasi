@@ -3,7 +3,21 @@ import { Panel } from '../../src/components/templates'
 
 const Student = () => {
     return (
-        'student'
+        <p>
+        student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+            student<br/>student<br/>student<br/>
+        </p>
     )
 }
 
