@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import { connect, useSelector } from 'react-redux'
 import { toggleIDENLang } from '../../../lib/redux/slices/configSlice'
 import { useDispatch } from 'react-redux'
-import { Avatar, Button, IconButton } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
+import { Tooltip } from '..'
+import useLocalization from '../../../lib/useLocalization'
 
 const ButtonSwitchLanguage = ({variant}) => {
     const config = useSelector(state => state.config)
     const dispatch = useDispatch()
+    const strings = useLocalization()
 
     const toggler = () => {
         dispatch(toggleIDENLang())
@@ -15,27 +18,30 @@ const ButtonSwitchLanguage = ({variant}) => {
 
     if (variant === 'button') {
         return (
-            <Button
-                onClick={toggler}
+            <Tooltip
+                title={strings.default.buttonSwitchLanguageTooltipText}
             >
-                {config.language == 'light' ? 'EN' : 'ID'}
-            </Button>
+                <Button
+                    onClick={toggler}
+                >
+                    {config.language == 'light' ? 'EN' : 'ID'}
+                </Button>
+            </Tooltip>
         )
     }
 
     return (
-        <IconButton
-            color="inherit"
-            onClick={toggler}
-            className="w-10 h-10 text-base font-bold"
+        <Tooltip
+            title={strings.buttonSwitchLanguageTooltipText}
         >
-            {/* <Avatar
-                className="w-10 h-10 bg-transparent text-white"
+            <IconButton
+                color="inherit"
+                onClick={toggler}
+                className="w-10 h-10 text-base font-bold"
             >
-                
-            </Avatar> */}
-            {config.language == 'en' ? 'EN' : 'ID'}
-        </IconButton>
+                {config.language == 'en' ? 'EN' : 'ID'}
+            </IconButton>
+        </Tooltip>
     )
 }
 

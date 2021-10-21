@@ -18,14 +18,26 @@ const typography = {
 
 const lightTheme = createTheme({
     palette:{
-        mode:'light'
+        mode:'light',
+        primary: {
+            main: '#3f51b5',
+        },
+        secondary: {
+            main: '#f50057',
+        },
     },
     typography
 })
 
 const darkTheme = createTheme({
     palette:{
-        mode:'dark'
+        mode:'dark',
+        primary: {
+            main: '#3f51b5',
+        },
+        secondary: {
+            main: '#f50057',
+        },
     },
     typography
 })

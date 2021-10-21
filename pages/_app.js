@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
 			<ThemeProvider theme={applyTheme}>
 				<CssBaseline/>
 				<NextNprogress
-					color={applyTheme.palette.success.main}
+					color={applyTheme.palette.secondary.main}
 					startPosition={0.3}
 					stopDelayMs={200}
 					height={3}

@@ -1,9 +1,25 @@
+import { Paper, Typography } from '@mui/material'
+import { Box } from '@mui/system'
 import React from 'react'
 import { Panel } from '../../src/components/templates'
+import useLocalization from '../../src/lib/useLocalization'
 
 const Dashboard = () => {
+    const strings = useLocalization()
+
     return (
-        'test'
+        <Box>
+            <Typography
+                variant="h5"
+            >
+                {strings.panel.pages.dashboard.welcomeMessage}
+            </Typography>
+            <Typography
+                variant="h4"
+            >
+                [USER_FULLNAME]
+            </Typography>
+        </Box>
     )
 }
 

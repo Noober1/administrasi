@@ -13,15 +13,19 @@ import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Menus from '../../organisms/dashboard/listItems';
 import Chart from '../../organisms/dashboard/Chart';
 import Deposits from '../../organisms/dashboard/Deposits.js';
 import Orders from '../../organisms/dashboard/Orders';
-import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright } from '../../atoms';
+import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, Tooltip } from '../../atoms';
 import PropTypes from 'prop-types'
+import useLocalization from '../../../lib/useLocalization';
+import { useTheme } from '@mui/system';
+import { Avatar, ClickAwayListener } from '@mui/material';
 
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -69,23 +73,29 @@ const Panel = ({children}) => {
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
+	const theme = useTheme()
+	const strings = useLocalization()
 
 	return (
 		<Box className="flex">
 			<AppBar position="absolute" open={open}>
 				<Toolbar className="pr-6">
-					<IconButton
-						edge="start"
-						color="inherit"
-						aria-label="open drawer"
-						onClick={toggleDrawer}
-						className="mr-9"
-						sx={{
-							...(open && { display: 'none' }),
-						}}
+					<Tooltip
+						title={strings.appBar.showMenuTooltipText}
 					>
-						<MenuIcon />
-					</IconButton>
+						<IconButton
+							edge="start"
+							color="inherit"
+							aria-label="open drawer"
+							onClick={toggleDrawer}
+							className="mr-9"
+							sx={{
+								...(open && { display: 'none' }),
+							}}
+						>
+							<MenuIcon />
+						</IconButton>
+					</Tooltip>
 					<Typography
 						component="h1"
 						variant="h6"
@@ -95,13 +105,26 @@ const Panel = ({children}) => {
 					>
 						STEI Al-Amar Subang
 					</Typography>
-					<IconButton color="inherit">
-						<Badge badgeContent={4} color="secondary">
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
+					<Tooltip
+						title={strings.appBar.notificationTooltipText}
+					>
+						<IconButton color="inherit">
+							<Badge badgeContent={4} color="secondary">
+									<NotificationsIcon />
+							</Badge>
+						</IconButton>
+					</Tooltip>
 					<ButtonSwitchLanguage />
 					<ButtonToggleDarkMode variant="icon"/>
+					<ClickAwayListener
+						onClickAway={() => alert('click away')}
+					>
+						<IconButton
+							onClick={() => alert('click inside')}
+						>
+							<KeyboardArrowDownRoundedIcon/>
+						</IconButton>
+					</ClickAwayListener>
 				</Toolbar>
 			</AppBar>
 			<Drawer variant="permanent" open={open}>
@@ -110,15 +133,31 @@ const Panel = ({children}) => {
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'flex-end',
-						px: [1],
+						px: [1]
 					}}
 				>
-				<IconButton onClick={toggleDrawer}>
-					<ChevronLeftIcon />
-				</IconButton>
+					<div className="w-full text-left flex overflow-hidden items-center">
+						<Avatar
+							className="mr-6 bg-blue-500"
+						>
+							TS
+						</Avatar>
+						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base" >
+							Cucu Ruhiyatna
+						</Typography>
+					</div>
+					<Tooltip
+						title={strings.appBar.hideMenuTooltipText}
+					>
+						<IconButton onClick={toggleDrawer}>
+							<ChevronLeftIcon />
+						</IconButton>
+					</Tooltip>
 				</Toolbar>
 				<Divider />
-				<Menus />
+				<Menus
+					menuOpen={open}
+				/>
 			</Drawer>
 			<Box
 				component="main"

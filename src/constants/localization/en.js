@@ -8,6 +8,11 @@ export default function english() {
             alertLogoutBodyText: "Are you sure want to logout?",
             alertLogoutText: "Logout"
         },
+        appBar: {
+            notificationTooltipText: "Notification",
+            showMenuTooltipText: "Show menu",
+            hideMenuTooltipText: "Hide menu",
+        },
         username: "Username",
         password: "Password",
         togglePasswordVisibilityText:"Tampilkan/sembunyikan kata sandi",
@@ -18,6 +23,11 @@ export default function english() {
                 paymentText: "Payment",
                 invoicesText: "Invoice",
                 studentListText: "Student List"
+            },
+            pages:{
+                dashboard:{
+                    welcomeMessage: "Welcome back"
+                }
             }
         },
         buttonToggleDarkMode:{
@@ -26,6 +36,7 @@ export default function english() {
             switchToLightText: "Switch to light mode",
             switchToDarkText: "Switch to dark mode"
         },
+        buttonSwitchLanguageTooltipText:"Ubah bahasa",
         accountInformationButtonText:"Account information",
         loginBoxTopMessage: "Please login to continue",
         loginBoxUsernameHelperText: "Max 20 characters with letter and number combination without space",

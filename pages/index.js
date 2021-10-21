@@ -17,13 +17,15 @@ const Index = ({auth}) => {
     }
 
     return (
-        <div className="w-screen h-screen flex items-center text-center">
-            <ButtonToggleDarkMode
-                variant="icon"
-            />
-            <ButtonSwitchLanguage
-                variant="icon"
-            />
+        <div className="w-screen h-screen flex items-center text-center flex-col justify-center">
+            <div className="mb-2">
+                <ButtonToggleDarkMode
+                    variant="icon"
+                />
+                <ButtonSwitchLanguage
+                    variant="icon"
+                />
+            </div>
             <div className="grid grid-cols-1 mx-auto">
                 <LoginBox/>
                 <div className="grid grid-cols-2 px-3">
