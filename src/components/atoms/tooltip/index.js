@@ -7,9 +7,9 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 	[`& .${tooltipClasses.tooltip}`]: {
 		backgroundColor: theme.palette.background.paper,
 		color: theme.palette.text.primary,
-		maxWidth: 220,
+		maxWidth: 350,
 		fontSize: theme.typography.pxToRem(16),
-		borderRadius: 5,
+		borderRadius: 5
 	},
 	[`& .${tooltipClasses.arrow}`]: {
 		borderColor: theme.palette.background.paper,

@@ -1,38 +1,15 @@
 import { Alert, Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
-import localization from '../../../constants/localization'
-import { connect } from 'react-redux'
-import { selectConfig } from '../../../lib/redux/slices/configSlice'
-import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-
-{/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl> */}
+import { Tooltip } from '../../atoms'
+import useLocalization from '../../../lib/useLocalization'
+import { useDispatch } from 'react-redux'
+import { hideSpinner, setSpinnerHideOnClick, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 
 const LoginBox = () => {
-    const config = useSelector(selectConfig)
-    const strings = localization(config.language)
+    const dispatch = useDispatch()
+    const strings = useLocalization()
     const [loginValue, setloginValue] = useState({
         username: '',
         password: ''
@@ -41,7 +18,10 @@ const LoginBox = () => {
 
     const handleSubmitForm = event => {
         event.preventDefault()
-        console.log('submitted')
+        dispatch(showSpinner(true))
+        setTimeout(() => {
+            dispatch(hideSpinner())
+        }, 3000);
     }
 
     const formChangeHandler = event => setloginValue({
@@ -56,6 +36,7 @@ const LoginBox = () => {
             component="form"
             className="max-w-md p-5 mb-2"
             onSubmit={handleSubmitForm}
+            autoComplete="off"
         >
             <Typography
                 variant="h4"
@@ -83,6 +64,7 @@ const LoginBox = () => {
                 }}
                 name="username"
                 required
+                autoFocus
             />
             <FormControl
                 variant="outlined"
@@ -98,13 +80,18 @@ const LoginBox = () => {
                     onChange={formChangeHandler}
                     endAdornment={
                         <InputAdornment position="end">
-                            <IconButton
-                                aria-label={strings.togglePasswordVisibilityText}
-                                onClick={toggleShowPassword}
-                                onMouseDown={event => event.preventDefault()}
+                            <Tooltip
+                                title={strings.togglePasswordVisibilityText}
+                                arrow
                             >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
+                                <IconButton
+                                    aria-label={strings.togglePasswordVisibilityText}
+                                    onClick={toggleShowPassword}
+                                    onMouseDown={event => event.preventDefault()}
+                                >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </Tooltip>
                         </InputAdornment>
                     }
                     inputProps={{
@@ -131,4 +118,4 @@ const LoginBox = () => {
     )
 }
 
-export default connect(state => state)(LoginBox)
+export default LoginBox

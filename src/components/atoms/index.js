@@ -4,6 +4,7 @@ import ButtonToggleDarkMode from './buttonToggleDarkMode'
 import IconButtonAvatar from './IconButtonAvatar'
 import Copyright from './Copyright'
 import Tooltip from './tooltip'
+import SpinnerBackdrop from './spinnerBackdrop'
 
 export {
     Link,
@@ -11,5 +12,6 @@ export {
     ButtonSwitchLanguage,
     IconButtonAvatar,
     Copyright,
-    Tooltip
+    Tooltip,
+    SpinnerBackdrop
 }

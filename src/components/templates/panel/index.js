@@ -13,7 +13,6 @@ import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Menus from '../../organisms/dashboard/listItems';
 import Chart from '../../organisms/dashboard/Chart';
 import Deposits from '../../organisms/dashboard/Deposits.js';
@@ -21,8 +20,8 @@ import Orders from '../../organisms/dashboard/Orders';
 import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, Tooltip } from '../../atoms';
 import PropTypes from 'prop-types'
 import useLocalization from '../../../lib/useLocalization';
-import { useTheme } from '@mui/system';
-import { Avatar, ClickAwayListener } from '@mui/material';
+import { Avatar } from '@mui/material';
+import { MenuDropdown } from '../../organisms';
 
 
 const drawerWidth = 300;
@@ -73,7 +72,6 @@ const Panel = ({children}) => {
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
-	const theme = useTheme()
 	const strings = useLocalization()
 
 	return (
@@ -116,15 +114,7 @@ const Panel = ({children}) => {
 					</Tooltip>
 					<ButtonSwitchLanguage />
 					<ButtonToggleDarkMode variant="icon"/>
-					<ClickAwayListener
-						onClickAway={() => alert('click away')}
-					>
-						<IconButton
-							onClick={() => alert('click inside')}
-						>
-							<KeyboardArrowDownRoundedIcon/>
-						</IconButton>
-					</ClickAwayListener>
+					<MenuDropdown/>
 				</Toolbar>
 			</AppBar>
 			<Drawer variant="permanent" open={open}>
@@ -138,7 +128,7 @@ const Panel = ({children}) => {
 				>
 					<div className="w-full text-left flex overflow-hidden items-center">
 						<Avatar
-							className="mr-6 bg-blue-500"
+							className="mr-6 bg-blue-500 font-bold"
 						>
 							TS
 						</Avatar>

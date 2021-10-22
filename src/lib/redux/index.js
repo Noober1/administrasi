@@ -4,11 +4,13 @@ import thunkMiddleware from "redux-thunk";
 import configSlice from "./slices/configSlice"
 import authSlice from "./slices/authSlice"
 import { configureStore } from "@reduxjs/toolkit";
+import noPersistConfig from "./slices/noPersistConfigSlice";
 
 //COMBINING ALL REDUCERS
 const combinedReducer = combineReducers({
 	config: configSlice.reducer,
-	auth: authSlice.reducer
+	auth: authSlice.reducer,
+	noPersistConfig: noPersistConfig.reducer
 });
 
 // // BINDING MIDDLEWARE

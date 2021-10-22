@@ -12,6 +12,12 @@ export default function english() {
             notificationTooltipText: "Notification",
             showMenuTooltipText: "Show menu",
             hideMenuTooltipText: "Hide menu",
+            toggleMiniMenu: "Show / hide menu",
+            settingMiniMenuText: "Settings"
+        },
+        about: {
+            officialWebsiteText: "Official Website",
+            findUsText: "Find Us"
         },
         username: "Username",
         password: "Password",
@@ -22,7 +28,8 @@ export default function english() {
                 dashboardText: "Dashboard",
                 paymentText: "Payment",
                 invoicesText: "Invoice",
-                studentListText: "Student List"
+                studentListText: "Student List",
+                classListText: "Class List"
             },
             pages:{
                 dashboard:{

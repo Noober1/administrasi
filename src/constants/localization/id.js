@@ -12,6 +12,12 @@ export default function indonesian() {
             notificationTooltipText: "Pemberitahuan",
             showMenuTooltipText: "Tampilkan menu",
             hideMenuTooltipText: "Sembunyikan menu",
+            toggleMiniMenu: "Tampilkan / sembunyikan menu",
+            settingMiniMenuText: "Pengaturan"
+        },
+        about: {
+            officialWebsiteText: "Situs resmi",
+            findUsText: "Temukan Kami"
         },
         username: "Nama pengguna",
         password: "Kata sandi",
@@ -22,7 +28,8 @@ export default function indonesian() {
                 dashboardText: "Beranda",
                 paymentText: "Pembayaran",
                 invoicesText: "Invoice",
-                studentListText: "Daftar Mahasiswa"
+                studentListText: "Daftar Mahasiswa",
+                classListText: "Kelas / Angkatan"
             },
             pages:{
                 dashboard:{

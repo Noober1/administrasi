@@ -1,20 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { AlertDialog, LoginBox } from '../src/components/organisms'
-import { Button, Link } from '@mui/material'
+import { Link } from '@mui/material'
 import { ButtonSwitchLanguage, ButtonToggleDarkMode, Link as NextLink } from '../src/components/atoms'
-import { localization } from '../src/constants'
-import { connect, useDispatch, useSelector } from 'react-redux'
-import { selectConfig, setLanguage, toggleDarkMode } from '../src/lib/redux/slices/configSlice'
+import { connect, useDispatch } from 'react-redux'
+import useLocalization from '../src/lib/useLocalization'
 
-const Index = ({auth}) => {
+const Index = () => {
     const dispatch = useDispatch()
-    const config = useSelector(selectConfig)
-    const strings = localization(config.language)
-
-    const handleClick = () => {
-        dispatch(setLanguage(config.language == 'en' ? 'id' : 'en'))
-        dispatch(toggleDarkMode())
-    }
+    const strings = useLocalization()
 
     return (
         <div className="w-screen h-screen flex items-center text-center flex-col justify-center">

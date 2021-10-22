@@ -9,19 +9,13 @@ import { useStore } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useSelector } from 'react-redux'
 import { selectConfig } from '../src/lib/redux/slices/configSlice'
-import { useEffect } from 'react'
+import MainSpinner from '../src/components/molecules/mainSpinner';
 
 function MyApp({ Component, pageProps }) {
 	const store = useStore((state) => state);
 	const config = useSelector(selectConfig)
 	const getLayout = Component.getLayout || ((page) => page)
 	const applyTheme = config.theme == 'light' ? theme.lightTheme : theme.darkTheme
-	
-	if (process.env.NODE_ENV !== "production") {
-		useEffect(() => {
-			console.log(config)
-		}, [config])
-	}
 
 	const Body = () => getLayout(<Component {...pageProps} />)
 
@@ -40,6 +34,7 @@ function MyApp({ Component, pageProps }) {
 					}}
 				/>
 				<Body/>
+				<MainSpinner/>
 			</ThemeProvider>
 		</PersistGate>
 	);
