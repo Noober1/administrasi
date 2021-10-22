@@ -1,27 +1,22 @@
+import { Alert, Typography } from '@mui/material'
+import { Box } from '@mui/system'
 import React from 'react'
+import { PanelContentTitle } from '../../src/components/atoms/dashboard'
 import { Panel } from '../../src/components/templates'
 
 const Student = () => {
     return (
-        <p>
-        student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-            student<br/>student<br/>student<br/>
-        </p>
+        <Box>
+            <PanelContentTitle title="manakutau"/>
+            <Alert severity="info">
+                Berikut adalah data mahasiswa
+            </Alert>
+            
+        </Box>
     )
 }
 
-Student.getLayout = (page) => (
+Student.getLayout = page => (
     <Panel>
         {page}
     </Panel>
