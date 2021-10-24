@@ -10,6 +10,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { useSelector } from 'react-redux'
 import { selectConfig } from '../src/lib/redux/slices/configSlice'
 import MainSpinner from '../src/components/molecules/mainSpinner';
+import { SpinnerBackdrop } from '../src/components/atoms';
 
 function MyApp({ Component, pageProps }) {
 	const store = useStore((state) => state);
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }) {
 	const Body = () => getLayout(<Component {...pageProps} />)
 
 	return(
-		<PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
+		<PersistGate persistor={store.__persistor} loading={<SpinnerBackdrop/>}>
 			<ThemeProvider theme={applyTheme}>
 				<CssBaseline/>
 				<NextNprogress
