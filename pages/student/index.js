@@ -7,8 +7,7 @@ import { Panel, ServerSideTable } from '../../src/components/templates'
 const columns = [
     {
         field:'code',
-        headerName:'Kode',
-        flex:1
+        headerName:'Kode'
     },
     {
         field: 'name',
@@ -17,53 +16,11 @@ const columns = [
     },
     {
         field: 'brand',
-        headerName: 'Merek',
-        flex:1
+        headerName: 'Merek'
     },
     {
         field: 'model',
-        headerName: 'Model',
-        flex:1
-    },
-    {
-        field:'id',
-        flex: 1,
-        minWidth: 250,
-        headerName:'Aksi',
-        sortable:false,
-        disableHide:true,
-        filterable: false,
-        disableMenu:true,
-        headerAlign:'center',
-        align:'center',
-        renderCell: params => (
-            <>
-                <Button
-                    size="small"
-                    variant="outlined"
-                    className="bg-blue-500 text-white mr-1"
-                    onClick={() => handleEditItem(params.row)}
-                >
-                    Edit
-                </Button>
-                <Button
-                    size="small"
-                    variant="outlined"
-                    className="bg-green-500 text-white mr-1"
-                    onClick={() => router.push('/transaksi/' + params.row.id)}
-                >
-                    Transaksi
-                </Button>
-                <Button
-                    size="small"
-                    variant="outlined"
-                    className="bg-red-500 text-white mr-1"
-                    onClick={() => handleDeleteItem(params.row.id)}
-                >
-                    Hapus
-                </Button>
-            </>
-        )
+        headerName: 'Model'
     }
 ];
 

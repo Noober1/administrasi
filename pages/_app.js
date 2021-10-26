@@ -9,8 +9,8 @@ import { useStore } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useSelector } from 'react-redux'
 import { selectConfig } from '../src/lib/redux/slices/configSlice'
-import MainSpinner from '../src/components/molecules/mainSpinner';
 import { SpinnerBackdrop } from '../src/components/atoms';
+import { MainSpinner } from '../src/components/molecules';
 
 function MyApp({ Component, pageProps }) {
 	const store = useStore((state) => state);

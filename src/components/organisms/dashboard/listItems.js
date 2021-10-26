@@ -100,6 +100,15 @@ const Menus = ({menuOpen}) => {
 			<List className="p-0">
 				<SecondaryListItems/>
 			</List>
+			<List className="p-0">
+				{process.env.NODE_ENV == 'development' &&
+					<MenuLink
+						link="/test"
+						text="Test Page"
+						icon={<DashboardIcon />}
+					/>
+				}
+			</List>
 		</>
 	)
 }

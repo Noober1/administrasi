@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { DataGrid } from '@mui/x-data-grid'
 import { useFetchApi } from '../../../lib'
 import { useEffectOnce, useUpdateEffect } from 'react-use'
-import { Typography, Button, CircularProgress, Skeleton } from '@mui/material';
+import { Typography, Button, CircularProgress, Skeleton, useTheme } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 
 const ServerSideTable = forwardRef((props, ref) => {
@@ -16,15 +16,17 @@ const ServerSideTable = forwardRef((props, ref) => {
 
     const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`)
 
-    const [selections, setSelections] = useState([])
     const [completeInit, setcompleteInit] = useState(false)
     const [paginationData, setpaginationData] = useState({})
     const [rows, setRows] = useState([]);
+    const [selections, setSelections] = useState([])
     const [searchOnChange, setsearchOnChange] = useState('')
     const [searchText, setSearchText] = useState('');
 
+    const theme = useTheme()
+
     useUpdateEffect(() => {
-        if (!loading) {
+        if (!loading && data !== null) {
             setRows(data.data)
             if (!completeInit) {
                 setpaginationData(data.pagination)
@@ -76,6 +78,9 @@ const ServerSideTable = forwardRef((props, ref) => {
 
     return (
         <DataGrid
+            style={{
+                backgroundColor:theme.palette.background.paper
+            }}
             checkboxSelection
             autoHeight
             pagination

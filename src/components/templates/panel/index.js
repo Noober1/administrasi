@@ -133,7 +133,7 @@ const Panel = ({children}) => {
 							TS
 						</Avatar>
 						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base" >
-							Cucu Ruhiyatna
+							[USER_FULLNAME]
 						</Typography>
 					</div>
 					<Tooltip
