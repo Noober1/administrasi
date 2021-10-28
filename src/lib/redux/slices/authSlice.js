@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { HYDRATE } from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper'
+// import AuthService from '../../auth/authService';
+
+// const auth = new AuthService()
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -9,7 +12,7 @@ const authSlice = createSlice({
 	reducers: {
 		setAuthToken(state, action) {
 			state.authToken = action.payload
-		},
+		}
 	},
 	extraReducers: {
 		[HYDRATE]: (state, action) => {
@@ -21,7 +24,7 @@ const authSlice = createSlice({
 	},
 });
 
-export const { setAuthToken } = authSlice.actions
+export const { setAuthToken, login } = authSlice.actions
 
 export const selectAuth = state => state.auth
 

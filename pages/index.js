@@ -1,13 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AlertDialog, LoginBox } from '../src/components/organisms'
 import { Link } from '@mui/material'
-import { ButtonSwitchLanguage, ButtonToggleDarkMode, Link as NextLink } from '../src/components/atoms'
-import { connect, useDispatch } from 'react-redux'
+import { ButtonSwitchLanguage, ButtonToggleDarkMode, Link as NextLink, SpinnerBackdrop } from '../src/components/atoms'
+import { connect } from 'react-redux'
 import useLocalization from '../src/lib/useLocalization'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../src/lib/redux/slices/authSlice'
+import { useRouter } from 'next/router'
 
 const Index = () => {
-    const dispatch = useDispatch()
+    const [loading, setloading] = useState(true)
     const strings = useLocalization()
+    const auth = useSelector(selectAuth)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (auth) {
+            if (auth.authToken) {
+                router.push('/dashboard')
+            } else {
+                setloading(false)
+            }
+        }
+    }, [auth])
+    
+    if (loading) {
+        return(
+            <SpinnerBackdrop/>
+        )
+    }
 
     return (
         <div className="w-screen h-screen flex items-center text-center flex-col justify-center">

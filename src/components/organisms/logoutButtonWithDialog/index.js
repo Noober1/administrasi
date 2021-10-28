@@ -3,11 +3,14 @@ import React from 'react'
 import useLocalization from '../../../lib/useLocalization'
 import AlertDialog from '../alertDialog'
 import PropTypes from 'prop-types'
+import { setAuthToken } from '../../../lib/redux/slices/authSlice'
+import { useDispatch } from 'react-redux'
 
 const LogoutButtonWithDialog = ({children}) => {
+    const dispatch = useDispatch()
     const strings = useLocalization()
     const handleConfirmLogout = events => {
-        console.log('submitted')
+        dispatch(setAuthToken(null))
         events.closeDialog()
     }
 

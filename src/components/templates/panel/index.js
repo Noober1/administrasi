@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -17,11 +17,14 @@ import Menus from '../../organisms/dashboard/listItems';
 import Chart from '../../organisms/dashboard/Chart';
 import Deposits from '../../organisms/dashboard/Deposits.js';
 import Orders from '../../organisms/dashboard/Orders';
-import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, Tooltip } from '../../atoms';
+import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, SpinnerBackdrop, Tooltip } from '../../atoms';
 import PropTypes from 'prop-types'
 import useLocalization from '../../../lib/useLocalization';
 import { Avatar } from '@mui/material';
 import { MenuDropdown } from '../../organisms';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../../lib/redux/slices/authSlice';
+import { useRouter } from 'next/router';
 
 
 const drawerWidth = 300;
@@ -68,11 +71,30 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const Panel = ({children}) => {
+	
 	const [open, setOpen] = useState(true);
+	const [loadingAuth, setloadingAuth] = useState(true)
+	const router = useRouter()
+	const auth = useSelector(selectAuth)
+	
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
 	const strings = useLocalization()
+
+	useEffect(() => {
+		if (auth) {
+            if (auth.authToken == null) {
+                router.push('/')
+            } else {
+                setloadingAuth(false)
+            }
+        }
+	}, [auth])
+
+	if (loadingAuth) {
+		return <SpinnerBackdrop />
+	}
 
 	return (
 		<Box className="flex">

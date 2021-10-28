@@ -6,7 +6,8 @@ export default function indonesian() {
             alertDialogCancelButtonText: "Batal",
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
-            alertLogoutText: "Keluar"
+            alertLogoutText: "Keluar",
+            anErrorOccured: "Terjadi kesalahan"
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
@@ -14,6 +15,9 @@ export default function indonesian() {
             hideMenuTooltipText: "Sembunyikan menu",
             toggleMiniMenu: "Tampilkan / sembunyikan menu",
             settingMiniMenuText: "Pengaturan"
+        },
+        login: {
+            usernamePasswordWrong: "Nama pengguna atau kata sandi salah"
         },
         about: {
             officialWebsiteText: "Situs resmi",
@@ -46,7 +50,7 @@ export default function indonesian() {
         buttonSwitchLanguageTooltipText:"Switch Language",
         accountInformationButtonText:"Informasi akun",
         loginBoxTopMessage: "Silahkan untuk masuk melanjutkan",
-        loginBoxUsernameHelperText: "Maksimal 20 karakter dengan kombinasi huruf dan angka tanpa spasi",
+        loginBoxUsernameHelperText: "Maksimal 50 karakter dengan kombinasi huruf dan angka tanpa spasi",
         loginBoxPasswordHelperText: "Maksimal 50 karakter dengan kombinasi huruf, angka dan simbol tanpa spasi",
         loginBoxButtonText: "Masuk"
     }

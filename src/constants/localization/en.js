@@ -6,7 +6,8 @@ export default function english() {
             alertDialogCancelButtonText: "Cancel",
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
-            alertLogoutText: "Logout"
+            alertLogoutText: "Logout",
+            anErrorOccured: "An error occured"
         },
         appBar: {
             notificationTooltipText: "Notification",
@@ -14,6 +15,9 @@ export default function english() {
             hideMenuTooltipText: "Hide menu",
             toggleMiniMenu: "Show / hide menu",
             settingMiniMenuText: "Settings"
+        },
+        login: {
+            usernamePasswordWrong: "Username or password incorrect"
         },
         about: {
             officialWebsiteText: "Official Website",
@@ -46,7 +50,7 @@ export default function english() {
         buttonSwitchLanguageTooltipText:"Ubah bahasa",
         accountInformationButtonText:"Account information",
         loginBoxTopMessage: "Please login to continue",
-        loginBoxUsernameHelperText: "Max 20 characters with letter and number combination without space",
+        loginBoxUsernameHelperText: "Max 50 characters with letter and number combination without space",
         loginBoxPasswordHelperText: "Max 50 characters with letter, number and symbol combination without space",
         loginBoxButtonText: "Login"
     }
