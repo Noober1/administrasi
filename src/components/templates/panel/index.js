@@ -20,11 +20,14 @@ import Orders from '../../organisms/dashboard/Orders';
 import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, SpinnerBackdrop, Tooltip } from '../../atoms';
 import PropTypes from 'prop-types'
 import useLocalization from '../../../lib/useLocalization';
-import { Avatar } from '@mui/material';
+import useFetchApi from '../../../lib/useFetchApi';
+import { Avatar, Button } from '@mui/material';
 import { MenuDropdown } from '../../organisms';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../lib/redux/slices/authSlice';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { hideSpinner, selectNoPersistConfig, setProfile } from '../../../lib/redux/slices/noPersistConfigSlice';
 
 
 const drawerWidth = 300;
@@ -72,10 +75,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Panel = ({children}) => {
 	
+	const dispatch = useDispatch()
+	const router = useRouter()
+	const noPersistConfig = useSelector(selectNoPersistConfig)
+	const auth = useSelector(selectAuth)
+
 	const [open, setOpen] = useState(true);
 	const [loadingAuth, setloadingAuth] = useState(true)
-	const router = useRouter()
-	const auth = useSelector(selectAuth)
+	const [loadingProfile, setloadingProfile] = useState(true)
+	loading
+
+	const [profileData, loadingFetchProfile, isError, errorMessage] = useFetchApi(null, {
+		url: '/user/profile',
+		headers:{
+			"Authorization" : `Bearer ${auth.authToken}`
+		}
+	})
+	const loading = (loadingAuth || loadingProfile || !noPersistConfig.profile)
 	
 	const toggleDrawer = () => {
 		setOpen(!open);
@@ -88,11 +104,19 @@ const Panel = ({children}) => {
                 router.push('/')
             } else {
                 setloadingAuth(false)
+				dispatch(hideSpinner())
             }
         }
 	}, [auth])
 
-	if (loadingAuth) {
+	useEffect(() => {
+		if (!isError) {
+			setloadingProfile(false)
+			dispatch(setProfile(profileData))
+		}
+	}, [profileData])
+
+	if (loading) {
 		return <SpinnerBackdrop />
 	}
 
@@ -155,7 +179,7 @@ const Panel = ({children}) => {
 							TS
 						</Avatar>
 						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base" >
-							[USER_FULLNAME]
+							{noPersistConfig.profile.fullName || ''}
 						</Typography>
 					</div>
 					<Tooltip

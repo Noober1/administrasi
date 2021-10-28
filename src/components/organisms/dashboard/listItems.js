@@ -20,7 +20,6 @@ const Menus = ({menuOpen}) => {
 	if (process.env.NODE_ENV == 'development') {
 		useEffect(() => {
 			console.log('listItem > Router:', router)
-			console.log(firstRoute)
 		}, [router])
 	}
 

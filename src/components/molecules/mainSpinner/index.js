@@ -13,7 +13,7 @@ const MainSpinner = () => {
 
     if (process.env.NODE_ENV == 'development') {
         useEffect(() => {
-            console.log(config)
+            console.log('Components > MainSpinner ',config)
         }, [config])
     }
 

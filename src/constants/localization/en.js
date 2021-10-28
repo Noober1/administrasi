@@ -17,7 +17,8 @@ export default function english() {
             settingMiniMenuText: "Settings"
         },
         login: {
-            usernamePasswordWrong: "Username or password incorrect"
+            usernamePasswordWrongText: "Username or password incorrect",
+            loginForbiddenText: "This account has no permission"
         },
         about: {
             officialWebsiteText: "Official Website",

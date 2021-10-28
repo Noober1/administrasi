@@ -17,7 +17,8 @@ export default function indonesian() {
             settingMiniMenuText: "Pengaturan"
         },
         login: {
-            usernamePasswordWrong: "Nama pengguna atau kata sandi salah"
+            usernamePasswordWrongText: "Nama pengguna atau kata sandi salah",
+            loginForbiddenText: "Akun ini tidak mempunyai hak akses"
         },
         about: {
             officialWebsiteText: "Situs resmi",
@@ -49,7 +50,7 @@ export default function indonesian() {
         },
         buttonSwitchLanguageTooltipText:"Switch Language",
         accountInformationButtonText:"Informasi akun",
-        loginBoxTopMessage: "Silahkan untuk masuk melanjutkan",
+        loginBoxTopMessage: "Silahkan masuk untuk melanjutkan",
         loginBoxUsernameHelperText: "Maksimal 50 karakter dengan kombinasi huruf dan angka tanpa spasi",
         loginBoxPasswordHelperText: "Maksimal 50 karakter dengan kombinasi huruf, angka dan simbol tanpa spasi",
         loginBoxButtonText: "Masuk"

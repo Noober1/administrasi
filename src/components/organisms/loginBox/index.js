@@ -1,18 +1,17 @@
 import { Alert, Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Tooltip } from '../../atoms'
 import useLocalization from '../../../lib/useLocalization'
 import { useDispatch } from 'react-redux'
-import { hideSpinner, setSpinnerHideOnClick, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
-import { login, selectAuth, setAuthToken } from '../../../lib/redux/slices/authSlice'
+import { hideSpinner,  showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import { selectAuth, setAuthToken } from '../../../lib/redux/slices/authSlice'
 import fetchAPI from '../../../lib/fetchApi'
 import { useSelector } from 'react-redux'
 
 const LoginBox = () => {
     const dispatch = useDispatch()
-    const auth = useSelector(selectAuth)
     const strings = useLocalization()
     const [loginValue, setloginValue] = useState({
         username: '',
@@ -25,19 +24,16 @@ const LoginBox = () => {
         message:''
     })
 
-    useEffect(() => {
-        if (auth.authToken !== null) {
-            dispatch(hideSpinner())
-        }
-    }, [auth])
-
     const handleSubmitForm = event => {
         event.preventDefault()
         dispatch(showSpinner(true))
         fetchAPI({
             url: '/auth/login',
             method: 'POST',
-            data: loginValue
+            data: {
+                ...loginValue,
+                app:'administrasi'
+            }
         }).then(result => {
             dispatch(setAuthToken(result.accessToken))
             setloginError({
@@ -49,10 +45,16 @@ const LoginBox = () => {
         .catch(error => {
             if (error?.response?.data) {
                 const { data } = error.response
-                if (error.response.data.code === 'WRONG_AUTH') {
+                if (data.code === 'WRONG_AUTH') {
                     setloginError({
                         code:data.code,
-                        message:strings.login.usernamePasswordWrong,
+                        message:strings.login.usernamePasswordWrongText,
+                        isError:true
+                    })
+                } else if (data.code === 'NO_PERMISSION') {
+                    setloginError({
+                        code:data.code,
+                        message:strings.login.loginForbiddenText,
                         isError:true
                     })
                 } else {

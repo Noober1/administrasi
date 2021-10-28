@@ -1,10 +1,8 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
-import thunkMiddleware from "redux-thunk";
-import configSlice from "./slices/configSlice"
-import authSlice from "./slices/authSlice"
 import { configureStore } from "@reduxjs/toolkit";
-import noPersistConfig from "./slices/noPersistConfigSlice";
+import thunkMiddleware from "redux-thunk";
+import { authSlice, configSlice, noPersistConfig } from './slices'
 
 //COMBINING ALL REDUCERS
 const combinedReducer = combineReducers({

@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { AlertDialog, LoginBox } from '../src/components/organisms'
 import { Link } from '@mui/material'
 import { ButtonSwitchLanguage, ButtonToggleDarkMode, Link as NextLink, SpinnerBackdrop } from '../src/components/atoms'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import useLocalization from '../src/lib/useLocalization'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../src/lib/redux/slices/authSlice'
 import { useRouter } from 'next/router'
+import { hideSpinner } from '../src/lib/redux/slices/noPersistConfigSlice'
 
 const Index = () => {
     const [loading, setloading] = useState(true)
     const strings = useLocalization()
+    const dispatch = useDispatch()
     const auth = useSelector(selectAuth)
     const router = useRouter()
 
@@ -19,6 +21,7 @@ const Index = () => {
             if (auth.authToken) {
                 router.push('/dashboard')
             } else {
+                dispatch(hideSpinner())
                 setloading(false)
             }
         }

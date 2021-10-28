@@ -18,8 +18,6 @@ function MyApp({ Component, pageProps }) {
 	const getLayout = Component.getLayout || ((page) => page)
 	const applyTheme = config.theme == 'light' ? theme.lightTheme : theme.darkTheme
 
-	const Body = () => getLayout(<Component {...pageProps} />)
-
 	return(
 		<PersistGate persistor={store.__persistor} loading={<SpinnerBackdrop/>}>
 			<ThemeProvider theme={applyTheme}>
@@ -34,7 +32,7 @@ function MyApp({ Component, pageProps }) {
 						showSpinner:true
 					}}
 				/>
-				<Body/>
+				{getLayout(<Component {...pageProps} />)}
 				<MainSpinner/>
 			</ThemeProvider>
 		</PersistGate>

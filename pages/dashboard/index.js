@@ -3,9 +3,11 @@ import { Box } from '@mui/system'
 import React from 'react'
 import { Panel } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
+import useProfile from '../../src/lib/useProfile'
 
 const Dashboard = () => {
     const strings = useLocalization()
+    const profile = useProfile()
 
     return (
         <Box>
@@ -17,7 +19,7 @@ const Dashboard = () => {
             <Typography
                 variant="h4"
             >
-                [USER_FULLNAME]
+                {profile.fullName}
             </Typography>
         </Box>
     )

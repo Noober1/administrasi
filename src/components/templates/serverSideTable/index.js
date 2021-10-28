@@ -35,13 +35,15 @@ const ServerSideTable = forwardRef((props, ref) => {
         }
     }, [loading])
 
-    useUpdateEffect(() => {
-        console.log(data,loading,isError,errorMessage)
-    }, [data,loading,isError,errorMessage])
-
-    useUpdateEffect(() => {
-        console.log(page)
-    }, [page])
+    if (process.env.NODE_ENV === 'development') {
+        useUpdateEffect(() => {
+            console.log('Component > ServerSideTable: fetching data',data,loading,isError,errorMessage)
+        }, [data,loading,isError,errorMessage])
+    
+        useUpdateEffect(() => {
+            console.log('Component > ServerSideTable: table page', page)
+        }, [page])
+    }
 
     const InitView = () => (
         <div className="relative w-full h-80 py-12 overflow-hidden rounded-md">

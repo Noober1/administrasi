@@ -8,6 +8,14 @@ const noPersistConfig = createSlice({
 			showSpinner: false,
 			hideOnClick: true,
 			methods: {}
+		},
+		profile:{
+			firstName:'',
+			lastName:'',
+			fullName:'',
+			level:'',
+			permission:[],
+			email: ''
 		}
 	},
 	reducers: {
@@ -23,6 +31,9 @@ const noPersistConfig = createSlice({
 		},
 		setSpinnerHideOnClick(state,actions) {
 			state.spinner.hideOnClick = actions.payload
+		},
+		setProfile(state,actions) {
+			state.profile = actions.payload
 		}
 	},
 	extraReducers: {
@@ -38,7 +49,8 @@ const noPersistConfig = createSlice({
 export const {
 	showSpinner,
 	hideSpinner,
-	setSpinnerHideOnClick
+	setSpinnerHideOnClick,
+	setProfile
 } = noPersistConfig.actions
 
 export const selectNoPersistConfig = state => state.noPersistConfig

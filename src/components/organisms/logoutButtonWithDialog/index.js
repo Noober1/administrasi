@@ -5,12 +5,14 @@ import AlertDialog from '../alertDialog'
 import PropTypes from 'prop-types'
 import { setAuthToken } from '../../../lib/redux/slices/authSlice'
 import { useDispatch } from 'react-redux'
+import { showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 
 const LogoutButtonWithDialog = ({children}) => {
     const dispatch = useDispatch()
     const strings = useLocalization()
     const handleConfirmLogout = events => {
         dispatch(setAuthToken(null))
+        dispatch(showSpinner(true))
         events.closeDialog()
     }
 
@@ -19,6 +21,7 @@ const LogoutButtonWithDialog = ({children}) => {
             title={strings.default.alertLogoutTitleText}
             showCancelButton={true}
             content={strings.default.alertLogoutBodyText}
+            confirmLabel={strings.default.alertLogoutText}
             onConfirm={handleConfirmLogout}
         >
             {children ? children :
