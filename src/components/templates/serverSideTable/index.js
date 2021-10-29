@@ -28,7 +28,7 @@ const ServerSideTable = forwardRef((props, ref) => {
     const [rows, setRows] = useState([]);
     const [selections, setSelections] = useState([])
     const [searchOnChange, setsearchOnChange] = useState('')
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState('')
 
     const refreshTable = (forceRefresh = false) => {
         if (!forceRefresh) {
@@ -115,26 +115,31 @@ const ServerSideTable = forwardRef((props, ref) => {
     }
 
     return (
-        <DataGrid
-            localeText={localeText}
-            style={{
-                backgroundColor:theme.palette.background.paper
-            }}
-            checkboxSelection
-            autoHeight
-            pagination
-            headerHeight={40}
-            rowHeight={40}
-            pageSize={paginationData.perPage}
-            onPageChange={page=>setpage(page)}
-            rowCount={paginationData.total}
-            rowsPerPageOptions={[5,10,15,20]}
-            disableSelectionOnClick
-            paginationMode="server"
-            columns={columns}
-            rows={rows}
-            loading={loading}
-        />
+        <div className="w-full" style={{ height: 400 }}>
+            <div className="flex h-full">
+                <div className="flex-1">
+                    <DataGrid
+                        localeText={localeText}
+                        style={{
+                            backgroundColor:theme.palette.background.paper
+                        }}
+                        checkboxSelection
+                        pagination
+                        headerHeight={40}
+                        rowHeight={40}
+                        pageSize={paginationData.perPage}
+                        onPageChange={page=>setpage(page)}
+                        rowCount={paginationData.total}
+                        rowsPerPageOptions={[5,10,15,20]}
+                        disableSelectionOnClick
+                        paginationMode="server"
+                        columns={columns}
+                        rows={rows}
+                        loading={loading}
+                    />
+                </div>
+            </div>
+        </div>
     )
 })
 
