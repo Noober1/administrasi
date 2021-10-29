@@ -3,6 +3,7 @@ import { Box } from '@mui/system'
 import React, { useEffect } from 'react'
 import { PanelContentTitle } from '../../src/components/atoms/dashboard'
 import { Panel, ServerSideTable } from '../../src/components/templates'
+import useLocalization from '../../src/lib/useLocalization'
 
 const columns = [
     {
@@ -25,10 +26,11 @@ const columns = [
 ];
 
 const Student = () => {
+    const strings = useLocalization()
 
     return (
         <Box>
-            <PanelContentTitle title="Daftar Mahasiswa"/>
+            <PanelContentTitle title={strings.panel.pages.student.titlePage}/>
             <Alert severity="info">
                 Berikut adalah data mahasiswa
             </Alert>

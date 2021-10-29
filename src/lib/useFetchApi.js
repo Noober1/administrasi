@@ -16,6 +16,7 @@ const useFetchApi = (url, options, timeout) => {
     
     useEffect(() => {
         setLoading(true)
+        setError(false)
         let unmounted = false;
         let source = axios.CancelToken.source();
 

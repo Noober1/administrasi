@@ -75,6 +75,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Panel = ({children}) => {
 	
+	const strings = useLocalization()
 	const dispatch = useDispatch()
 	const router = useRouter()
 	const noPersistConfig = useSelector(selectNoPersistConfig)
@@ -85,8 +86,8 @@ const Panel = ({children}) => {
 	const [loadingProfile, setloadingProfile] = useState(true)
 	loading
 
-	const [profileData, loadingFetchProfile, isError, errorMessage] = useFetchApi(null, {
-		url: '/user/profile',
+	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage] = useFetchApi(null, {
+		url: '/auth/profile',
 		headers:{
 			"Authorization" : `Bearer ${auth.authToken}`
 		}
@@ -96,7 +97,6 @@ const Panel = ({children}) => {
 	const toggleDrawer = () => {
 		setOpen(!open);
 	};
-	const strings = useLocalization()
 
 	useEffect(() => {
 		if (auth) {
@@ -109,12 +109,26 @@ const Panel = ({children}) => {
         }
 	}, [auth])
 
+	if (process.env.NODE_ENV === 'development') {
+		useEffect(() => {
+			console.log('Components > Panel : profile initialization',noPersistConfig.profile)
+		}, [noPersistConfig.profile])
+	}
+
 	useEffect(() => {
-		if (!isError) {
+		if (!fetchProfileError) {
 			setloadingProfile(false)
 			dispatch(setProfile(profileData))
 		}
 	}, [profileData])
+
+	if (fetchProfileError) {
+		return(
+			<div>
+				Terjadi kesalahan
+			</div>
+		)
+	}
 
 	if (loading) {
 		return <SpinnerBackdrop />
@@ -178,7 +192,7 @@ const Panel = ({children}) => {
 						>
 							TS
 						</Avatar>
-						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base" >
+						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base capitalize" >
 							{noPersistConfig.profile.fullName || ''}
 						</Typography>
 					</div>

@@ -9,14 +9,7 @@ const noPersistConfig = createSlice({
 			hideOnClick: true,
 			methods: {}
 		},
-		profile:{
-			firstName:'',
-			lastName:'',
-			fullName:'',
-			level:'',
-			permission:[],
-			email: ''
-		}
+		profile:{}
 	},
 	reducers: {
 		showSpinner(state,actions) {

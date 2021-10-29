@@ -1,6 +1,10 @@
 
 export default function indonesian() {
     return {
+        languange: {
+            name: 'indonesia',
+            initial:'ID'
+        },
         default:{
             alertDialogConfirmButtonText: "Oke",
             alertDialogCancelButtonText: "Batal",
@@ -34,11 +38,15 @@ export default function indonesian() {
                 paymentText: "Pembayaran",
                 invoicesText: "Invoice",
                 studentListText: "Daftar Mahasiswa",
-                classListText: "Kelas / Angkatan"
+                classListText: "Kelas / Angkatan",
+                billText: "Tagihan"
             },
             pages:{
                 dashboard:{
                     welcomeMessage: "Selamat Datang"
+                },
+                student:{
+                    titlePage:"Daftar Mahasiswa"
                 }
             }
         },

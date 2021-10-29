@@ -5,22 +5,31 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import PersonIcon from '@mui/icons-material/Person';
 import PeopleIcon from '@mui/icons-material/People';
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import { Divider, List, ListItemButton } from '@mui/material';
 import useLocalization from '../../../lib/useLocalization';
 import { useRouter } from 'next/router';
 import { Link, Tooltip } from '../../atoms';
-import PropTypes from 'prop-types'
-import { useEffect } from 'react';
+import PropTypes, { string } from 'prop-types'
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectNoPersistConfig } from '../../../lib/redux/slices/noPersistConfigSlice';
 
 const Menus = ({menuOpen}) => {
 	const strings = useLocalization()
+	const { profile } = useSelector(selectNoPersistConfig)
 	const router = useRouter()
 	const firstRoute = '/' + router.pathname.split('/')[1] || '/'
 
+	const [showAllMenu, setshowAllMenu] = useState(false)
+
 	if (process.env.NODE_ENV == 'development') {
 		useEffect(() => {
-			console.log('listItem > Router:', router)
+			console.log('Components > Panel > listItem: Router', router)
 		}, [router])
+		useEffect(() => {
+			console.log('Components > Panel > listItem: Selecting profile from redux', profile)
+		}, [profile])
 	}
 
 	const MenuLink = ({link,text,icon}) => {
@@ -31,7 +40,7 @@ const Menus = ({menuOpen}) => {
 				<ListItemIcon>
 					{icon}
 				</ListItemIcon>
-				<ListItemText>
+				<ListItemText className="capitalize">
 					{text}
 				</ListItemText>
 			</ListItemButton>
@@ -67,6 +76,36 @@ const Menus = ({menuOpen}) => {
 		</div>
 	)
 
+	const AdminMenu = () => (
+		<div>
+			<MenuLink
+				link="/payment"
+				text={'menu admin 1'}
+				icon={<AttachMoneyIcon />}
+			/>
+			<MenuLink
+				link="/invoice"
+				text={'menu admin 2'}
+				icon={<FileCopyIcon />}
+			/>
+		</div>
+	);
+
+	const StudentMenu = () => (
+		<div>
+			<MenuLink
+				link="/bill"
+				text={strings.panel.menu.billText}
+				icon={<AttachMoneyIcon />}
+			/>
+			<MenuLink
+				link="/invoice"
+				text={'menu siswa 2'}
+				icon={<FileCopyIcon />}
+			/>
+		</div>
+	);
+
 	const SecondaryListItems = () => (
 		<div>
 			<MenuLink
@@ -92,22 +131,46 @@ const Menus = ({menuOpen}) => {
 				/>
 			</List>
 			<Divider/>
-			<List className="p-0">
-				<MasterDataList/>
-			</List>
-			<Divider/>
-			<List className="p-0">
-				<SecondaryListItems/>
-			</List>
-			<List className="p-0">
-				{process.env.NODE_ENV == 'development' &&
+			{(profile.accountType === 'admin' || showAllMenu) &&
+				<>
+				<List className="p-0">
+					<MasterDataList/>
+				</List>
+				<Divider/>
+				<List className="p-0">
+					<SecondaryListItems/>
+				</List>
+				<Divider/>
+				<List className="p-0">
+					<AdminMenu/>
+				</List>
+				</>
+			}
+			{(profile.accountType === 'student' || showAllMenu) &&
+				<>
+				<List className="p-0">
+					<StudentMenu/>
+				</List>
+				</>
+			}
+			{process.env.NODE_ENV == 'development' &&
+				<List className="p-0">
 					<MenuLink
-						link="/test"
-						text="Test Page"
-						icon={<DashboardIcon />}
-					/>
-				}
-			</List>
+							link="/test"
+							text="Test Page"
+							icon={<DeveloperModeIcon />}
+						/>
+						<ListItemButton onClick={() => setshowAllMenu(!showAllMenu)}>
+							<ListItemIcon>
+								<DeveloperModeIcon/>
+							</ListItemIcon>
+							<ListItemText>
+								Show / hide all menu
+							</ListItemText>
+						</ListItemButton>
+						
+				</List>
+			}
 		</>
 	)
 }

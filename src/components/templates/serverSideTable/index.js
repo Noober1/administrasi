@@ -1,27 +1,51 @@
-import React, { forwardRef, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
+import PropTypes, { string } from 'prop-types'
 import { DataGrid } from '@mui/x-data-grid'
 import { useFetchApi } from '../../../lib'
-import { useEffectOnce, useUpdateEffect } from 'react-use'
+import { useEffectOnce, useUpdate, useUpdateEffect } from 'react-use'
 import { Typography, Button, CircularProgress, Skeleton, useTheme } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
+import useLocalization from '../../../lib/useLocalization'
+import { tableLocalization } from '../../../constants'
 
 const ServerSideTable = forwardRef((props, ref) => {
+    const strings = useLocalization()
+    const localeText = tableLocalization(strings.languange.initial)
     let { url, perPage, columns, placeholder } = props
     const [page, setpage] = useState(0)
+    const [refreshCount, setrefreshCount] = useState(0)
 
     const urlParam = new URLSearchParams()
     urlParam.append('limit', perPage || "10")
     urlParam.append('page', (page + 1).toString())
+    urlParam.append('refresh', refreshCount)
 
     const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`)
 
     const [completeInit, setcompleteInit] = useState(false)
+    const [fetchFailed, setfetchFailed] = useState(false)
     const [paginationData, setpaginationData] = useState({})
     const [rows, setRows] = useState([]);
     const [selections, setSelections] = useState([])
     const [searchOnChange, setsearchOnChange] = useState('')
     const [searchText, setSearchText] = useState('');
+
+    const refreshTable = (forceRefresh = false) => {
+        if (!forceRefresh) {
+            if (loading) return
+        } else {
+            if (isError) {
+                setfetchFailed(false)
+                setcompleteInit(false)
+            }
+        }
+        setrefreshCount(refreshCount + 1)
+    }
+
+    useImperativeHandle(ref, () => ({
+        refresh: refreshTable,
+        getSelection: () => selections
+    }));
 
     const theme = useTheme()
 
@@ -33,6 +57,10 @@ const ServerSideTable = forwardRef((props, ref) => {
                 setcompleteInit(true)
             }
         }
+        if (isError) {
+            setfetchFailed(true)
+            setcompleteInit(false)
+        }
     }, [loading])
 
     if (process.env.NODE_ENV === 'development') {
@@ -43,26 +71,34 @@ const ServerSideTable = forwardRef((props, ref) => {
         useUpdateEffect(() => {
             console.log('Component > ServerSideTable: table page', page)
         }, [page])
+        useUpdateEffect(() => {
+            console.log('Component > ServerSideTable: table localization strings', localeText)
+        }, [localeText])
     }
 
     const InitView = () => (
         <div className="relative w-full h-80 py-12 overflow-hidden rounded-md">
-            {!isError ?
+            {!fetchFailed ?
                 <div className="flex items-center w-full h-full">
                     <Skeleton variant="rect" className="w-full h-full absolute top-0 left-0 right-0 bottom-0"/>
                     <div className="mx-auto">
                         <CircularProgress size={60}/>
                     </div>
                 </div> :
-                <div className="w-full mx-auto text-center">
+                <div
+                    className="w-full mx-auto p-5 text-center rounded-md"
+                    style={{
+                        backgroundColor:theme.palette.background.paper
+                    }}
+                >
                     <img src="/error.png" alt="Error" className="w-32 mx-auto mb-2"/>
                     <Typography variant="h6" gutterBottom>
-                        Terjadi kesalahan: {errorMessage}
+                        {strings.default.anErrorOccured}: {errorMessage}
                     </Typography>
                     <Button
                         variant="contained"
                         className="bg-blue-500 text-white"
-                        // onClick={() => refreshTable(true)}
+                        onClick={() => refreshTable(true)}
                         startIcon={<ReplayIcon/>}
                     >
                         Coba lagi
@@ -80,6 +116,7 @@ const ServerSideTable = forwardRef((props, ref) => {
 
     return (
         <DataGrid
+            localeText={localeText}
             style={{
                 backgroundColor:theme.palette.background.paper
             }}

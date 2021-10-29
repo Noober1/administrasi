@@ -18,6 +18,7 @@ const Dashboard = () => {
             </Typography>
             <Typography
                 variant="h4"
+                className="capitalize"
             >
                 {profile.fullName}
             </Typography>

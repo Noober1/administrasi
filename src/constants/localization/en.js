@@ -1,6 +1,10 @@
 
 export default function english() {
     return {
+        languange: {
+            name: 'english',
+            initial:'EN'
+        },
         default:{
             alertDialogConfirmButtonText: "OK",
             alertDialogCancelButtonText: "Cancel",
@@ -34,11 +38,15 @@ export default function english() {
                 paymentText: "Payment",
                 invoicesText: "Invoice",
                 studentListText: "Student List",
-                classListText: "Class List"
+                classListText: "Class List",
+                billText: "Bill"
             },
             pages:{
                 dashboard:{
                     welcomeMessage: "Welcome back"
+                },
+                student:{
+                    titlePage:"Student List"
                 }
             }
         },
