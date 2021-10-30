@@ -1,23 +1,23 @@
-import { Backdrop, CircularProgress } from '@mui/material'
-import TrapFocus from '@mui/material/Unstable_TrapFocus'
+import { Backdrop, CircularProgress, Modal } from '@mui/material'
 import React from 'react'
 import PropTypes from 'prop-types'
 
 const SpinnerBackdrop = ({open,onBackdropClick}) => {
     return (
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={open}
-                onClick={onBackdropClick}
-            >
-                <TrapFocus open={open}>
-                    <CircularProgress
-                        color="inherit"
-                        size={75}
-                        className="outline-none"
-                    />
-                </TrapFocus>
-            </Backdrop>
+        <Modal
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.modal + 1 }}
+            className="flex items-center outline-none"
+            open={open}
+            onClick={onBackdropClick}
+        >
+            <div className="mx-auto outline-none">
+                <CircularProgress
+                    color="inherit"
+                    size={75}
+                    className="outline-none"
+                />
+            </div>
+        </Modal>
     )
 }
 

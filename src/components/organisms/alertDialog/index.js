@@ -17,7 +17,7 @@ const AlertDialog = ({
 	title,
 	content,
 	showConfirmButton = true,
-	showCancelButton = false,
+	showCancelButton = true,
 	confirmLabel,
 	cancelLabel,
 	sizeOnFullscreen = 'sm',

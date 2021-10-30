@@ -31,7 +31,7 @@ const Student = () => {
     return (
         <Box>
             <PanelContentTitle title={strings.panel.pages.student.titlePage}/>
-            <Alert severity="info">
+            <Alert severity="info" variant="filled">
                 Berikut adalah data mahasiswa
             </Alert>
             <ServerSideTable

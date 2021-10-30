@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 
 /**
- * Fetching API, returns [data, loading, error, errorMessage]
+ * Fetching API, returns [data, loading, error, errorMessage, errorData]
  * @param url - URL endpoint
  * @param options - (Optional) Axios options
  * @param timeout - (Optional) Request timeout limit
@@ -12,11 +12,13 @@ const useFetchApi = (url, options, timeout) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [errorData, seterrorData] = useState(null)
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
         setLoading(true)
         setError(false)
+        seterrorData(null)
         let unmounted = false;
         let source = axios.CancelToken.source();
 
@@ -46,7 +48,10 @@ const useFetchApi = (url, options, timeout) => {
             .catch(error => {
                 if (!unmounted) {
                     setError(true);
-                    setErrorMessage(error.message);
+                    if(error.response) {
+                        seterrorData(error.response)
+                    }
+                    setErrorMessage('error.message');
                     setLoading(false);
                     if (axios.isCancel(error)) {
                         console.log(`request cancelled:${error.message}`);
@@ -61,7 +66,7 @@ const useFetchApi = (url, options, timeout) => {
         };
     }, [url, timeout]);
 
-    return [data, loading, error, errorMessage];
+    return [data, loading, error, errorMessage, errorData];
 };
 
 export default useFetchApi;

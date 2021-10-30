@@ -24,10 +24,11 @@ import useFetchApi from '../../../lib/useFetchApi';
 import { Avatar, Button } from '@mui/material';
 import { MenuDropdown } from '../../organisms';
 import { useSelector } from 'react-redux';
-import { selectAuth } from '../../../lib/redux/slices/authSlice';
+import { clearAuthToken, selectAuth } from '../../../lib/redux/slices/authSlice';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { hideSpinner, selectNoPersistConfig, setProfile } from '../../../lib/redux/slices/noPersistConfigSlice';
+import { useUpdateEffect } from 'react-use';
 
 
 const drawerWidth = 300;
@@ -84,9 +85,9 @@ const Panel = ({children}) => {
 	const [open, setOpen] = useState(true);
 	const [loadingAuth, setloadingAuth] = useState(true)
 	const [loadingProfile, setloadingProfile] = useState(true)
-	loading
+	const [fetchError, setfetchError] = useState(null)
 
-	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage] = useFetchApi(null, {
+	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage, errorData] = useFetchApi(null, {
 		url: '/auth/profile',
 		headers:{
 			"Authorization" : `Bearer ${auth.authToken}`
@@ -122,10 +123,24 @@ const Panel = ({children}) => {
 		}
 	}, [profileData])
 
+	useEffect(() => {
+		if (errorData) {
+			if(errorData.status == 403) {
+				dispatch(clearAuthToken())
+			}
+		}
+	}, [errorData])
+
 	if (fetchProfileError) {
+		if(errorData) {
+			if(errorData.status == 403) {
+				return <SpinnerBackdrop />
+			}
+		}
+
 		return(
 			<div>
-				Terjadi kesalahan
+				Terjadi kesalahan: {errorMessage}
 			</div>
 		)
 	}
