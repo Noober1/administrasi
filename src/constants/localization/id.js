@@ -11,7 +11,9 @@ export default function indonesian() {
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
             alertLogoutText: "Keluar",
-            anErrorOccured: "Terjadi kesalahan"
+            anErrorOccured: "Terjadi kesalahan",
+            editText: "Sunting",
+            deleteText:"Hapus"
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
@@ -23,6 +25,18 @@ export default function indonesian() {
         login: {
             usernamePasswordWrongText: "Nama pengguna atau kata sandi salah",
             loginForbiddenText: "Akun ini tidak mempunyai hak akses"
+        },
+        table: {
+            refresh: "Segarkan",
+            columns: {
+                student: {
+                    NIS: "No. Induk",
+                    fullName: "Nama Lengkap",
+                    status: "Status",
+                    type: "Jenis",
+                    action: "Aksi"
+                }
+            }
         },
         about: {
             officialWebsiteText: "Situs resmi",

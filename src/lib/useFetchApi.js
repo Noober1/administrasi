@@ -51,7 +51,7 @@ const useFetchApi = (url, options, timeout) => {
                     if(error.response) {
                         seterrorData(error.response)
                     }
-                    setErrorMessage('error.message');
+                    setErrorMessage(error.message);
                     setLoading(false);
                     if (axios.isCancel(error)) {
                         console.log(`request cancelled:${error.message}`);

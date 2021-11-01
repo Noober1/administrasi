@@ -11,7 +11,9 @@ export default function english() {
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
             alertLogoutText: "Logout",
-            anErrorOccured: "An error occured"
+            anErrorOccured: "An error occured",
+            editText: "Edit",
+            deleteText:"Delete"
         },
         appBar: {
             notificationTooltipText: "Notification",
@@ -23,6 +25,18 @@ export default function english() {
         login: {
             usernamePasswordWrongText: "Username or password incorrect",
             loginForbiddenText: "This account has no permission"
+        },
+        table: {
+            refresh: "Refresh",
+            columns: {
+                student: {
+                    NIS: "NIS",
+                    fullName: "Full Name",
+                    status: "Status",
+                    type: "Type",
+                    action: "Action"
+                }
+            }
         },
         about: {
             officialWebsiteText: "Official Website",

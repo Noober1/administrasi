@@ -5,9 +5,14 @@ import { SpinnerBackdrop } from '../src/components/atoms'
 import { AlertDialog } from '../src/components/organisms'
 import Panel from '../src/components/templates/panel'
 import { hideSpinner, showSpinner } from '../src/lib/redux/slices/noPersistConfigSlice'
+import { useSWR } from '../src/lib'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../src/lib/redux/slices/authSlice'
 
 const TestPage = () => {
     const dispatch = useDispatch()
+    const auth = useSelector(selectAuth)
+    const { data, error } = useSWR('/auth/profile', auth.authToken)
 
     return (
         <div>

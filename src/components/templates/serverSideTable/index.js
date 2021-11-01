@@ -1,15 +1,19 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, useGridApiContext, useGridState } from '@mui/x-data-grid'
 import { useFetchApi } from '../../../lib'
 import { useEffectOnce, useUpdate, useUpdateEffect } from 'react-use'
-import { Typography, Button, CircularProgress, Skeleton, useTheme } from '@mui/material';
+import { Typography, Button, CircularProgress, Skeleton, useTheme, Pagination } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import useLocalization from '../../../lib/useLocalization'
 import { tableLocalization } from '../../../constants'
+import CustomToolbar from './CustomToolbar'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../../../lib/redux/slices/authSlice'
 
 const ServerSideTable = forwardRef((props, ref) => {
     const strings = useLocalization()
+    const auth = useSelector(selectAuth)
     const localeText = tableLocalization(strings.languange.initial)
     let { url, perPage, columns, placeholder } = props
     const [page, setpage] = useState(0)
@@ -20,7 +24,12 @@ const ServerSideTable = forwardRef((props, ref) => {
     urlParam.append('page', (page + 1).toString())
     urlParam.append('refresh', refreshCount)
 
-    const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`)
+    const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`, {
+        url: `${url}?${urlParam.toString()}`,
+        headers: {
+            Authorization: `Bearer ${auth.authToken}`
+        }
+    })
 
     const [completeInit, setcompleteInit] = useState(false)
     const [fetchFailed, setfetchFailed] = useState(false)
@@ -114,6 +123,21 @@ const ServerSideTable = forwardRef((props, ref) => {
         )
     }
 
+    const CustomPagination = () => {
+        const apiRef = useGridApiContext();
+        const [state] = useGridState(apiRef);
+      
+        return (
+            <Pagination
+                className="flex"
+                color="primary"
+                count={state.pagination.pageCount}
+                page={state.pagination.page + 1}
+                onChange={(event, value) => apiRef.current.setPage(value - 1)}
+            />
+        );
+    }
+
     return (
         <div className="w-full" style={{ height: 400 }}>
             <div className="flex h-full">
@@ -122,6 +146,16 @@ const ServerSideTable = forwardRef((props, ref) => {
                         localeText={localeText}
                         style={{
                             backgroundColor:theme.palette.background.paper
+                        }}
+                        components={{
+                            Toolbar: CustomToolbar,
+                            Pagination: CustomPagination,
+                        }}
+                        componentsProps={{
+                            toolbar: {
+                                refreshHandler: refreshTable,
+                                refreshText: strings.table.refresh
+                            }
                         }}
                         checkboxSelection
                         pagination

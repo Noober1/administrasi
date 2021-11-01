@@ -85,7 +85,6 @@ const Panel = ({children}) => {
 	const [open, setOpen] = useState(true);
 	const [loadingAuth, setloadingAuth] = useState(true)
 	const [loadingProfile, setloadingProfile] = useState(true)
-	const [fetchError, setfetchError] = useState(null)
 
 	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage, errorData] = useFetchApi(null, {
 		url: '/auth/profile',
@@ -140,7 +139,7 @@ const Panel = ({children}) => {
 
 		return(
 			<div>
-				Terjadi kesalahan: {errorMessage}
+				{strings.default.anErrorOccured}: {errorMessage}
 			</div>
 		)
 	}
