@@ -13,7 +13,10 @@ export default function indonesian() {
             alertLogoutText: "Keluar",
             anErrorOccured: "Terjadi kesalahan",
             editText: "Sunting",
-            deleteText:"Hapus"
+            addText: "Tambah",
+            importText:"Import",
+            deleteText:"Hapus",
+            helpButtonLabel: "Bantuan"
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
@@ -51,7 +54,7 @@ export default function indonesian() {
                 dashboardText: "Beranda",
                 paymentText: "Pembayaran",
                 invoicesText: "Invoice",
-                studentListText: "Daftar Mahasiswa",
+                studentListText: "Mahasiswa",
                 classListText: "Kelas / Angkatan",
                 billText: "Tagihan"
             },
@@ -61,6 +64,12 @@ export default function indonesian() {
                 },
                 student:{
                     titlePage:"Daftar Mahasiswa"
+                },
+                class:{
+                    titlePage: "Daftar kelas / Angkatan"
+                },
+                payment: {
+                    titlePage: "Daftar pembayaran"
                 }
             }
         },

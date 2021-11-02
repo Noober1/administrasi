@@ -13,7 +13,10 @@ export default function english() {
             alertLogoutText: "Logout",
             anErrorOccured: "An error occured",
             editText: "Edit",
-            deleteText:"Delete"
+            addText: "Add",
+            importText:"Import",
+            deleteText:"Delete",
+            helpButtonLabel: "Help"
         },
         appBar: {
             notificationTooltipText: "Notification",
@@ -61,6 +64,12 @@ export default function english() {
                 },
                 student:{
                     titlePage:"Student List"
+                },
+                class:{
+                    titlePage: "Class / Angkatan List"
+                },
+                payment: {
+                    titlePage: "Payment List"
                 }
             }
         },

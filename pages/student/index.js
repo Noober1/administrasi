@@ -1,13 +1,18 @@
-import { Alert, Button, ButtonGroup, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import AddIcon from '@mui/icons-material/Add';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { Alert, Button, ButtonGroup, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { useEffect } from 'react'
-import { PanelContentTitle } from '../../src/components/atoms/dashboard'
+import { PanelContentHead, PanelContentTitle } from '../../src/components/atoms/dashboard'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
+import FormDialog from '../../src/components/organisms/formDialog';
+import { useDebounce } from 'react-use';
 
 const Student = () => {
     const strings = useLocalization()
     const { student } = strings.table.columns
+    var addStudentValue = {}
 
     const columns = [
         {
@@ -46,12 +51,69 @@ const Student = () => {
         }
     ];
 
+    const AddStudentForm = () => {
+        const [formValue, setformValue] = useState({
+            firstName:'',
+            lastName:''
+        })
+        const handleInputChange = event => {
+            setformValue({
+                ...formValue,
+                [event.target.name]: event.target.value
+            })
+        }
+        useDebounce(() => {
+            addStudentValue = {
+                ...formValue
+            }
+        }, [formValue])
+        return(
+            <>
+                <TextField
+                    value={formValue.firstName}
+                    onChange={handleInputChange}
+                    name="firstName"
+                    label="Nama depan"
+                />
+                <TextField
+                    value={formValue.lastName}
+                    onChange={handleInputChange}
+                    name="lastName"
+                    label="Nama belakang"
+                />
+            </>
+        )
+    }
+
+    const handleSubmitAddStudent = (event) => {
+        console.log(addStudentValue)
+    }
+
     return (
         <Box>
-            <PanelContentTitle title={strings.panel.pages.student.titlePage}/>
-            <Alert severity="info" variant="filled">
-                Berikut adalah data mahasiswa
-            </Alert>
+            <PanelContentHead
+                title={strings.panel.pages.student.titlePage}
+                buttonGroup={(
+                    <ButtonGroup>
+                        <FormDialog
+                            buttonProps={{
+                                variant:'contained',
+                                color:'primary',
+                                startIcon: <AddIcon/>
+                            }}
+                            buttonText={strings.default.addText}
+                            dialogCaption="Ini caption"
+                            dialogTitle="Ini title"
+                            onSubmit={handleSubmitAddStudent}
+                            dialogContent={<AddStudentForm/>}
+                        />
+                        <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
+                            {strings.default.importText}
+                        </Button>
+                    </ButtonGroup>
+                )}
+                helpButtonHandler={event => console.log('click tombol bantuan siswa')}
+            />
             <ServerSideTable
                 url='/student'
                 columns={columns}

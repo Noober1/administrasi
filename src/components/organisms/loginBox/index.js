@@ -97,6 +97,7 @@ const LoginBox = () => {
             </Typography>
             <Alert
                 severity={loginError.isError ? 'error' : 'info'}
+                variant="filled"
                 className="mb-5"
             >
                 {loginError.isError ? loginError.message : strings.loginBoxTopMessage}
