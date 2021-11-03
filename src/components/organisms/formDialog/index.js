@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
 
-const FormDialog = ({buttonText, buttonProps, dialogTitle, dialogContent, dialogCaption, onSubmit}) => {
+const FormDialog = memo(({buttonText, confirmButtonText, buttonProps, dialogTitle, children, dialogCaption, onSubmit}) => {
     const strings = useLocalization()
     const [open, setOpen] = useState(false)
-    console.log('test')
 
     const handleClickOpen = event => setOpen(true)
     const handleClose = event => setOpen(false)
     const defaultButton = <Button>Button</Button>
+
+    console.log('test2')
 
     return (
         <>
@@ -20,22 +21,27 @@ const FormDialog = ({buttonText, buttonProps, dialogTitle, dialogContent, dialog
             >
                 {buttonText}
             </Button>
-            <Dialog open={open} onClose={handleClose} keepMounted>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth="sm"
+                fullWidth
+            >
                 <DialogTitle>{dialogTitle}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
+                    <DialogContentText className="mb-5">
                         {dialogCaption}
                     </DialogContentText>
-                    {dialogContent}
+                    {children}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>{strings.default.alertDialogCancelButtonText}</Button>
-                    <Button onClick={onSubmit ?? handleClose}>[SUBMIT_TEXT]</Button>
+                    <Button onClick={onSubmit ?? handleClose}>{confirmButtonText ?? strings.default.saveText}</Button>
                 </DialogActions>
             </Dialog>
         </>
     )
-}
+})
 
 FormDialog.defaultProps = {
     buttonText: 'Button',
@@ -49,10 +55,14 @@ FormDialog.defaultProps = {
 }
 
 FormDialog.propTypes = {
-    buttonText: PropTypes.element.isRequired,
+    buttonText: PropTypes.string,
     buttonProps: PropTypes.object,
     dialogTitle: PropTypes.string,
-    dialogContent: PropTypes.element.isRequired,
+    confirmButtonText: PropTypes.string,
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ]).isRequired,
     dialogCaption: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.element

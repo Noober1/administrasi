@@ -14,9 +14,11 @@ export default function english() {
             anErrorOccured: "An error occured",
             editText: "Edit",
             addText: "Add",
+            saveText: "Save",
             importText:"Import",
             deleteText:"Delete",
-            helpButtonLabel: "Help"
+            helpButtonLabel: "Help",
+            retryText: "Try again"
         },
         appBar: {
             notificationTooltipText: "Notification",
@@ -34,9 +36,16 @@ export default function english() {
             columns: {
                 student: {
                     NIS: "NIS",
+                    firstName:"First Name",
+                    lastName:"Last Name",
                     fullName: "Full Name",
-                    status: "Status",
                     type: "Type",
+                    email:"E-mail",
+                    password:"Password",
+                    status:"Status",
+                    class: "Class",
+                    registerYear: "Register Year",
+                    prodi: "Prodi",
                     action: "Action"
                 }
             }
@@ -63,7 +72,9 @@ export default function english() {
                     welcomeMessage: "Welcome back"
                 },
                 student:{
-                    titlePage:"Student List"
+                    titlePage:"Student List",
+                    addStudentTitle:"Add Student",
+                    addStudentDescription: "Please fill this form below"
                 },
                 class:{
                     titlePage: "Class / Angkatan List"

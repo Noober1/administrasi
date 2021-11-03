@@ -14,9 +14,11 @@ export default function indonesian() {
             anErrorOccured: "Terjadi kesalahan",
             editText: "Sunting",
             addText: "Tambah",
+            saveText: "Simpan",
             importText:"Import",
             deleteText:"Hapus",
-            helpButtonLabel: "Bantuan"
+            helpButtonLabel: "Bantuan",
+            retryText: "Coba Lagi"
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
@@ -34,9 +36,16 @@ export default function indonesian() {
             columns: {
                 student: {
                     NIS: "No. Induk",
-                    fullName: "Nama Lengkap",
-                    status: "Status",
+                    firstName:"Nama depan",
+                    lastName:"Nama belakang",
+                    fullName: "Nama lengkap",
                     type: "Jenis",
+                    email:"Surel(E-mail)",
+                    password:"Kata sandi",
+                    status:"Status",
+                    class: "Kelas",
+                    registerYear: "Tahun masuk",
+                    prodi: "Prodi",
                     action: "Aksi"
                 }
             }
@@ -63,7 +72,9 @@ export default function indonesian() {
                     welcomeMessage: "Selamat Datang"
                 },
                 student:{
-                    titlePage:"Daftar Mahasiswa"
+                    titlePage:"Daftar Mahasiswa",
+                    addStudentTitle:"Tambah Mahasiswa",
+                    addStudentDescription: "Silahkan isi form dibawah ini"
                 },
                 class:{
                     titlePage: "Daftar kelas / Angkatan"

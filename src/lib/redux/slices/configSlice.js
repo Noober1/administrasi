@@ -5,7 +5,8 @@ const configSlice = createSlice({
 	name: 'config',
 	initialState:{
 		language: 'id',
-		theme: 'light'
+		theme: 'light',
+		panelOpen: true
 	},
 	reducers: {
 		setLanguage(state, action) {
@@ -16,6 +17,9 @@ const configSlice = createSlice({
 		},
 		toggleDarkMode(state) {
 			state.theme = state.theme === 'light' ? 'dark' : 'light'
+		},
+		togglePanelOpen(state) {
+			state.panelOpen = !state.panelOpen
 		}
 	},
 	extraReducers: {
@@ -29,7 +33,7 @@ const configSlice = createSlice({
 	},
 });
 
-export const { setLanguage, toggleDarkMode, toggleIDENLang } = configSlice.actions
+export const { setLanguage, toggleDarkMode, toggleIDENLang, togglePanelOpen } = configSlice.actions
 
 export const selectConfig = state => state.config
 

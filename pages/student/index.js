@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Alert, Button, ButtonGroup, TextField, Typography } from '@mui/material'
@@ -8,11 +8,13 @@ import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import FormDialog from '../../src/components/organisms/formDialog';
 import { useDebounce } from 'react-use';
+import StudentForm from '../../src/components/templates/forms/studentForm';
 
 const Student = () => {
     const strings = useLocalization()
+    const [formAddStudentOpen, setformAddStudentOpen] = useState(false)
+
     const { student } = strings.table.columns
-    var addStudentValue = {}
 
     const columns = [
         {
@@ -51,62 +53,47 @@ const Student = () => {
         }
     ];
 
-    const AddStudentForm = () => {
-        const [formValue, setformValue] = useState({
-            firstName:'',
-            lastName:''
-        })
-        const handleInputChange = event => {
-            setformValue({
-                ...formValue,
-                [event.target.name]: event.target.value
-            })
-        }
-        useDebounce(() => {
-            addStudentValue = {
-                ...formValue
-            }
-        }, [formValue])
-        return(
-            <>
-                <TextField
-                    value={formValue.firstName}
-                    onChange={handleInputChange}
-                    name="firstName"
-                    label="Nama depan"
-                />
-                <TextField
-                    value={formValue.lastName}
-                    onChange={handleInputChange}
-                    name="lastName"
-                    label="Nama belakang"
-                />
-            </>
-        )
-    }
-
-    const handleSubmitAddStudent = (event) => {
-        console.log(addStudentValue)
-    }
-
     return (
         <Box>
             <PanelContentHead
                 title={strings.panel.pages.student.titlePage}
                 buttonGroup={(
                     <ButtonGroup>
-                        <FormDialog
+                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={() => setformAddStudentOpen(true)}>
+                            {strings.default.addText}
+                        </Button>
+                        <StudentForm open={formAddStudentOpen} handleClose={() => setformAddStudentOpen(false)}/>
+                        {/* <FormDialog
                             buttonProps={{
                                 variant:'contained',
                                 color:'primary',
                                 startIcon: <AddIcon/>
                             }}
                             buttonText={strings.default.addText}
-                            dialogCaption="Ini caption"
-                            dialogTitle="Ini title"
+                            dialogCaption={strings.panel.pages.student.addStudentDescription}
+                            dialogTitle={strings.panel.pages.student.addStudentTitle}
                             onSubmit={handleSubmitAddStudent}
-                            dialogContent={<AddStudentForm/>}
-                        />
+                            formValue={formValue}
+                        >
+                            <div className="grid grid-cols-2 gap-2">
+                                <TextField
+                                    inputProps={{
+                                        className:"capitalize"
+                                    }}
+                                    // onChange={handleInputChange}
+                                    name="firstName"
+                                    label={student.firstName}
+                                />
+                                <TextField
+                                    inputProps={{
+                                        className:"capitalize"
+                                    }}
+                                    // onChange={handleInputChange}
+                                    name="lastName"
+                                    label={student.lastName}
+                                />
+                            </div>
+                        </FormDialog> */}
                         <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
                             {strings.default.importText}
                         </Button>

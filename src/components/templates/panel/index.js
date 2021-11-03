@@ -29,6 +29,8 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { hideSpinner, selectNoPersistConfig, setProfile } from '../../../lib/redux/slices/noPersistConfigSlice';
 import { useUpdateEffect } from 'react-use';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { selectConfig, togglePanelOpen } from '../../../lib/redux/slices/configSlice';
 
 
 const drawerWidth = 300;
@@ -82,11 +84,13 @@ const Panel = ({children}) => {
 	const noPersistConfig = useSelector(selectNoPersistConfig)
 	const auth = useSelector(selectAuth)
 
-	const [open, setOpen] = useState(true);
+	// const [open, setOpen] = useState(true);
+	const { panelOpen:open } = useSelector(selectConfig)
 	const [loadingAuth, setloadingAuth] = useState(true)
 	const [loadingProfile, setloadingProfile] = useState(true)
+	const [refreshProfile, setrefreshProfile] = useState(0)
 
-	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage, errorData] = useFetchApi(null, {
+	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage, errorData] = useFetchApi('/auth/profile' + refreshProfile, {
 		url: '/auth/profile',
 		headers:{
 			"Authorization" : `Bearer ${auth.authToken}`
@@ -95,8 +99,12 @@ const Panel = ({children}) => {
 	const loading = (loadingAuth || loadingProfile || !noPersistConfig.profile)
 	
 	const toggleDrawer = () => {
-		setOpen(!open);
+		dispatch(togglePanelOpen())
 	};
+
+	const retryProfileFetchError = () => {
+		setrefreshProfile(refreshProfile + 1)
+	}
 
 	useEffect(() => {
 		if (auth) {
@@ -130,6 +138,7 @@ const Panel = ({children}) => {
 		}
 	}, [errorData])
 
+	// if (fetchProfileError) {
 	if (fetchProfileError) {
 		if(errorData) {
 			if(errorData.status == 403) {
@@ -138,9 +147,24 @@ const Panel = ({children}) => {
 		}
 
 		return(
-			<div>
-				{strings.default.anErrorOccured}: {errorMessage}
-			</div>
+			<Box className="flex h-screen items-center justify-between">
+				<div className="mx-auto grid grid-cols-1">
+					<div className="mx-auto mb-5">
+						<img src="/error.png" alt="Error" className="h-40 m-0"/>
+					</div>
+					<Typography variant="h5" gutterBottom>
+						{strings.default.anErrorOccured}: {errorMessage}
+					</Typography>
+					<div className="mx-auto">
+						<Button variant="contained" color="primary" onClick={retryProfileFetchError} startIcon={<ReplayIcon/>}>
+							{strings.default.retryText}
+						</Button>
+					</div>
+				</div>
+			</Box>
+			// <div>
+			// 	{strings.default.anErrorOccured}: {errorMessage}
+			// </div>
 		)
 	}
 
