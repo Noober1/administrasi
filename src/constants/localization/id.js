@@ -42,6 +42,7 @@ export default function indonesian() {
                     type: "Jenis",
                     email:"Surel(E-mail)",
                     password:"Kata sandi",
+                    repeatPassword:"Ulangi kata sandi",
                     status:"Status",
                     class: "Kelas",
                     registerYear: "Tahun masuk",

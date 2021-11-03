@@ -42,6 +42,7 @@ export default function english() {
                     type: "Type",
                     email:"E-mail",
                     password:"Password",
+                    repeatPassword:"Retype Password",
                     status:"Status",
                     class: "Class",
                     registerYear: "Register Year",
