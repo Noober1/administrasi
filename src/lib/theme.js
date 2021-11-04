@@ -1,19 +1,19 @@
 import { createTheme } from "@mui/material/styles";
 
 const fontFamily = ['"PlusJakarta"', 'Open Sans']
-const headingFontBold = {
+const fontBold = {
     fontWeight: "bold"
 }
 const typography = {
     allVariants: {
         fontFamily: fontFamily.join(','),
     },
-    h1:headingFontBold,
-    h2:headingFontBold,
-    h3:headingFontBold,
-    h4:headingFontBold,
-    h5:headingFontBold,
-    h6:headingFontBold
+    h1:fontBold,
+    h2:fontBold,
+    h3:fontBold,
+    h4:fontBold,
+    h5:fontBold,
+    h6:fontBold
 }
 
 const lightTheme = createTheme({
@@ -26,7 +26,14 @@ const lightTheme = createTheme({
             main: '#f50057',
         },
     },
-    typography
+    typography,
+    components:{
+        MuiButton:{
+            styleOverrides:{
+                root:fontBold
+            }
+        }
+    }
 })
 
 const darkTheme = createTheme({
@@ -39,7 +46,14 @@ const darkTheme = createTheme({
             main: '#f50057',
         },
     },
-    typography
+    typography,
+    components:{
+        MuiButton:{
+            styleOverrides:{
+                root:fontBold
+            }
+        }
+    }
 })
 
 export default {

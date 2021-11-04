@@ -1,12 +1,14 @@
 import React, { memo, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { object } from 'prop-types'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
+import { ServerSideSelect } from '../../molecules'
+import { useDispatch } from 'react-redux'
+import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import { useUpdateEffect } from 'react-use'
 
-const StudentForm = ({open, handleClose}) => {
-    const strings = useLocalization()
-    const { student } = strings.table.columns
-    const [formValue, setformValue] = useState({
+const StudentForm = ({open, handleClose, mode}) => {
+    const emptyForm = {
         firstName:'',
         lastName:'',
         NIS:'',
@@ -15,9 +17,15 @@ const StudentForm = ({open, handleClose}) => {
         status:'',
         class:0,
         type:'',
-        registerYear: new Date().getFullYear(),
+        registerYear: '',
         prodi:''
-    })
+    }
+    const strings = useLocalization()
+    const dispatch = useDispatch()
+    const { student } = strings.table.columns
+    const [passwordError, setpasswordError] = useState(false)
+    const [passwordEmpty, setpasswordEmpty] = useState(false)
+    const [formValue, setformValue] = useState(emptyForm)
     const [passwordFormValue, setpasswordFormValue] = useState({
         password:'',
         retypePassword:''
@@ -25,6 +33,16 @@ const StudentForm = ({open, handleClose}) => {
 
     const handleSubmitForm = event => {
         event.preventDefault()
+        dispatch(showSpinner(true))
+        setTimeout(() => {
+            handleClose()
+            dispatch(hideSpinner())
+            dispatch(openSnackbar({
+                position: 'top-right',
+                message: 'Data berhasil disimpan',
+                severity: 'success'
+            }))
+        }, 3000);
         console.log('test')
     }
     
@@ -40,33 +58,43 @@ const StudentForm = ({open, handleClose}) => {
         }))
     }
 
+    const handleClassOnChange = (event, newValue, objectValue) => {
+        setformValue(prevValue => ({
+            ...prevValue,
+            class: newValue,
+            registerYear: Object.keys(objectValue).length > 0 ? objectValue.angkatan : ''
+        }))
+    }
+
     if (process.env.NODE_ENV === 'development') {
         useEffect(() => {
             console.log('Component > studentForm: formValue', formValue)
         }, [formValue])
     }
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         const { password, retypePassword } = passwordFormValue
         if (password === retypePassword) {
             setformValue(prevValue => ({
                 ...prevValue,
                 password: password
             }))
-            console.log('password same')
+            setpasswordError(false)
         } else {
+            setpasswordError(true)
             setformValue(prevValue => ({
                 ...prevValue,
                 password: ''
             }))
-            console.log('password isnt same')
         }
+        setpasswordEmpty(password == '')
     }, [passwordFormValue])
 
     return (
         <Dialog
             open={open}
             onClose={handleClose}
+            scroll="body"
             maxWidth="sm"
             fullWidth
             keepMounted
@@ -88,6 +116,7 @@ const StudentForm = ({open, handleClose}) => {
                             onChange={handleInputChange}
                             name="firstName"
                             label={student.firstName}
+                            required
                         />
                         <TextField
                             className="col-span-2"
@@ -106,18 +135,20 @@ const StudentForm = ({open, handleClose}) => {
                             onChange={handleInputChange}
                             name="NIS"
                             label={student.NIS}
+                            required
                         />
                         <TextField
                             type="email"
                             inputProps={{
-                                className:"capitalize",
                                 maxLength: 50
                             }}
                             onChange={handleInputChange}
                             name="email"
                             label={student.email}
+                            required
                         />
                         <TextField
+                            error={passwordError || passwordEmpty}
                             type="password"
                             inputProps={{
                                 maxLength: 50
@@ -125,8 +156,11 @@ const StudentForm = ({open, handleClose}) => {
                             onChange={handlePassOnChange}
                             name="password"
                             label={student.password}
+                            helperText={passwordEmpty ? student.emptyPassword : passwordError ? student.mismatchPassword : ''}
+                            required
                         />
                         <TextField
+                            error={passwordError}
                             type="password"
                             inputProps={{
                                 maxLength: 50
@@ -134,16 +168,16 @@ const StudentForm = ({open, handleClose}) => {
                             onChange={handlePassOnChange}
                             name="retypePassword"
                             label={student.repeatPassword}
+                            helperText={passwordError ? student.mismatchPassword : ''}
+                            required
                         />
                         <FormControl fullWidth>
                             <InputLabel>{student.status}</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
                                 name="status"
                                 value={formValue.status}
-                                label="Age"
                                 onChange={handleInputChange}
+                                required
                             >
                                 <MenuItem value="aktif">Aktif</MenuItem>
                                 <MenuItem value="alumni">Alumni</MenuItem>
@@ -151,6 +185,36 @@ const StudentForm = ({open, handleClose}) => {
                                 <MenuItem value="lainnya">Lainnya</MenuItem>
                             </Select>
                         </FormControl>
+                        <ServerSideSelect
+                            url="/class"
+                            optionValue="id"
+                            optionLabel="name"
+                            label={student.class}
+                            onChange={handleClassOnChange}
+                            required
+                        />
+                        <FormControl fullWidth>
+                            <InputLabel>{student.type}</InputLabel>
+                            <Select
+                                name="type"
+                                value={formValue.type}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <MenuItem value="reguler">Reguler</MenuItem>
+                                <MenuItem value="beasiswa">Beasiswa</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            value={formValue.registerYear}
+                            name="registerYear"
+                            label={student.registerYear}
+                            inputProps={{
+                                readOnly:true
+                            }}
+                            helperText={student.helperRegisterYearCantChange}
+                            required
+                        />
                     </div>
                     {/* FORM END HERE */}
                 </DialogContent>
@@ -163,9 +227,15 @@ const StudentForm = ({open, handleClose}) => {
     )
 }
 
+StudentForm.defaultProps = {
+    open: false,
+    mode: 'add'
+}
+
 StudentForm.propTypes = {
     open: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired
+    handleClose: PropTypes.func.isRequired,
+    mode: PropTypes.oneOf(['add','edit'])
 }
 
 export default StudentForm

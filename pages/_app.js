@@ -9,7 +9,7 @@ import { useStore } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useSelector } from 'react-redux'
 import { selectConfig } from '../src/lib/redux/slices/configSlice'
-import { SpinnerBackdrop } from '../src/components/atoms';
+import { MainSnackbar, SpinnerBackdrop } from '../src/components/atoms';
 import { MainSpinner } from '../src/components/molecules';
 
 function MyApp({ Component, pageProps }) {
@@ -33,6 +33,7 @@ function MyApp({ Component, pageProps }) {
 					}}
 				/>
 				{getLayout(<Component {...pageProps} />)}
+				<MainSnackbar/>
 				<MainSpinner/>
 			</ThemeProvider>
 		</PersistGate>

@@ -43,9 +43,12 @@ export default function english() {
                     email:"E-mail",
                     password:"Password",
                     repeatPassword:"Retype Password",
+                    mismatchPassword:"Password mismatch",
+                    emptyPassword: "Password empty",
                     status:"Status",
                     class: "Class",
                     registerYear: "Register Year",
+                    helperRegisterYearCantChange: "Register year will filled automatically based on selected Class",
                     prodi: "Prodi",
                     action: "Action"
                 }

@@ -43,9 +43,12 @@ export default function indonesian() {
                     email:"Surel(E-mail)",
                     password:"Kata sandi",
                     repeatPassword:"Ulangi kata sandi",
+                    mismatchPassword:"Kata sandi tidak sama",
+                    emptyPassword: "Kata sandi kosong",
                     status:"Status",
                     class: "Kelas",
                     registerYear: "Tahun masuk",
+                    helperRegisterYearCantChange: "Tahun masuk akan terisi otomatis berdasarkan kelas yang dipilih",
                     prodi: "Prodi",
                     action: "Aksi"
                 }

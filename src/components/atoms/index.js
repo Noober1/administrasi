@@ -5,6 +5,7 @@ import IconButtonAvatar from './IconButtonAvatar'
 import Copyright from './Copyright'
 import Tooltip from './tooltip'
 import SpinnerBackdrop from './spinnerBackdrop'
+import MainSnackbar from './MainSnackbar'
 
 export {
     Link,
@@ -13,5 +14,6 @@ export {
     IconButtonAvatar,
     Copyright,
     Tooltip,
-    SpinnerBackdrop
+    SpinnerBackdrop,
+    MainSnackbar
 }

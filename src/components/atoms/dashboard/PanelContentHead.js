@@ -10,9 +10,9 @@ const PanelContentHead = ({title,buttonGroup,helpButtonHandler}) => {
     const upToMd = useMediaQuery(theme => theme.breakpoints.up('md'))
     
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 my-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 my-2">
             <PanelContentTitle title={title}/>
-            <div className="flex items-center justify-center lg:justify-end">
+            <div className="flex items-center justify-center sm:justify-end">
                 {buttonGroup}
                 <div className="ml-2">
                     {upToMd ?

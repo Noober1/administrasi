@@ -9,6 +9,15 @@ const noPersistConfig = createSlice({
 			hideOnClick: true,
 			methods: {}
 		},
+		mainSnackbar: {
+			open:false,
+			message:'No Message',
+			severity: 'success',
+			position: {
+				horizontal: 'left',
+				vertical:'top'
+			}
+		},
 		profile:{}
 	},
 	reducers: {
@@ -18,7 +27,7 @@ const noPersistConfig = createSlice({
 				state.spinner.hideOnClick = false
 			}
 		},
-		hideSpinner(state,actions) {
+		hideSpinner(state) {
 			state.spinner.showSpinner = false
 			state.spinner.hideOnClick = true
 		},
@@ -27,6 +36,33 @@ const noPersistConfig = createSlice({
 		},
 		setProfile(state,actions) {
 			state.profile = actions.payload
+		},
+		setSnackbarOpen(state,actions) {
+			state.mainSnackbar.open = actions.payload
+		},
+		setSnackbarMessage(state,actions) {
+			state.mainSnackbar.message = actions.payload
+		},
+		setSnackbarSeverity(state,actions) {
+			state.mainSnackbar.severity = actions.payload
+		},
+		openSnackbar(state, actions) {
+			const { message, severity, position } = actions.payload
+			const getPosition = position || 'top-center'
+			const splitPosition = getPosition.split('-')
+			if (splitPosition.length == 2) {
+				let verticals = ['top','bottom']
+				let horizontals = ['left','right','center']
+				let newVertical = verticals.includes(splitPosition[0]) ? splitPosition[0] : 'top'
+				let newHorizontal = horizontals.includes(splitPosition[1]) ? splitPosition[1] : 'center'
+				state.mainSnackbar.position = {
+					vertical: newVertical,
+					horizontal: newHorizontal
+				}
+			}
+			state.mainSnackbar.message = message || 'No Message'
+			state.mainSnackbar.severity = severity || 'info'
+			state.mainSnackbar.open = true
 		}
 	},
 	extraReducers: {
@@ -43,6 +79,10 @@ export const {
 	showSpinner,
 	hideSpinner,
 	setSpinnerHideOnClick,
+	setSnackbarOpen,
+	setSnackbarSeverity,
+	setSnackbarMessage,
+	openSnackbar,
 	setProfile
 } = noPersistConfig.actions
 

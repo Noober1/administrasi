@@ -1,5 +1,7 @@
-import MainSpinner from "./mainSpinner";
+import MainSpinner from "./mainSpinner"
+import ServerSideSelect from "./ServerSideSelect"
 
 export {
-    MainSpinner
+    MainSpinner,
+    ServerSideSelect
 }
