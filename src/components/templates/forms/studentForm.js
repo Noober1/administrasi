@@ -3,11 +3,14 @@ import PropTypes, { object } from 'prop-types'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
 import { ServerSideSelect } from '../../molecules'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 import { useUpdateEffect } from 'react-use'
+import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
+import { selectAuth } from '../../../lib/redux/slices/authSlice'
 
 const StudentForm = ({open, handleClose, mode}) => {
+    const { authToken } = useSelector(selectAuth)
     const emptyForm = {
         firstName:'',
         lastName:'',
@@ -30,20 +33,45 @@ const StudentForm = ({open, handleClose, mode}) => {
         password:'',
         retypePassword:''
     })
+    const formError = passwordError || passwordEmpty
 
     const handleSubmitForm = event => {
         event.preventDefault()
         dispatch(showSpinner(true))
-        setTimeout(() => {
-            handleClose()
-            dispatch(hideSpinner())
-            dispatch(openSnackbar({
-                position: 'top-right',
-                message: 'Data berhasil disimpan',
-                severity: 'success'
-            }))
-        }, 3000);
-        console.log('test')
+        fetchAPI(fetchWithToken({
+            url:'/student',
+            method:'POST',
+            token: authToken,
+            data: formValue
+        }))
+            .then(result => {
+                handleClose()
+                dispatch(hideSpinner())
+                dispatch(openSnackbar({
+                    position: 'top-right',
+                    message: strings.default.savedText,
+                    severity: 'success'
+                }))
+            })
+            .catch(error => {
+                console.log(error.response)
+                dispatch(hideSpinner())
+                dispatch(openSnackbar({
+                    position: 'top-right',
+                    message: `${strings.default.failedToSaveText} [${error?.response?.data?.code}]`,
+                    severity: 'error'
+                }))
+            })
+        // dispatch(showSpinner(true))
+        // setTimeout(() => {
+        //     handleClose()
+        //     dispatch(hideSpinner())
+        //     dispatch(openSnackbar({
+        //         position: 'top-right',
+        //         message: 'Data berhasil disimpan',
+        //         severity: 'success'
+        //     }))
+        // }, 3000);
     }
     
     const handleInputChange = event => setformValue({
@@ -63,6 +91,13 @@ const StudentForm = ({open, handleClose, mode}) => {
             ...prevValue,
             class: newValue,
             registerYear: Object.keys(objectValue).length > 0 ? objectValue.angkatan : ''
+        }))
+    }
+
+    const handleProdiOnChange = (event, newValue) => {
+        setformValue(prevValue => ({
+            ...prevValue,
+            prodi: newValue
         }))
     }
 
@@ -171,6 +206,24 @@ const StudentForm = ({open, handleClose, mode}) => {
                             helperText={passwordError ? student.mismatchPassword : ''}
                             required
                         />
+                        <ServerSideSelect
+                            className="col-span-2"
+                            url="/prodi"
+                            optionValue="id"
+                            optionLabel="name"
+                            label={student.prodi}
+                            onChange={handleProdiOnChange}
+                            required
+                        />
+                        <ServerSideSelect
+                            className="col-span-2"
+                            url="/class"
+                            optionValue="id"
+                            optionLabel="name"
+                            label={student.class}
+                            onChange={handleClassOnChange}
+                            required
+                        />
                         <FormControl fullWidth>
                             <InputLabel>{student.status}</InputLabel>
                             <Select
@@ -185,14 +238,6 @@ const StudentForm = ({open, handleClose, mode}) => {
                                 <MenuItem value="lainnya">Lainnya</MenuItem>
                             </Select>
                         </FormControl>
-                        <ServerSideSelect
-                            url="/class"
-                            optionValue="id"
-                            optionLabel="name"
-                            label={student.class}
-                            onChange={handleClassOnChange}
-                            required
-                        />
                         <FormControl fullWidth>
                             <InputLabel>{student.type}</InputLabel>
                             <Select
@@ -205,22 +250,12 @@ const StudentForm = ({open, handleClose, mode}) => {
                                 <MenuItem value="beasiswa">Beasiswa</MenuItem>
                             </Select>
                         </FormControl>
-                        <TextField
-                            value={formValue.registerYear}
-                            name="registerYear"
-                            label={student.registerYear}
-                            inputProps={{
-                                readOnly:true
-                            }}
-                            helperText={student.helperRegisterYearCantChange}
-                            required
-                        />
                     </div>
                     {/* FORM END HERE */}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>{strings.default.alertDialogCancelButtonText}</Button>
-                    <Button type="submit">{strings.default.saveText}</Button>
+                    <Button type="submit" disabled={formError}>{strings.default.saveText}</Button>
                 </DialogActions>
             </form>
         </Dialog>

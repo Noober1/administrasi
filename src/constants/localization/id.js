@@ -15,6 +15,8 @@ export default function indonesian() {
             editText: "Sunting",
             addText: "Tambah",
             saveText: "Simpan",
+            savedText: "Data berhasil disimpan",
+            failedToSaveText: "Data gagal disimpan",
             importText:"Import",
             deleteText:"Hapus",
             helpButtonLabel: "Bantuan",

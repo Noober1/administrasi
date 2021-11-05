@@ -17,7 +17,7 @@ import { useDebounce } from 'react-use'
  * @param {string} onChange - onChange event, parameter: event, newOptionValue, newObjectValue
  * @returns {null}
  */
-const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, required}) => {
+const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, required, className}) => {
 	const auth = useSelector(selectAuth)
 	const [open, setOpen] = useState(false)
 	const [value, setvalue] = useState('')
@@ -74,6 +74,7 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 
 	return (
 		<Autocomplete
+			className={className}
 			fullWidth
 			open={open}
 			value={value}
@@ -122,6 +123,7 @@ ServerSideSelect.propTypes = {
 	optionValue: PropTypes.string.isRequired,
 	optionLabel: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
+	className: PropTypes.string,
 	onChange: PropTypes.func,
 	required: PropTypes.bool
 }

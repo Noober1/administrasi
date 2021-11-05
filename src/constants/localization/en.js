@@ -15,6 +15,8 @@ export default function english() {
             editText: "Edit",
             addText: "Add",
             saveText: "Save",
+            savedText: "Data has been saved",
+            failedToSaveText: "Data failed to save",
             importText:"Import",
             deleteText:"Delete",
             helpButtonLabel: "Help",

@@ -31,4 +31,23 @@ const fetchAPI = (options) => {
 	})
 }
 
+const fetchWithToken = (options) => {
+	if (typeof options !== 'object') {
+		throw new Error('Options must be object!')
+	}
+
+	const { token, ...rest } = options
+
+	return {
+		...rest,
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	}
+}
+
 export default fetchAPI
+export {
+	fetchAPI,
+	fetchWithToken
+}
