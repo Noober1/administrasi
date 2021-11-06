@@ -9,7 +9,7 @@ import { useUpdateEffect } from 'react-use'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 
-const StudentForm = ({open, handleClose, mode}) => {
+const StudentForm = ({open, handleClose, mode, callback}) => {
     const { authToken } = useSelector(selectAuth)
     const emptyForm = {
         firstName:'',
@@ -44,34 +44,50 @@ const StudentForm = ({open, handleClose, mode}) => {
             token: authToken,
             data: formValue
         }))
-            .then(result => {
-                handleClose()
-                dispatch(hideSpinner())
-                dispatch(openSnackbar({
-                    position: 'top-right',
-                    message: strings.default.savedText,
-                    severity: 'success'
-                }))
-            })
-            .catch(error => {
-                console.log(error.response)
-                dispatch(hideSpinner())
-                dispatch(openSnackbar({
-                    position: 'top-right',
-                    message: `${strings.default.failedToSaveText} [${error?.response?.data?.code}]`,
-                    severity: 'error'
-                }))
-            })
-        // dispatch(showSpinner(true))
-        // setTimeout(() => {
-        //     handleClose()
-        //     dispatch(hideSpinner())
-        //     dispatch(openSnackbar({
-        //         position: 'top-right',
-        //         message: 'Data berhasil disimpan',
-        //         severity: 'success'
-        //     }))
-        // }, 3000);
+        .then(result => {
+            handleClose()
+            dispatch(hideSpinner())
+            dispatch(openSnackbar({
+                position: 'top-right',
+                message: strings.default.savedText,
+                severity: 'success'
+            }))
+            if (typeof callback == 'function') {
+                callback(false, result)
+            }
+        })
+        .catch(error => {
+            let msg = 'No message'
+            dispatch(hideSpinner())
+            if (typeof error.response !== 'undefined') {
+                const { code } = error.response.data
+                switch (code) {
+                    case 'ER_DUP_ENTRY':
+                        msg = strings.errors.duplicateData
+                        break;
+                    case 'ERR_EMAIL_EXIST':
+                        msg = strings.errors.emailDuplicate
+                        break;
+                    case 'ERR_CLASS_NOT_FOUND':
+                        msg = strings.errors.classNotFound
+                        break;
+                    case 'ERR_PRODI_NOT_FOUND':
+                        msg = strings.errors.prodiNotFound
+                        break;
+                    default:
+                        msg = strings.errors.internalError
+                        break;
+                }
+            }
+            dispatch(openSnackbar({
+                position: 'top-right',
+                message: `${strings.default.failedToSaveText}: ${msg}`,
+                severity: 'error'
+            }))
+            if (typeof callback == 'function') {
+                callback(true, error)
+            }
+        })
     }
     
     const handleInputChange = event => setformValue({
@@ -270,6 +286,7 @@ StudentForm.defaultProps = {
 StudentForm.propTypes = {
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
+    callback: PropTypes.func,
     mode: PropTypes.oneOf(['add','edit'])
 }
 

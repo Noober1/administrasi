@@ -1,9 +1,10 @@
 import { Button } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from '@mui/x-data-grid'
 import React from 'react'
 
-const CustomToolbar = ({refreshHandler,refreshText}) => {
+const CustomToolbar = ({refreshHandler,refreshText, customButton, setdialogOpen, deleteLabel}) => {
     return (
         <GridToolbarContainer>
             <Button
@@ -16,6 +17,10 @@ const CustomToolbar = ({refreshHandler,refreshText}) => {
             <GridToolbarColumnsButton/>
             <GridToolbarFilterButton/>
             <GridToolbarDensitySelector/>
+            <Button size="small" color="error" startIcon={<DeleteIcon/>} onClick={setdialogOpen}>
+                {deleteLabel}
+            </Button>
+            {customButton}
         </GridToolbarContainer>
     )
 }

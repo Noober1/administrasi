@@ -3,31 +3,33 @@ import PropTypes, { string } from 'prop-types'
 import { DataGrid, useGridApiContext, useGridState } from '@mui/x-data-grid'
 import { useFetchApi } from '../../../lib'
 import { useEffectOnce, useUpdate, useUpdateEffect } from 'react-use'
-import { Typography, Button, CircularProgress, Skeleton, useTheme, Pagination } from '@mui/material';
+import { Typography, Button, CircularProgress, Skeleton, useTheme, Pagination, Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import useLocalization from '../../../lib/useLocalization'
 import { tableLocalization } from '../../../constants'
 import CustomToolbar from './CustomToolbar'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
+import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 
-const ServerSideTable = forwardRef((props, ref) => {
+const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder, enableCheckbox = true, customButtons, deleteUrl = null, showDeleteButton = true}, ref) => {
     const strings = useLocalization()
-    const auth = useSelector(selectAuth)
+    const { authToken } = useSelector(selectAuth)
+    const dispatch = useDispatch()
     const localeText = tableLocalization(strings.languange.initial)
-    let { url, perPage, columns, placeholder } = props
     const [page, setpage] = useState(0)
     const [refreshCount, setrefreshCount] = useState(0)
 
     const urlParam = new URLSearchParams()
-    urlParam.append('limit', perPage || "10")
+    urlParam.append('limit', perPage)
     urlParam.append('page', (page + 1).toString())
     urlParam.append('refresh', refreshCount)
 
     const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`, {
         url: `${url}?${urlParam.toString()}`,
         headers: {
-            Authorization: `Bearer ${auth.authToken}`
+            Authorization: `Bearer ${authToken}`
         }
     })
 
@@ -36,6 +38,7 @@ const ServerSideTable = forwardRef((props, ref) => {
     const [paginationData, setpaginationData] = useState({})
     const [rows, setRows] = useState([]);
     const [selections, setSelections] = useState([])
+    const [dialogOpen, setdialogOpen] = useState(false)
     const [searchOnChange, setsearchOnChange] = useState('')
     const [searchText, setSearchText] = useState('')
 
@@ -76,7 +79,6 @@ const ServerSideTable = forwardRef((props, ref) => {
         useUpdateEffect(() => {
             console.log('Component > ServerSideTable: fetching data',data,loading,isError,errorMessage)
         }, [data,loading,isError,errorMessage])
-    
         useUpdateEffect(() => {
             console.log('Component > ServerSideTable: table page', page)
         }, [page])
@@ -117,12 +119,6 @@ const ServerSideTable = forwardRef((props, ref) => {
         </div>
     )
 
-    if (!completeInit) {
-        return(
-            <InitView/>
-        )
-    }
-
     const CustomPagination = () => {
         const apiRef = useGridApiContext();
         const [state] = useGridState(apiRef);
@@ -136,6 +132,64 @@ const ServerSideTable = forwardRef((props, ref) => {
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
         );
+    }
+
+    const handleDeleteItem = event => {
+        const snackbarErrorOptions = {
+            position: 'top-right',
+            severity: 'error'
+        }
+        dispatch(showSpinner(true))
+        if (selections.length < 1) {
+            setdialogOpen(false)
+            dispatch(openSnackbar({
+                ...snackbarErrorOptions,
+                message: strings.errors.noDataSelected
+            }))
+            dispatch(hideSpinner())
+            return false
+        }
+
+        if (!deleteUrl) {
+            setdialogOpen(false)
+            dispatch(openSnackbar({
+                ...snackbarErrorOptions,
+                message: strings.errors.deleteUrlInvalid
+            }))
+            dispatch(hideSpinner())
+            return false
+        }
+
+        fetchAPI(fetchWithToken({
+            url: deleteUrl,
+            method: "DELETE",
+            token: authToken,
+            data: JSON.stringify(selections)
+        }))
+        .then(result => {
+            setdialogOpen(false)
+            refreshTable()
+            dispatch(openSnackbar({
+                position: 'top-right',
+                severity: 'error',
+                message: strings.success.deleteItemsSuccess
+            }))
+            dispatch(hideSpinner())
+        })
+        .catch(error =>{
+            setdialogOpen(false)
+            dispatch(openSnackbar({
+                ...snackbarErrorOptions,
+                message: strings.errors.deleteItemsError
+            }))
+            dispatch(hideSpinner())
+        })
+    }
+
+    if (!completeInit) {
+        return(
+            <InitView/>
+        )
     }
 
     return (
@@ -154,15 +208,19 @@ const ServerSideTable = forwardRef((props, ref) => {
                         componentsProps={{
                             toolbar: {
                                 refreshHandler: refreshTable,
-                                refreshText: strings.table.refresh
+                                refreshText: strings.table.refresh,
+                                customButton: customButtons,
+                                deleteLabel: strings.table.dialogDeleteTitle,
+                                setdialogOpen: event => setdialogOpen(true)
                             }
                         }}
-                        checkboxSelection
+                        checkboxSelection={enableCheckbox}
+                        onSelectionModelChange={setSelections}
                         pagination
                         headerHeight={40}
                         rowHeight={40}
                         pageSize={paginationData.perPage}
-                        onPageChange={page=>setpage(page)}
+                        onPageChange={setpage}
                         rowCount={paginationData.total}
                         rowsPerPageOptions={[5,10,15,20]}
                         disableSelectionOnClick
@@ -171,6 +229,23 @@ const ServerSideTable = forwardRef((props, ref) => {
                         rows={rows}
                         loading={loading}
                     />
+                    <Dialog
+                        open={dialogOpen}
+                        onClose={() => setdialogOpen(false)}
+                    >
+                        <DialogTitle>{strings.table.dialogDeleteTitle}</DialogTitle>
+                        <DialogContent>
+                            {strings.table.dialogDeleteConfirmMessage}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setdialogOpen(false)}>
+                                {strings.default.alertDialogCancelButtonText}
+                            </Button>
+                            <Button onClick={handleDeleteItem}>
+                                {strings.default.deleteText}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </div>
         </div>
@@ -181,7 +256,11 @@ ServerSideTable.propTypes = {
     url: PropTypes.string.isRequired,
     perPage: PropTypes.string,
     columns: PropTypes.array.isRequired,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    enableCheckbox: PropTypes.bool,
+    customButtons: PropTypes.element,
+    deleteUrl: PropTypes.string,
+    showDeleteButton: PropTypes.bool
 }
 
 export default ServerSideTable

@@ -22,6 +22,19 @@ export default function indonesian() {
             helpButtonLabel: "Bantuan",
             retryText: "Coba Lagi"
         },
+        errors:{
+            internalError: 'Internal server error, silahkan laporkan ini ke admin aplikasi ini',
+            duplicateData: "Data duplikat, silahkan periksa kembali",
+            emailDuplicate: "Surel(E-mail) telah ada didalam sistem, tidak dapat menambahkan data",
+            classNotFound: "Data kelas tidak ditemukan",
+            prodiNotFound: "Prodi tidak ditemukan",
+            deleteUrlInvalid: "Delete URL tidak valid",
+            noDataSelected: "Tidak ada data yang dipilih",
+            deleteItemsError: 'Gagal menghapus data'
+        },
+        success:{
+            deleteItemsSuccess: 'Data berhasil dihapus'
+        },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
             showMenuTooltipText: "Tampilkan menu",
@@ -35,6 +48,8 @@ export default function indonesian() {
         },
         table: {
             refresh: "Segarkan",
+            dialogDeleteTitle: "Hapus yang dipilih",
+            dialogDeleteConfirmMessage: "Apakah Anda yakin ingin menghapus data yang dipilih?",
             columns: {
                 student: {
                     NIS: "No. Induk",

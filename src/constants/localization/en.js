@@ -22,6 +22,19 @@ export default function english() {
             helpButtonLabel: "Help",
             retryText: "Try again"
         },
+        errors:{
+            internalError: 'Internal server error, please report to your administrator',
+            duplicateData: "Data duplicate, please check and try again",
+            emailDuplicate: "Email already exist, unable to add the data",
+            classNotFound: "Class not found",
+            prodiNotFound: "Prodi not found",
+            noDataSelected: "No data selected",
+            deleteUrlInvalid: "Delete URL not valid",
+            deleteItemsError: 'Deleting item(s) has ben failed'
+        },
+        success:{
+            deleteItemsSuccess: 'Item(s) has been deleted'
+        },
         appBar: {
             notificationTooltipText: "Notification",
             showMenuTooltipText: "Show menu",
@@ -35,6 +48,8 @@ export default function english() {
         },
         table: {
             refresh: "Refresh",
+            dialogDeleteTitle: "Delete selected",
+            dialogDeleteConfirmMessage: "Are you sure want to delete selected item(s)?",
             columns: {
                 student: {
                     NIS: "NIS",
