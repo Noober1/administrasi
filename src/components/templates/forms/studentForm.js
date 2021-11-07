@@ -1,17 +1,18 @@
 import React, { memo, useState, useEffect } from 'react'
-import PropTypes, { object } from 'prop-types'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import PropTypes from 'prop-types'
+import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
-import { ServerSideSelect } from '../../molecules'
+import { MainSpinner, ServerSideSelect } from '../../molecules'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
-import { useUpdateEffect } from 'react-use'
+import { useUpdateEffect, useEffectOnce } from 'react-use'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 
-const StudentForm = ({open, handleClose, mode, callback}) => {
-    const { authToken } = useSelector(selectAuth)
-    const emptyForm = {
+const StudentForm = ({open, handleClose, mode, callback, id}) => {
+
+    // edit this, make sure compare it with edit form structure
+    let formStructure = {
         firstName:'',
         lastName:'',
         NIS:'',
@@ -23,24 +24,56 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
         registerYear: '',
         prodi:''
     }
+
+    // don't edit this
+    const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const dispatch = useDispatch()
+    const [initComplete, setinitComplete] = useState(false)
+    const [isFetchError, setisFetchError] = useState(false)
+    const [formValue, setformValue] = useState(formStructure)
+    useUpdateEffect(() => {
+        if (mode === 'edit') {
+            setinitComplete(false)
+            setisFetchError(false)
+            if (open) {
+                fetchAPI(fetchWithToken({
+                    url:`/student/${id || ''}`,
+                    token: authToken
+                }))
+                .then(result => {
+                    setinitComplete(true)
+                })
+                .catch(error => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error(error)
+                    }
+                })
+            }
+        } else {
+            setinitComplete(true)
+            setisFetchError(false)
+            setformValue(prevValue => ({
+                ...formStructure
+            }))
+        }
+    }, [open])
+
     const { student } = strings.table.columns
     const [passwordError, setpasswordError] = useState(false)
     const [passwordEmpty, setpasswordEmpty] = useState(false)
-    const [formValue, setformValue] = useState(emptyForm)
     const [passwordFormValue, setpasswordFormValue] = useState({
         password:'',
         retypePassword:''
     })
-    const formError = passwordError || passwordEmpty
+    const formError = passwordError || (passwordEmpty && mode === 'add')
 
     const handleSubmitForm = event => {
         event.preventDefault()
         dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
-            url:'/student',
-            method:'POST',
+            url:`/student${mode === 'edit' ? '/' + data.id : ''}` ,
+            method:mode === 'edit' ? 'PATCH' : 'POST',
             token: authToken,
             data: formValue
         }))
@@ -117,6 +150,12 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
         }))
     }
 
+    const handleCloseFromDismiss = event => {
+        handleClose()
+        setinitComplete(false)
+        setisFetchError(false)
+    }
+
     if (process.env.NODE_ENV === 'development') {
         useEffect(() => {
             console.log('Component > studentForm: formValue', formValue)
@@ -141,14 +180,34 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
         setpasswordEmpty(password == '')
     }, [passwordFormValue])
 
+    if (!initComplete && open) {
+        return (
+            <Dialog
+                open={open}
+                onClose={isFetchError ? handleCloseFromDismiss : () => {}}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogContent className="text-center">
+                    <div className="py-10">
+                        {!isFetchError ? <CircularProgress/> : 
+                            <Typography>
+                                Error
+                            </Typography>
+                        }
+                    </div>
+                </DialogContent>
+            </Dialog>
+        )
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={handleCloseFromDismiss}
             scroll="body"
             maxWidth="sm"
             fullWidth
-            keepMounted
         >
             <form onSubmit={handleSubmitForm}>
                 <DialogTitle>{strings.panel.pages.student.addStudentTitle}</DialogTitle>
@@ -160,6 +219,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                     <div className="grid grid-cols-2 gap-4">
                         <TextField
                             className="col-span-2"
+                            value={formValue.firstName}
                             inputProps={{
                                 className:"capitalize",
                                 maxLength: 50
@@ -171,6 +231,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                         />
                         <TextField
                             className="col-span-2"
+                            value={formValue.lastName}
                             inputProps={{
                                 className:"capitalize",
                                 maxLength: 50
@@ -183,6 +244,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                             inputProps={{
                                 maxLength: 30
                             }}
+                            value={formValue.NIS}
                             onChange={handleInputChange}
                             name="NIS"
                             label={student.NIS}
@@ -190,6 +252,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                         />
                         <TextField
                             type="email"
+                            value={formValue.email}
                             inputProps={{
                                 maxLength: 50
                             }}
@@ -198,8 +261,13 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                             label={student.email}
                             required
                         />
+                        {mode === 'edit' &&
+                            <Alert severity="info" className="col-span-2">
+                                Jika ingin merubah kata sandi, silahkan isi 2 kolom kata sandi dibawah
+                            </Alert>
+                        }
                         <TextField
-                            error={passwordError || passwordEmpty}
+                            error={passwordError || (passwordEmpty && mode === 'add')}
                             type="password"
                             inputProps={{
                                 maxLength: 50
@@ -207,11 +275,11 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                             onChange={handlePassOnChange}
                             name="password"
                             label={student.password}
-                            helperText={passwordEmpty ? student.emptyPassword : passwordError ? student.mismatchPassword : ''}
-                            required
+                            helperText={passwordEmpty && mode === 'add' ? student.emptyPassword : passwordError ? student.mismatchPassword : ''}
+                            required={mode === 'add'}
                         />
                         <TextField
-                            error={passwordError}
+                            error={passwordError && mode ==='add'}
                             type="password"
                             inputProps={{
                                 maxLength: 50
@@ -219,10 +287,11 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                             onChange={handlePassOnChange}
                             name="retypePassword"
                             label={student.repeatPassword}
-                            helperText={passwordError ? student.mismatchPassword : ''}
-                            required
+                            helperText={passwordError && mode === 'add' ? student.mismatchPassword : ''}
+                            required={mode === 'add'}
                         />
                         <ServerSideSelect
+                            value={formValue.prodi}
                             className="col-span-2"
                             url="/prodi"
                             optionValue="id"
@@ -232,6 +301,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                             required
                         />
                         <ServerSideSelect
+                            value={formValue.class}
                             className="col-span-2"
                             url="/class"
                             optionValue="id"
@@ -270,7 +340,7 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
                     {/* FORM END HERE */}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>{strings.default.alertDialogCancelButtonText}</Button>
+                    <Button onClick={handleCloseFromDismiss}>{strings.default.alertDialogCancelButtonText}</Button>
                     <Button type="submit" disabled={formError}>{strings.default.saveText}</Button>
                 </DialogActions>
             </form>
@@ -280,11 +350,16 @@ const StudentForm = ({open, handleClose, mode, callback}) => {
 
 StudentForm.defaultProps = {
     open: false,
-    mode: 'add'
+    mode: 'add',
+    id: null
 }
 
 StudentForm.propTypes = {
     open: PropTypes.bool.isRequired,
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     handleClose: PropTypes.func.isRequired,
     callback: PropTypes.func,
     mode: PropTypes.oneOf(['add','edit'])

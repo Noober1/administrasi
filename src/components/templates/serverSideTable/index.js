@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
+import { DeleteDialog } from '../../molecules'
 
 const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder, enableCheckbox = true, customButtons, deleteUrl = null, showDeleteButton = true}, ref) => {
     const strings = useLocalization()
@@ -67,6 +68,8 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
             if (!completeInit) {
                 setpaginationData(data.pagination)
                 setcompleteInit(true)
+            } else if(page == 0) {
+                setpaginationData(data.pagination)
             }
         }
         if (isError) {
@@ -112,7 +115,7 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
                         onClick={() => refreshTable(true)}
                         startIcon={<ReplayIcon/>}
                     >
-                        Coba lagi
+                        {strings.default.retryText}
                     </Button>
                 </div>
             }
@@ -132,58 +135,6 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
         );
-    }
-
-    const handleDeleteItem = event => {
-        const snackbarErrorOptions = {
-            position: 'top-right',
-            severity: 'error'
-        }
-        dispatch(showSpinner(true))
-        if (selections.length < 1) {
-            setdialogOpen(false)
-            dispatch(openSnackbar({
-                ...snackbarErrorOptions,
-                message: strings.errors.noDataSelected
-            }))
-            dispatch(hideSpinner())
-            return false
-        }
-
-        if (!deleteUrl) {
-            setdialogOpen(false)
-            dispatch(openSnackbar({
-                ...snackbarErrorOptions,
-                message: strings.errors.deleteUrlInvalid
-            }))
-            dispatch(hideSpinner())
-            return false
-        }
-
-        fetchAPI(fetchWithToken({
-            url: deleteUrl,
-            method: "DELETE",
-            token: authToken,
-            data: JSON.stringify(selections)
-        }))
-        .then(result => {
-            setdialogOpen(false)
-            refreshTable()
-            dispatch(openSnackbar({
-                position: 'top-right',
-                severity: 'error',
-                message: strings.success.deleteItemsSuccess
-            }))
-            dispatch(hideSpinner())
-        })
-        .catch(error =>{
-            setdialogOpen(false)
-            dispatch(openSnackbar({
-                ...snackbarErrorOptions,
-                message: strings.errors.deleteItemsError
-            }))
-            dispatch(hideSpinner())
-        })
     }
 
     if (!completeInit) {
@@ -211,6 +162,7 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
                                 refreshText: strings.table.refresh,
                                 customButton: customButtons,
                                 deleteLabel: strings.table.dialogDeleteTitle,
+                                showDeleteButton: showDeleteButton,
                                 setdialogOpen: event => setdialogOpen(true)
                             }
                         }}
@@ -229,23 +181,13 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
                         rows={rows}
                         loading={loading}
                     />
-                    <Dialog
-                        open={dialogOpen}
-                        onClose={() => setdialogOpen(false)}
-                    >
-                        <DialogTitle>{strings.table.dialogDeleteTitle}</DialogTitle>
-                        <DialogContent>
-                            {strings.table.dialogDeleteConfirmMessage}
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setdialogOpen(false)}>
-                                {strings.default.alertDialogCancelButtonText}
-                            </Button>
-                            <Button onClick={handleDeleteItem}>
-                                {strings.default.deleteText}
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
+                    <DeleteDialog
+                        dialogOpen={dialogOpen}
+                        closeHandle={() => setdialogOpen(false)}
+                        data={selections}
+                        url={deleteUrl || ''}
+                        refreshTableHandler={refreshTable}
+                    />
                 </div>
             </div>
         </div>

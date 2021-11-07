@@ -1,14 +1,23 @@
-import React from 'react'
-import { Button, ButtonGroup, Paper, Typography } from '@mui/material'
+import React, { useRef, useState } from 'react'
+import { Alert, Button, ButtonGroup, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import AddIcon from '@mui/icons-material/Add';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { PanelContentHead, PanelContentTitle } from '../../src/components/atoms/dashboard'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
+import { DeleteDialog } from '../../src/components/molecules'
 
 const Class = () => {
+    const tableRef = useRef(null)
     const strings = useLocalization()
+    const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
+    const [dataToDelete, setdataToDelete] = useState(null)
+
+    const handleOpenDeleteDialog = (data) => {
+        setdataToDelete(data)
+        setdeleteDialogOpen(true)
+    }
 
     const columns = [
         {
@@ -35,7 +44,7 @@ const Class = () => {
                         <Button size="small" variant="contained" color="info">
                             {strings.default.editText}
                         </Button>
-                        <Button size="small" variant="contained" color="error">
+                        <Button size="small" variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
                             {strings.default.deleteText}
                         </Button>
                     </ButtonGroup>
@@ -61,8 +70,25 @@ const Class = () => {
                 helpButtonHandler={event => console.log('click tombol bantuan pembayaran')}
             />
             <ServerSideTable
+                ref={tableRef}
+                enableCheckbox={false}
+                showDeleteButton={false}
                 url='/class'
                 columns={columns}
+            />
+            <DeleteDialog
+                dialogOpen={deleteDialogOpen}
+                closeHandle={() => setdeleteDialogOpen(false)}
+                data={[dataToDelete]}
+                additionalMessage={(
+                    <Alert severity="warning">
+                        {strings.panel.pages.class.warningDeleteItem}
+                    </Alert>
+                )}
+                url="/class"
+                refreshTableHandler={() => {
+                    tableRef.current.refresh()
+                }}
             />
         </Box>
     )

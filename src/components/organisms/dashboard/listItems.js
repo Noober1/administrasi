@@ -64,14 +64,14 @@ const Menus = ({menuOpen}) => {
 	const MasterDataList = () => (
 		<div>
 			<MenuLink
-				link="/student"
-				text={strings.panel.menu.studentListText}
-				icon={<PersonIcon />}
-			/>
-			<MenuLink
 				link="/class"
 				text={strings.panel.menu.classListText}
 				icon={<PeopleIcon />}
+			/>
+			<MenuLink
+				link="/student"
+				text={strings.panel.menu.studentListText}
+				icon={<PersonIcon />}
 			/>
 		</div>
 	)

@@ -44,7 +44,7 @@ export default function MainSnackbar() {
 				</>
 			}
 		>
-			<Alert variant="filled" severity={mainSnackbar.severity} sx={{ width: '100%' }}>
+			<Alert variant="filled" severity={mainSnackbar.severity} sx={{ width: '100%', maxWidth: '500px' }}>
 				{mainSnackbar.message}
 			</Alert>
 		</Snackbar>

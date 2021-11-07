@@ -30,7 +30,7 @@ export default function english() {
             prodiNotFound: "Prodi not found",
             noDataSelected: "No data selected",
             deleteUrlInvalid: "Delete URL not valid",
-            deleteItemsError: 'Deleting item(s) has ben failed'
+            deleteItemsError: 'Deleting item(s) failed'
         },
         success:{
             deleteItemsSuccess: 'Item(s) has been deleted'
@@ -98,7 +98,8 @@ export default function english() {
                     addStudentDescription: "Please fill this form below"
                 },
                 class:{
-                    titlePage: "Class / Angkatan List"
+                    titlePage: "Class / Angkatan List",
+                    warningDeleteItem: "Data would not be deleted if there are student(s) with a same class exist"
                 },
                 payment: {
                     titlePage: "Payment List"

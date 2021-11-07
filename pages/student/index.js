@@ -1,17 +1,35 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { Alert, Button, ButtonGroup, TextField, Typography } from '@mui/material'
+import { Button, ButtonGroup } from '@mui/material'
 import { Box } from '@mui/system'
-import { PanelContentHead, PanelContentTitle } from '../../src/components/atoms/dashboard'
+import { PanelContentHead } from '../../src/components/atoms/dashboard'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import StudentForm from '../../src/components/templates/forms/studentForm';
 
 const Student = () => {
     const strings = useLocalization()
-    const [formAddStudentOpen, setformAddStudentOpen] = useState(false)
+    const [formStudentMode, setformStudentMode] = useState('add')
+    const [formStudentOpen, setformStudentOpen] = useState(false)
+    const [formStudentEditId, setformStudentEditId] = useState(null)
     const tableRef = useRef(null)
+
+    const handleAddStudentButton = event => {
+        setformStudentMode('add')
+        setformStudentOpen(true)
+    }
+
+    const handleEditStudent = id => {
+        setformStudentMode('edit')
+        setformStudentEditId(id)
+        setformStudentOpen(true)
+    }
+
+    const handleFormCallback = (error, data) => {
+        if (error || typeof tableRef.current.refresh === 'undefined') return
+        tableRef.current.refresh()
+    }
 
     const { student } = strings.table.columns
 
@@ -41,11 +59,8 @@ const Student = () => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained" color="info">
+                        <Button size="small" variant="contained" color="info" onClick={() => handleEditStudent(params.value)}>
                             {strings.default.editText}
-                        </Button>
-                        <Button size="small" variant="contained" color="error">
-                            {strings.default.deleteText}
                         </Button>
                     </ButtonGroup>
                 )
@@ -53,23 +68,20 @@ const Student = () => {
         }
     ];
 
-    const handleFormCallback = (error, data) => {
-        if (error || typeof tableRef.current.refresh === 'undefined') return
-        tableRef.current.refresh()
-    }
-
     return (
         <Box>
             <PanelContentHead
                 title={strings.panel.pages.student.titlePage}
                 buttonGroup={(
                     <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={() => setformAddStudentOpen(true)}>
+                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddStudentButton}>
                             {strings.default.addText}
                         </Button>
                         <StudentForm
-                            open={formAddStudentOpen}
-                            handleClose={() => setformAddStudentOpen(false)}
+                            open={formStudentOpen}
+                            mode={formStudentMode}
+                            id={formStudentEditId}
+                            handleClose={() => setformStudentOpen(false)}
                             callback={handleFormCallback}
                         />
                         <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
@@ -82,7 +94,6 @@ const Student = () => {
             <ServerSideTable
                 ref={tableRef}
                 url='/student'
-                perPage="2"
                 columns={columns}
                 deleteUrl='/student'
             />

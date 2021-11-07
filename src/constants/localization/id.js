@@ -98,7 +98,8 @@ export default function indonesian() {
                     addStudentDescription: "Silahkan isi form dibawah ini"
                 },
                 class:{
-                    titlePage: "Daftar kelas / Angkatan"
+                    titlePage: "Daftar kelas / Angkatan",
+                    warningDeleteItem: "Data tidak akan terhapus terdapat mahasiswa yang berada di kelas yang akan dihapus"
                 },
                 payment: {
                     titlePage: "Daftar pembayaran"

@@ -6,7 +6,7 @@ import { useFetchApi } from '../../../lib'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import PropTypes from 'prop-types'
-import { useDebounce } from 'react-use'
+import { useDebounce, useEffectOnce, useUpdateEffect } from 'react-use'
 
 /**
  * Selection with value from API
@@ -17,10 +17,11 @@ import { useDebounce } from 'react-use'
  * @param {string} onChange - onChange event, parameter: event, newOptionValue, newObjectValue
  * @returns {null}
  */
-const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, required, className}) => {
+const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, required, className, value:initValue}) => {
 	const auth = useSelector(selectAuth)
 	const [open, setOpen] = useState(false)
 	const [value, setvalue] = useState('')
+	const [initValueDone, setinitValueDone] = useState(false)
 	const [tempSearchText, settempSearchText] = useState('')
 	const [searchText, setsearchText] = useState('')
 	const [options, setOptions] = useState([])
@@ -40,6 +41,15 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 		}
 	}, [data, open])
 
+	useUpdateEffect(() => {
+		if (options.length > 0 && !initValueDone && initValue) {
+			let getDataFromFetchedData = options.find(item => item[optionValue] == initValue)
+			if (getDataFromFetchedData) {
+				setvalue(getDataFromFetchedData)
+			}
+		}
+	}, [options])
+
 	if (process.env.NODE_ENV === 'development') {
 		useEffect(() => {
 			console.log('Component > ServerSideSelect: Fetch', data, fetchLoading, fetchErrorMessage,fetchErrorMessage)
@@ -54,7 +64,9 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 	}, [open]);
 
 	const handleOnChange = (event, newValue) => {
-		console.log('newValue', newValue)
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Components > ServerSideSelect: handleOnChange newValue', newValue)
+		}
 		if (typeof onChange === 'function') {
 			try {
 				onChange(event, newValue[optionValue], newValue)
