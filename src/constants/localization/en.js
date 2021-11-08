@@ -16,13 +16,14 @@ export default function english() {
             addText: "Add",
             saveText: "Save",
             savedText: "Data has been saved",
-            failedToSaveText: "Data failed to save",
             importText:"Import",
             deleteText:"Delete",
             helpButtonLabel: "Help",
             retryText: "Try again"
         },
         errors:{
+            failedToSaveText: "Data failed to save",
+            failedToDelete: "Data failed to delete",
             internalError: 'Internal server error, please report to your administrator',
             duplicateData: "Data duplicate, please check and try again",
             emailDuplicate: "Email already exist, unable to add the data",
@@ -68,6 +69,12 @@ export default function english() {
                     helperRegisterYearCantChange: "Register year will filled automatically based on selected Class",
                     prodi: "Prodi",
                     action: "Action"
+                },
+                class: {
+                    name: "Class name",
+                    semster: "Semester",
+                    angkatan: "Angkatan",
+                    action: "Action"
                 }
             }
         },
@@ -95,10 +102,16 @@ export default function english() {
                 student:{
                     titlePage:"Student List",
                     addStudentTitle:"Add Student",
-                    addStudentDescription: "Please fill this form below"
+                    addStudentDescription: "Please fill this form below",
+                    editStudentTitle:"Edit Student",
+                    editStudentDescription: "Please edit these fields below"
                 },
                 class:{
                     titlePage: "Class / Angkatan List",
+                    addClassTitle:"Tambah Kelas / Angkatan",
+                    addClassDescription: "Please fill this form below",
+                    editClassTitle: "Edit Kelas / Angkatan",
+                    editClassDescription: "Please edit these fields below",
                     warningDeleteItem: "Data would not be deleted if there are student(s) with a same class exist"
                 },
                 payment: {

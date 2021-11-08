@@ -7,16 +7,45 @@ import { PanelContentHead, PanelContentTitle } from '../../src/components/atoms/
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import { DeleteDialog } from '../../src/components/molecules'
+import ClassForm from '../../src/components/templates/forms/classForm';
 
 const Class = () => {
     const tableRef = useRef(null)
     const strings = useLocalization()
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
     const [dataToDelete, setdataToDelete] = useState(null)
+    const [formOpen, setformOpen] = useState(false)
+    const [formMode, setformMode] = useState('')
+    const [formEditId, setformEditId] = useState(null)
 
     const handleOpenDeleteDialog = (data) => {
         setdataToDelete(data)
         setdeleteDialogOpen(true)
+    }
+
+    const handleAddButton = event => {
+        setformMode('add')
+        setformOpen(true)
+    }
+
+    const handleEditButton = id => {
+        setformMode('edit')
+        setformEditId(id)
+        setformOpen(true)
+    }
+
+    const handleFormCallback = (error, data) => {
+        try {
+            if (typeof tableRef.current.refresh == 'function') {
+                if (!error) {
+                    tableRef.current.refresh()
+                }
+            }
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error()
+            }
+        }
     }
 
     const columns = [
@@ -41,7 +70,7 @@ const Class = () => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained" color="info">
+                        <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
                             {strings.default.editText}
                         </Button>
                         <Button size="small" variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
@@ -59,7 +88,7 @@ const Class = () => {
                 title={strings.panel.pages.class.titlePage}
                 buttonGroup={(
                     <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>}>
+                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
                             {strings.default.addText}
                         </Button>
                         <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
@@ -89,6 +118,13 @@ const Class = () => {
                 refreshTableHandler={() => {
                     tableRef.current.refresh()
                 }}
+            />
+            <ClassForm
+                open={formOpen}
+                mode={formMode}
+                id={formEditId}
+                handleClose={() => setformOpen(false)}
+                callback={handleFormCallback}
             />
         </Box>
     )

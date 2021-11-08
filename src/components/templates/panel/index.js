@@ -199,7 +199,7 @@ const Panel = ({children}) => {
 						noWrap
 						sx={{ flexGrow: 1 }}
 					>
-						STEI Al-Amar Subang
+						{process.env.NEXT_PUBLIC_COMPANY_NAME}
 					</Typography>
 					<Tooltip
 						title={strings.appBar.notificationTooltipText}

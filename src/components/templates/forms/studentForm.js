@@ -32,6 +32,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
     const [initComplete, setinitComplete] = useState(false)
     const [isFetchError, setisFetchError] = useState(false)
     const [formValue, setformValue] = useState(formStructure)
+
     useUpdateEffect(() => {
         if (mode === 'edit') {
             setinitComplete(false)
@@ -42,12 +43,22 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                     token: authToken
                 }))
                 .then(result => {
+                    // edit this
+                    setformValue(prevValue => ({
+                        ...prevValue,
+                        ...result,
+                        class: result.class.id,
+                        prodi: result.prodi.id
+                    }))
+
                     setinitComplete(true)
+                    setisFetchError(false)
                 })
                 .catch(error => {
                     if (process.env.NODE_ENV === 'development') {
                         console.error(error)
                     }
+                    setisFetchError(true)
                 })
             }
         } else {
@@ -72,7 +83,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
         event.preventDefault()
         dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
-            url:`/student${mode === 'edit' ? '/' + data.id : ''}` ,
+            url:`/student${mode === 'edit' ? '/' + id : ''}` ,
             method:mode === 'edit' ? 'PATCH' : 'POST',
             token: authToken,
             data: formValue
@@ -114,7 +125,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
             }
             dispatch(openSnackbar({
                 position: 'top-right',
-                message: `${strings.default.failedToSaveText}: ${msg}`,
+                message: `${strings.errors.failedToSaveText}: ${msg}`,
                 severity: 'error'
             }))
             if (typeof callback == 'function') {
@@ -336,6 +347,15 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                                 <MenuItem value="beasiswa">Beasiswa</MenuItem>
                             </Select>
                         </FormControl>
+                        <TextField
+                            type="text"
+                            value={formValue.registerYear}
+                            label={student.registerYear}
+                            helperText={student.helperRegisterYearCantChange}
+                            inputProps={{
+                                readOnly: true
+                            }}
+                        />
                     </div>
                     {/* FORM END HERE */}
                 </DialogContent>

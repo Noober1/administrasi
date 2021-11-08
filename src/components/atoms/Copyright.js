@@ -7,7 +7,7 @@ const Copyright = (props) => {
             {new Date().getFullYear()}
             {' - '}
             <Link color="inherit" underline="none" target="_blank" href="https://mui.com/">
-                STEI Al-Amar Subang
+                {process.env.NEXT_PUBLIC_COMPANY_NAME}
             </Link>
             {'.'}
 		</Typography>

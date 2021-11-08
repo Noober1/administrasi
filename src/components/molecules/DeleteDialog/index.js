@@ -53,7 +53,10 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
             url: url,
             method: "DELETE",
             token: authToken,
-            data: JSON.stringify(data)
+            data: {
+                ids: data,
+                action: 'delete'
+            }
         }))
         .then(result => {
             closeHandle()

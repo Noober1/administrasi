@@ -1,23 +1,20 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import PropTypes, { string } from 'prop-types'
+import PropTypes from 'prop-types'
 import { DataGrid, useGridApiContext, useGridState } from '@mui/x-data-grid'
 import { useFetchApi } from '../../../lib'
-import { useEffectOnce, useUpdate, useUpdateEffect } from 'react-use'
-import { Typography, Button, CircularProgress, Skeleton, useTheme, Pagination, Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
+import { useUpdateEffect } from 'react-use'
+import { Typography, Button, CircularProgress, Skeleton, useTheme, Pagination } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import useLocalization from '../../../lib/useLocalization'
 import { tableLocalization } from '../../../constants'
 import CustomToolbar from './CustomToolbar'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
-import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
-import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { DeleteDialog } from '../../molecules'
 
 const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder, enableCheckbox = true, customButtons, deleteUrl = null, showDeleteButton = true}, ref) => {
     const strings = useLocalization()
     const { authToken } = useSelector(selectAuth)
-    const dispatch = useDispatch()
     const localeText = tableLocalization(strings.languange.initial)
     const [page, setpage] = useState(0)
     const [refreshCount, setrefreshCount] = useState(0)

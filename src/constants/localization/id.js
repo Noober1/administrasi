@@ -16,13 +16,14 @@ export default function indonesian() {
             addText: "Tambah",
             saveText: "Simpan",
             savedText: "Data berhasil disimpan",
-            failedToSaveText: "Data gagal disimpan",
             importText:"Import",
             deleteText:"Hapus",
             helpButtonLabel: "Bantuan",
             retryText: "Coba Lagi"
         },
         errors:{
+            failedToSaveText: "Data gagal disimpan",
+            failedToDelete: "Data gagal dihapus",
             internalError: 'Internal server error, silahkan laporkan ini ke admin aplikasi ini',
             duplicateData: "Data duplikat, silahkan periksa kembali",
             emailDuplicate: "Surel(E-mail) telah ada didalam sistem, tidak dapat menambahkan data",
@@ -68,6 +69,12 @@ export default function indonesian() {
                     helperRegisterYearCantChange: "Tahun masuk akan terisi otomatis berdasarkan kelas yang dipilih",
                     prodi: "Prodi",
                     action: "Aksi"
+                },
+                class: {
+                    name: "Nama kelas",
+                    semster: "Semester",
+                    angkatan: "Angkatan",
+                    action: "Aksi"
                 }
             }
         },
@@ -95,10 +102,16 @@ export default function indonesian() {
                 student:{
                     titlePage:"Daftar Mahasiswa",
                     addStudentTitle:"Tambah Mahasiswa",
-                    addStudentDescription: "Silahkan isi form dibawah ini"
+                    addStudentDescription: "Silahkan isi form dibawah ini",
+                    editStudentTitle:"Sunting Mahasiswa",
+                    editStudentDescription: "Silahkan sunting isian dibawah ini"
                 },
                 class:{
-                    titlePage: "Daftar kelas / Angkatan",
+                    titlePage: "Daftar Kelas / Angkatan",
+                    addClassTitle:"Tambah Kelas / Angkatan",
+                    addClassDescription: "Silahkan isi form dibawah ini",
+                    editClassTitle: "Sunting Kelas / Angkatan",
+                    editClassDescription: "Silahkan sunting isian dibawah ini",
                     warningDeleteItem: "Data tidak akan terhapus terdapat mahasiswa yang berada di kelas yang akan dihapus"
                 },
                 payment: {

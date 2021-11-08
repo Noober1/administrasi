@@ -97,6 +97,8 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 			onClose={() => {
 				setOpen(false);
 			}}
+			disableClearable
+			openOnFocus
 			isOptionEqualToValue={(option, value) => option[optionValue] === value[optionValue] || value == ''}
 			getOptionLabel={(option) => option[optionLabel] || ''}
 			options={options}
