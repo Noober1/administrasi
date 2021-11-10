@@ -6,6 +6,7 @@ export default function english() {
             initial:'EN'
         },
         default:{
+            nameOfMonths: ['January','February','March','April','May','June','July','August','September','October','November','December'],
             alertDialogConfirmButtonText: "OK",
             alertDialogCancelButtonText: "Cancel",
             alertLogoutTitleText: "Logout from system",
@@ -19,7 +20,8 @@ export default function english() {
             importText:"Import",
             deleteText:"Delete",
             helpButtonLabel: "Help",
-            retryText: "Try again"
+            retryText: "Try again",
+            detailText: "Detail"
         },
         errors:{
             failedToSaveText: "Data failed to save",
@@ -31,7 +33,8 @@ export default function english() {
             prodiNotFound: "Prodi not found",
             noDataSelected: "No data selected",
             deleteUrlInvalid: "Delete URL not valid",
-            deleteItemsError: 'Deleting item(s) failed'
+            deleteItemsError: 'Deleting item(s) failed',
+            dataExist: 'Data already exist in database'
         },
         success:{
             deleteItemsSuccess: 'Item(s) has been deleted'
@@ -75,6 +78,14 @@ export default function english() {
                     semster: "Semester",
                     angkatan: "Angkatan",
                     action: "Action"
+                },
+                payment:{
+                    registerDate: "Date",
+                    admin:"Administrator",
+                    type: "Payment Type",
+                    price: "Price",
+                    description: "Description",
+                    action: "Action"
                 }
             }
         },
@@ -115,7 +126,8 @@ export default function english() {
                     warningDeleteItem: "Data would not be deleted if there are student(s) with a same class exist"
                 },
                 payment: {
-                    titlePage: "Payment List"
+                    titlePage: "Payment List",
+                    warningDeleteItem: "Data would not be deleted if there invoice data with this payment data exist"
                 }
             }
         },

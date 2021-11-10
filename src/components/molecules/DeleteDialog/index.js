@@ -71,10 +71,11 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
             dispatch(hideSpinner())
         })
         .catch(error =>{
+            const error_code = error?.response?.data?.code ? `[${error.response.data.code}]` : ''
             closeHandle()
             dispatch(openSnackbar({
                 ...snackbarErrorOptions,
-                message: strings.errors.deleteItemsError
+                message: strings.errors.deleteItemsError + ' ' + error_code
             }))
             dispatch(hideSpinner())
         })

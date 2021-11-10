@@ -6,6 +6,7 @@ export default function indonesian() {
             initial:'ID'
         },
         default:{
+            nameOfMonths: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
             alertDialogConfirmButtonText: "Oke",
             alertDialogCancelButtonText: "Batal",
             alertLogoutTitleText: "Keluar dari sistem",
@@ -19,7 +20,8 @@ export default function indonesian() {
             importText:"Import",
             deleteText:"Hapus",
             helpButtonLabel: "Bantuan",
-            retryText: "Coba Lagi"
+            retryText: "Coba Lagi",
+            detailText: "Rincian"
         },
         errors:{
             failedToSaveText: "Data gagal disimpan",
@@ -31,7 +33,8 @@ export default function indonesian() {
             prodiNotFound: "Prodi tidak ditemukan",
             deleteUrlInvalid: "Delete URL tidak valid",
             noDataSelected: "Tidak ada data yang dipilih",
-            deleteItemsError: 'Gagal menghapus data'
+            deleteItemsError: 'Gagal menghapus data',
+            dataExist: 'Data telah ada di database'
         },
         success:{
             deleteItemsSuccess: 'Data berhasil dihapus'
@@ -72,8 +75,16 @@ export default function indonesian() {
                 },
                 class: {
                     name: "Nama kelas",
-                    semster: "Semester",
+                    semester: "Semester",
                     angkatan: "Angkatan",
+                    action: "Aksi"
+                },
+                payment:{
+                    registerDate: "Tanggal",
+                    admin:"Administrator",
+                    type: "Jenis Pembayaran",
+                    price: "Nominal",
+                    description: "Deskripsi",
                     action: "Aksi"
                 }
             }
@@ -112,10 +123,11 @@ export default function indonesian() {
                     addClassDescription: "Silahkan isi form dibawah ini",
                     editClassTitle: "Sunting Kelas / Angkatan",
                     editClassDescription: "Silahkan sunting isian dibawah ini",
-                    warningDeleteItem: "Data tidak akan terhapus terdapat mahasiswa yang berada di kelas yang akan dihapus"
+                    warningDeleteItem: "Data tidak akan terhapus jika terdapat mahasiswa yang berada di kelas yang akan dihapus"
                 },
                 payment: {
-                    titlePage: "Daftar pembayaran"
+                    titlePage: "Daftar pembayaran",
+                    warningDeleteItem: "Data tidak akan terhapus jika data pembayaran ini mempunyai invoice"
                 }
             }
         },

@@ -102,6 +102,9 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                     case 'ERR_CLASS_NOT_FOUND':
                         msg = strings.errors.classNotFound
                         break;
+                    case 'ERR_DATA_EXIST':
+                            msg = strings.errors.dataExist
+                            break;
                     default:
                         msg = strings.errors.failedToDelete + ` [${code}]`
                         break;
@@ -198,7 +201,10 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                             onChange={handleInputChange}
                             name="angkatan"
                             label={classTable.angkatan}
-                            required
+                            inputProps={{
+                                readOnly: mode === 'edit'
+                            }}
+                            required={mode === 'add'}
                         />
                     </div>
                     {/* FORM END HERE */}
