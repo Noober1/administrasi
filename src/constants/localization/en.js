@@ -128,6 +128,9 @@ export default function english() {
                 payment: {
                     titlePage: "Payment List",
                     warningDeleteItem: "Data would not be deleted if there invoice data with this payment data exist"
+                },
+                paymentWithId: {
+                    titlePage: "Payment detail"
                 }
             }
         },

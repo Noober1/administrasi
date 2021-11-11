@@ -52,7 +52,7 @@ const Payment = (props) => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Link href={`/payment/${params.value}/invoices`}>
+                        <Link href={`/payment/${params.value}`}>
                             <Button size="small" variant="contained" color="secondary">
                                 {strings.panel.menu.invoicesText}
                             </Button>

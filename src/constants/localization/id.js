@@ -126,8 +126,11 @@ export default function indonesian() {
                     warningDeleteItem: "Data tidak akan terhapus jika terdapat mahasiswa yang berada di kelas yang akan dihapus"
                 },
                 payment: {
-                    titlePage: "Daftar pembayaran",
+                    titlePage: "Daftar Pembayaran",
                     warningDeleteItem: "Data tidak akan terhapus jika data pembayaran ini mempunyai invoice"
+                },
+                paymentWithId: {
+                    titlePage: "Rincian Pembayaran"
                 }
             }
         },
