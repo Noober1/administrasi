@@ -21,7 +21,8 @@ export default function english() {
             deleteText:"Delete",
             helpButtonLabel: "Help",
             retryText: "Try again",
-            detailText: "Detail"
+            detailText: "Detail",
+            returnText: "Back"
         },
         errors:{
             failedToSaveText: "Data failed to save",
@@ -83,9 +84,12 @@ export default function english() {
                     registerDate: "Date",
                     admin:"Administrator",
                     type: "Payment Type",
+                    typeHelper: "Subject / Title for payment detail",
                     price: "Price",
+                    priceHelper: "Example: 100000",
                     description: "Description",
-                    action: "Action"
+                    action: "Action",
+                    adminCantChanged: "Administrator will be filled automatically with your email"
                 }
             }
         },
@@ -119,7 +123,7 @@ export default function english() {
                 },
                 class:{
                     titlePage: "Class / Angkatan List",
-                    addClassTitle:"Tambah Kelas / Angkatan",
+                    addClassTitle:"Add Kelas / Angkatan",
                     addClassDescription: "Please fill this form below",
                     editClassTitle: "Edit Kelas / Angkatan",
                     editClassDescription: "Please edit these fields below",
@@ -127,10 +131,15 @@ export default function english() {
                 },
                 payment: {
                     titlePage: "Payment List",
+                    addPaymentTitle:"Add Payment",
+                    addPaymentDescription: "Please fill this form below",
+                    editPaymentTitle: "Edit Payment",
+                    editPaymentDescription: "Please edit these fields below",
                     warningDeleteItem: "Data would not be deleted if there invoice data with this payment data exist"
                 },
                 paymentWithId: {
-                    titlePage: "Payment detail"
+                    titlePage: "Payment detail",
+                    invoiceTableTitle: "Invoices"
                 }
             }
         },

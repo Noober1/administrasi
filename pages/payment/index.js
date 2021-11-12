@@ -8,6 +8,7 @@ import { PanelContentHead } from '../../src/components/atoms/dashboard';
 import { tools } from '../../src/lib';
 import { DeleteDialog } from '../../src/components/molecules';
 import Link from 'next/link'
+import PaymentForm from '../../src/components/templates/forms/paymentForm';
 
 const Payment = (props) => {
     const strings = useLocalization()
@@ -15,6 +16,34 @@ const Payment = (props) => {
     const tableRef = useRef(null)
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
     const [dataToDelete, setdataToDelete] = useState(null)
+    const [formOpen, setformOpen] = useState(false)
+    const [formMode, setformMode] = useState('add')
+    const [formEditId, setformEditId] = useState(null)
+
+    const handleAddButton = event => {
+        setformMode('add')
+        setformOpen(true)
+    }
+
+    const handleEditButton = id => {
+        setformMode('edit')
+        setformEditId(id)
+        setformOpen(true)
+    }
+
+    const handleFormCallback = (error, data) => {
+        try {
+            if (typeof tableRef.current.refresh == 'function') {
+                if (!error) {
+                    tableRef.current.refresh()
+                }
+            }
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error()
+            }
+        }
+    }
 
     const handleOpenDeleteDialog = (data) => {
         setdataToDelete(data)
@@ -53,11 +82,11 @@ const Payment = (props) => {
                 return(
                     <ButtonGroup>
                         <Link href={`/payment/${params.value}`}>
-                            <Button size="small" variant="contained" color="secondary">
-                                {strings.panel.menu.invoicesText}
+                            <Button size="small" variant="contained">
+                                {strings.default.detailText}
                             </Button>
                         </Link>
-                        <Button size="small" variant="contained" color="info">
+                        <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
                             {strings.default.editText}
                         </Button>
                         <Button variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
@@ -75,7 +104,7 @@ const Payment = (props) => {
                 title={strings.panel.pages.payment.titlePage}
                 buttonGroup={(
                     <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>}>
+                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
                             {strings.default.addText}
                         </Button>
                     </ButtonGroup>
@@ -102,6 +131,13 @@ const Payment = (props) => {
                 refreshTableHandler={() => {
                     tableRef.current.refresh()
                 }}
+            />
+            <PaymentForm
+                open={formOpen}
+                mode={formMode}
+                id={formEditId}
+                handleClose={() => setformOpen(false)}
+                callback={handleFormCallback}
             />
         </Box>
     )

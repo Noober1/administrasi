@@ -32,7 +32,7 @@ const DetailPaper = ({title, list, loading, error}) => {
     }
 
     return (
-        <Paper className="p-5" elevation={1}>
+        <Paper className="p-5" elevation={0}>
             {error &&
                 <Typography>
                     {strings.default.anErrorOccured}

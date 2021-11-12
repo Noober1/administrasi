@@ -6,6 +6,7 @@ import Copyright from './Copyright'
 import Tooltip from './tooltip'
 import SpinnerBackdrop from './spinnerBackdrop'
 import MainSnackbar from './MainSnackbar'
+import BackButton from './backButton'
 
 export {
     Link,
@@ -15,5 +16,6 @@ export {
     Copyright,
     Tooltip,
     SpinnerBackdrop,
-    MainSnackbar
+    MainSnackbar,
+    BackButton
 }

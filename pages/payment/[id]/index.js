@@ -1,6 +1,5 @@
-import StarIcon from '@mui/icons-material/Star'
 import EditIcon from '@mui/icons-material/Edit'
-import { Button, ButtonGroup, List, ListItemButton, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material'
+import { Button, ButtonGroup } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 import { PanelContentHead } from '../../../src/components/atoms/dashboard'
@@ -11,6 +10,8 @@ import useFetchApi from '../../../src/lib/useFetchApi'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../src/lib/redux/slices/authSlice'
 import { tools } from '../../../src/lib'
+import { BackButton } from '../../../src/components/atoms'
+import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
@@ -20,12 +21,22 @@ const PaymentWithId = ({paymentId}) => {
     const { payment } = strings.table.columns
     const [paymentDetailData, setpaymentDetailData] = useState({})
 
+    const [formOpen, setformOpen] = useState(false)
+
     const [data, loading, fetchError, errorMessage] = useFetchApi(null,{
         url: `/administrasi/payment/${paymentId}`,
         headers: {
 			Authorization: 'Bearer ' + authToken
 		}
     })
+
+    const handleEditButton = id => {
+        setformOpen(true)
+    }
+
+    const handleFormCallback = (error, data) => {
+        console.log('should refresh payment detail component')
+    }
 
     useEffect(() => {
         if (!loading) {
@@ -69,7 +80,8 @@ const PaymentWithId = ({paymentId}) => {
         {
             field:'destinationAccount',
             headerName:'Tujuan Rekening',
-            width:130
+            width:130,
+            valueGetter: params => params.value ?? '-'
         },
         {
             field: 'id',
@@ -95,22 +107,34 @@ const PaymentWithId = ({paymentId}) => {
             <PanelContentHead
                 title={paymentWithId.titlePage}
                 buttonGroup={(
+                    <>
+                    <BackButton/>
                     <ButtonGroup>
-                        <Button variant="contained" color="info" startIcon={<EditIcon/>}>
+                        <Button variant="contained" color="info" startIcon={<EditIcon/>} onClick={() => handleEditButton(paymentId)}>
                             {strings.default.editText}
                         </Button>
                     </ButtonGroup>
+                    </>
                 )}
                 helpButtonHandler={() => console.log('help button clicked')}
             />
-            <DetailPaper
-                loading={loading}
-                error={fetchError}
-                title={strings.default.detailText}
-                list={detailList}
+            <PaymentForm
+                open={formOpen}
+                mode="edit"
+                id={paymentId}
+                handleClose={() => setformOpen(false)}
+                callback={handleFormCallback}
             />
+            <Box className="mb-5">
+                <DetailPaper
+                    loading={loading}
+                    error={fetchError}
+                    title={strings.default.detailText}
+                    list={detailList}
+                />
+            </Box>
             <PanelContentHead
-                title="[INVOICES]"
+                title={paymentWithId.invoiceTableTitle}
                 helpButtonHandler={() => console.log('help button from invoices triggered')}
             />
             <ServerSideTable

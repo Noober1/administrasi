@@ -21,7 +21,8 @@ export default function indonesian() {
             deleteText:"Hapus",
             helpButtonLabel: "Bantuan",
             retryText: "Coba Lagi",
-            detailText: "Rincian"
+            detailText: "Rincian",
+            returnText: "Kembali"
         },
         errors:{
             failedToSaveText: "Data gagal disimpan",
@@ -83,9 +84,12 @@ export default function indonesian() {
                     registerDate: "Tanggal",
                     admin:"Administrator",
                     type: "Jenis Pembayaran",
+                    typeHelper: "Subjek / Judul untuk tagihan",
                     price: "Nominal",
+                    priceHelper: "Contoh: 100000",
                     description: "Deskripsi",
-                    action: "Aksi"
+                    action: "Aksi",
+                    adminCantChanged: "Administrator akan terisi secara otomatis dengan Email Anda"
                 }
             }
         },
@@ -101,7 +105,7 @@ export default function indonesian() {
             menu:{
                 dashboardText: "Beranda",
                 paymentText: "Pembayaran",
-                invoicesText: "Invoice",
+                invoicesText: "Tagihan",
                 studentListText: "Mahasiswa",
                 classListText: "Kelas / Angkatan",
                 billText: "Tagihan"
@@ -127,10 +131,15 @@ export default function indonesian() {
                 },
                 payment: {
                     titlePage: "Daftar Pembayaran",
-                    warningDeleteItem: "Data tidak akan terhapus jika data pembayaran ini mempunyai invoice"
+                    addPaymentTitle:"Tambah Pembayaran",
+                    addPaymentDescription: "Silahkan isi form dibawah ini",
+                    editPaymentTitle: "Edit Pembayaran",
+                    editPaymentDescription: "Silahkan sunting isian dibawah ini",
+                    warningDeleteItem: "Data tidak akan terhapus jika data pembayaran ini mempunyai data tagihan"
                 },
                 paymentWithId: {
-                    titlePage: "Rincian Pembayaran"
+                    titlePage: "Rincian Pembayaran",
+                    invoiceTableTitle: "Daftar Tagihan"
                 }
             }
         },
