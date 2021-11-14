@@ -12,20 +12,20 @@ String.prototype.stringReplace = function(findArray, replaceArray){
 }
 
 /**
- * 
+ * Date formatting
  * @param {string} date - Date
  * @param {string} format - Format pattern: d = date, m = month number, y = 2 digit year, M = month text, h = hour(s), i = minute(s), s = second(s)
  * @param {array} localization - Months localization array
  * @returns - Return formatted date
  */
-const dateFormatting = (date, format, localization) => {
+const dateFormatting = (value, format, localization) => {
 
     if(typeof format !== 'string') {
         format = 'd M y'
     }
 
     try {
-        const newDate = date ? new Date(date) : new Date()
+        const newDate = value ? new Date(value) : new Date()
         const addZero = number => number <= 9 ? '0'+9 : number;
 
         const date = newDate.getDate()

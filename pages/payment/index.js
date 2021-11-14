@@ -81,11 +81,11 @@ const Payment = (props) => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Link href={`/payment/${params.value}`}>
-                            <Button size="small" variant="contained">
+                        <Button size="small" variant="contained">
+                            <Link href={`/payment/${params.value}`}>
                                 {strings.default.detailText}
-                            </Button>
-                        </Link>
+                            </Link>
+                        </Button>
                         <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
                             {strings.default.editText}
                         </Button>

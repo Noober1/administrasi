@@ -110,7 +110,7 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
                             msg = strings.errors.dataExist
                             break;
                     default:
-                        msg = strings.errors.failedToDelete + ` [${code}]`
+                        msg = strings.errors.failedToSaveText + ` [${code}]`
                         break;
                 }
             }
@@ -132,9 +132,10 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
 
     const handlePriceChange = event => {
         let value = event.target.value.replace(/\./g, '')
+        if (isNaN(parseInt(value)) || value.length > 9) return
         setformValue({
             ...formValue,
-            [event.target.name]: value
+            [event.target.name]: parseInt(value)
         })
     }
 
@@ -197,7 +198,8 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
                             onChange={handlePriceChange}
                             name="price"
                             InputProps={{
-                                startAdornment: <InputAdornment position="start">Rp</InputAdornment>
+                                startAdornment: <InputAdornment position="start">Rp</InputAdornment>,
+                                max: 9
                             }}
                             label={paymentTable.price}
                             helperText={paymentTable.priceHelper}
