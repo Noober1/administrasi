@@ -35,8 +35,8 @@ const dateFormatting = (value, format, localization) => {
         const minute = newDate.getMinutes()
         const second = newDate.getSeconds()
         const nama_bulan = Array.isArray(localization) ? localization : ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']
-        const find = ['d','m','y','M','h','i','s']
         
+        const find = ['d','m','y','M','h','i','s']
         const replace = [
             addZero(date),
             month,

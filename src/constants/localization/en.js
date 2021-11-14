@@ -87,9 +87,11 @@ export default function english() {
                     typeHelper: "Subject / Title for payment detail",
                     price: "Price",
                     priceHelper: "Example: 100000",
+                    priceHelperNoEdit:"This field cannot be edited",
                     description: "Description",
                     action: "Action",
-                    adminCantChanged: "Administrator will be filled automatically with your email"
+                    adminCantChanged: "Administrator will be filled automatically with your email",
+                    adminDefault: "Administrator will still be filled with initial data"
                 }
             }
         },

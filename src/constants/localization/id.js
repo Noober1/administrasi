@@ -87,9 +87,11 @@ export default function indonesian() {
                     typeHelper: "Subjek / Judul untuk tagihan",
                     price: "Nominal",
                     priceHelper: "Contoh: 100000",
+                    priceHelperNoEdit:"Kolom ini tidak dapat disunting",
                     description: "Deskripsi",
                     action: "Aksi",
-                    adminCantChanged: "Administrator akan terisi secara otomatis dengan Email Anda"
+                    adminCantChanged: "Administrator akan terisi secara otomatis dengan Email Anda",
+                    adminDefault: "Administrator akan tetap terisi oleh data awal"
                 }
             }
         },

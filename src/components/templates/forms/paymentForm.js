@@ -199,11 +199,12 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
                             name="price"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">Rp</InputAdornment>,
-                                max: 9
+                                max: 9,
+                                readOnly: mode === 'edit'
                             }}
                             label={paymentTable.price}
-                            helperText={paymentTable.priceHelper}
-                            required
+                            helperText={mode === 'add' ? paymentTable.priceHelper : paymentTable.priceHelperNoEdit}
+                            required={mode === 'add'}
                         />
                         <TextField
                             value={formValue.description}
@@ -223,7 +224,7 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
                             }}
                             name="admin"
                             label={paymentTable.admin}
-                            helperText={paymentTable.adminCantChanged}
+                            helperText={mode === 'add' ? paymentTable.adminCantChanged : paymentTable.adminDefault}
                         />
                     </div>
                     {/* FORM END HERE */}

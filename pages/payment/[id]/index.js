@@ -20,11 +20,13 @@ const PaymentWithId = ({paymentId}) => {
     const { paymentWithId } = strings.panel.pages
     const { payment } = strings.table.columns
     const [paymentDetailData, setpaymentDetailData] = useState({})
+    const [refreshCount, setrefreshCount] = useState(0)
 
     const [formOpen, setformOpen] = useState(false)
 
-    const [data, loading, fetchError, errorMessage] = useFetchApi(null,{
-        url: `/administrasi/payment/${paymentId}`,
+    const url = `/administrasi/payment/${paymentId}?refreshCount=${refreshCount}`
+    const [data, loading, fetchError, errorMessage] = useFetchApi(url,{
+        url,
         headers: {
 			Authorization: 'Bearer ' + authToken
 		}
@@ -35,7 +37,9 @@ const PaymentWithId = ({paymentId}) => {
     }
 
     const handleFormCallback = (error, data) => {
-        console.log('should refresh payment detail component')
+        if (!error) {
+            setrefreshCount(refreshCount + 1)
+        }
     }
 
     useEffect(() => {
