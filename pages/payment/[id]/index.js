@@ -1,5 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
-import { Button, ButtonGroup } from '@mui/material'
+import { Button, ButtonGroup, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 import { PanelContentHead } from '../../../src/components/atoms/dashboard'
@@ -136,6 +136,36 @@ const PaymentWithId = ({paymentId}) => {
                     title={strings.default.detailText}
                     list={detailList}
                 />
+                <Paper elevation={0} className="p-5">
+                    <Typography variant="h5" gutterBottom>
+                        Menu
+                    </Typography>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+                        <Button variant="contained">
+                            [SEND_INVOICE]
+                        </Button>
+                        <Button variant="contained">
+                            {/* SHOULD BE PAGE */}
+                            [VALIDATING_TRANSFER_INVOICE]
+                        </Button>
+                        <Button variant="contained">
+                            {/* MODAL IS OK */}
+                            [VALIDATING_MANUAL_INVOICE]
+                        </Button>
+                        <Button variant="contained">
+                            test
+                        </Button>
+                        <Button variant="contained">
+                            test
+                        </Button>
+                        <Button variant="contained">
+                            test
+                        </Button>
+                        <Button variant="contained">
+                            test
+                        </Button>
+                    </div>
+                </Paper>
             </Box>
             <PanelContentHead
                 title={paymentWithId.invoiceTableTitle}
