@@ -12,6 +12,8 @@ import { selectAuth } from '../../../src/lib/redux/slices/authSlice'
 import { tools } from '../../../src/lib'
 import { BackButton } from '../../../src/components/atoms'
 import PaymentForm from '../../../src/components/templates/forms/paymentForm'
+import { connect } from 'react-redux'
+import fetchAPI from '../../../src/lib/fetchApi'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
@@ -19,6 +21,7 @@ const PaymentWithId = ({paymentId}) => {
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
     const { payment } = strings.table.columns
+    const { paymentWithId: paymentPage } = strings.panel.pages
     const [paymentDetailData, setpaymentDetailData] = useState({})
     const [refreshCount, setrefreshCount] = useState(0)
 
@@ -142,15 +145,7 @@ const PaymentWithId = ({paymentId}) => {
                     </Typography>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
                         <Button variant="contained">
-                            [SEND_INVOICE]
-                        </Button>
-                        <Button variant="contained">
-                            {/* SHOULD BE PAGE */}
-                            [VALIDATING_TRANSFER_INVOICE]
-                        </Button>
-                        <Button variant="contained">
-                            {/* MODAL IS OK */}
-                            [VALIDATING_MANUAL_INVOICE]
+                            {paymentPage.sendBatchInvoice}
                         </Button>
                         <Button variant="contained">
                             test
@@ -182,14 +177,23 @@ const PaymentWithId = ({paymentId}) => {
     )
 }
 
-export function getServerSideProps({params}){
-    return {
-        props:{
-            paymentId: params.id
+PaymentWithId.getLayout = page => <Panel>{page}</Panel>
+
+export const getServerSideProps = async({params}) => {
+    try {
+        const getDataFromApi = await fetchAPI('/administrasi/payment/' + params.id)
+        return {
+            props: {
+                paymentId:params.id,
+                data:getDataFromApi
+            }
+        }
+    } catch (error) {
+        return {
+            notFound:true
         }
     }
 }
 
-PaymentWithId.getLayout = page => <Panel>{page}</Panel>
 
-export default PaymentWithId
+export default connect(state => state)(PaymentWithId)

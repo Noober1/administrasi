@@ -141,7 +141,8 @@ export default function english() {
                 },
                 paymentWithId: {
                     titlePage: "Payment detail",
-                    invoiceTableTitle: "Invoices"
+                    invoiceTableTitle: "Invoices",
+                    sendBatchInvoice: "Send Batch Invoice"
                 }
             }
         },

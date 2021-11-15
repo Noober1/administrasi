@@ -141,7 +141,8 @@ export default function indonesian() {
                 },
                 paymentWithId: {
                     titlePage: "Rincian Pembayaran",
-                    invoiceTableTitle: "Daftar Tagihan"
+                    invoiceTableTitle: "Daftar Tagihan",
+                    sendBatchInvoice: "Kirim Batch Tagihan"
                 }
             }
         },
