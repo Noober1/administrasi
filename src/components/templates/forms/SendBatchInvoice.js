@@ -3,14 +3,18 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { ConfirmDialog, ServerSideSelect } from '../../molecules'
 import useLocalization from '../../../lib/useLocalization'
 import { useDispatch } from 'react-redux'
-import { hideSpinner, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 
 const SendBatchInvoice = forwardRef((props, ref) => {
     const { components:{ sendBatchInvoice }, ...strings } = useLocalization()
     const confirmDialogRef = useRef(null)
     const dispatch = useDispatch()
     const [open, setopen] = useState(false)
-    const [formValue, setformValue] = useState([])
+    const [formValue, setformValue] = useState({
+        prodi: [],
+        class: []
+    })
 
     const openDialog = () => setopen(true)
     const closeDialog = () => setopen(false)
@@ -24,9 +28,28 @@ const SendBatchInvoice = forwardRef((props, ref) => {
     const handleSubmitForm = event => {
         event.preventDefault()
         dispatch(showSpinner(true))
-        setTimeout(() => {
+        fetchAPI(fetchWithToken({
+            url:'/administrasi/invoice/',
+            method: 'POST',
+            data: formValue
+        }))
+        .then(result => {
             dispatch(hideSpinner())
-        }, 5000);
+            dispatch(openSnackbar({
+                severity: 'success',
+                position: 'top-right',
+                message:sendBatchInvoice.invoiceSended
+            }))
+        })
+        .catch(error => {
+            console.error(error)
+            dispatch(hideSpinner())
+            dispatch(openSnackbar({
+                severity: 'error',
+                position: 'top-right',
+                message:sendBatchInvoice.invoiceFailedToSend
+            }))
+        })
         console.log('submitted')
     }
 
@@ -34,9 +57,11 @@ const SendBatchInvoice = forwardRef((props, ref) => {
         confirmDialogRef.current.openConfirm()
     }
 
-    const handleClassOnChange = (event, value, value2) => {
-        console.log(value,value2)
-        setformValue(value)
+    const handleMultipleSelectOnChange = (name, value) => {
+        setformValue(prevValue => ({
+            ...prevValue,
+            [name]:value
+        }))
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -61,7 +86,31 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                         <DialogContentText className="mb-5">
                         {sendBatchInvoice.dialogContentText}
                         </DialogContentText>
-                        <div className="text-center">
+                        <div className="grid grid-cols-1 gap-2">
+                            <FormControl
+                                variant="outlined"
+                                className="mb-5"
+                                fullWidth
+                            >
+                                <ServerSideSelect
+                                    name="class"
+                                    multiple
+                                    value={formValue}
+                                    className="col-span-2"
+                                    url="/class"
+                                    urlParams={{
+                                        isActive: true
+                                    }}
+                                    optionValue="id"
+                                    optionLabel="name"
+                                    label={sendBatchInvoice.classFormLabel}
+                                    onChange={(event,value) => handleMultipleSelectOnChange('class', value)}
+                                    required
+                                />
+                                <FormHelperText>
+                                    {sendBatchInvoice.classFormHelper}
+                                </FormHelperText>
+                            </FormControl>
                             <FormControl
                                 variant="outlined"
                                 className="mb-5"
@@ -71,15 +120,15 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                                     multiple
                                     value={formValue}
                                     className="col-span-2"
-                                    url="/class"
+                                    url="/prodi"
                                     optionValue="id"
                                     optionLabel="name"
-                                    label={sendBatchInvoice.classFormLabel}
-                                    onChange={handleClassOnChange}
+                                    label={sendBatchInvoice.prodiFormLabel}
+                                    onChange={(event,value) => handleMultipleSelectOnChange('prodi', value)}
                                     required
                                 />
                                 <FormHelperText>
-                                    {sendBatchInvoice.classFormHelper}
+                                    {sendBatchInvoice.prodiFormHelper}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -88,7 +137,7 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                         <Button onClick={closeDialog}>
                             {strings.default.alertDialogCancelButtonText}
                         </Button>
-                        <Button onClick={showConfirm} disabled={formValue.length < 1}>
+                        <Button onClick={showConfirm} disabled={formValue.prodi.length < 1 || formValue.class.length < 1}>
                             {strings.default.sendText}
                         </Button>
                     </DialogActions>

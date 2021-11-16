@@ -17,7 +17,7 @@ import { useDebounce, useEffectOnce, useUpdateEffect } from 'react-use'
  * @param {string} onChange - onChange event, parameter: event, newOptionValue, newObjectValue
  * @returns {null}
  */
-const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onChange, required, className, value:initValue}) => {
+const ServerSideSelect = ({url, multiple, name, urlParams, optionValue, optionLabel, label, onChange, required, className, value:initValue}) => {
 	const auth = useSelector(selectAuth)
 	const [open, setOpen] = useState(false)
 	const [value, setvalue] = useState(multiple ? [] : '')
@@ -26,8 +26,16 @@ const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onCha
 	const [searchText, setsearchText] = useState('')
 	const [options, setOptions] = useState([])
 	
-	const [data, fetchLoading, isFetchError, fetchErrorMessage] = useFetchApi(url + `?search=${searchText}`,{
-		url: url + `?search=${searchText}`,
+	const urlParam = new URLSearchParams()
+    urlParam.append('search', searchText)
+    if (typeof urlParams == 'object' && !Array.isArray(urlParams)) {
+		Object.keys(urlParams).forEach(item => {
+			urlParam.append(item, urlParams[item])
+		})
+	}
+
+	const [data, fetchLoading, isFetchError, fetchErrorMessage] = useFetchApi(`${url}?${urlParam}`,{
+		url: `${url}?${urlParam}`,
 		headers: {
 			Authorization: 'Bearer ' + auth.authToken
 		}
@@ -97,6 +105,7 @@ const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onCha
 			fullWidth
 			open={open}
 			value={value}
+			name={name}
 			onChange={handleOnChange}
 			onOpen={() => {
 				setOpen(true);
@@ -112,6 +121,7 @@ const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onCha
 			loading={loading}
 			renderInput={(params) => (
 				<TextField
+					name={name}
 					onChange={handleInputChange}
 					{...params}
 					label={label}
@@ -133,7 +143,9 @@ const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onCha
 
 ServerSideSelect.defaultProps = {
 	multiple: false,
+	name: 'server-side-select',
 	url: '/student',
+	urlParams:{},
 	optionValue: 'id',
 	optionLabel: 'fullName',
 	label: 'Siswa',
@@ -142,7 +154,9 @@ ServerSideSelect.defaultProps = {
 
 ServerSideSelect.propTypes = {
 	multiple: PropTypes.bool,
+	name: PropTypes.string,
 	url: PropTypes.string.isRequired,
+	urlParams: PropTypes.object,
 	optionValue: PropTypes.string.isRequired,
 	optionLabel: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,

@@ -315,6 +315,9 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                             value={formValue.class}
                             className="col-span-2"
                             url="/class"
+                            urlParams={mode == 'add' ? {
+                                isActive: true
+                            } : {}}
                             optionValue="id"
                             optionLabel="name"
                             label={student.class}

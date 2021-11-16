@@ -53,10 +53,14 @@ export default function english() {
             sendBatchInvoice: {
                 dialogTitle: "Send Batch Invoice",
                 dialogContentText: "Please fill the criteria(s) below",
-                lassFormHelper: "You can choose the class more than one data",
+                classFormHelper: "You can choose the class more than one data",
                 classFormLabel:"Class List",
+                prodiFormLabel: "Prodi List",
+                prodiFormHelper: "You can choose the prodi more than one data",
                 alertConfirmText: "Are you sure want to send the invoices?",
-                alertWarningText: "Student will not received the invoice if he/she has been received this invoice"
+                alertWarningText: "Student will not received the invoice if he/she has been received this invoice",
+                invoiceSended: "Invoice sended",
+                invoiceFailedToSend: "Invoice failed to send"
             }
         },
         login: {

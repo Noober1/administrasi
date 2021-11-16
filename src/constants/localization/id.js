@@ -55,8 +55,12 @@ export default function indonesian() {
                 dialogContentText: "Silahkah untuk mengisi kriteria dibawah ini",
                 classFormHelper: "Anda dapat memilih kelas lebih dari 1 kelas",
                 classFormLabel:"Daftar Kelas",
+                prodiFormLabel: "Daftar Prodi",
+                prodiFormHelper: "Anda dapat memilih prodi lebih dari 1 prodi",
                 alertConfirmText: "Apakah Anda yakin ingin mengirim tagihan?",
-                alertWarningText: "Siswa yang telah menerima tagihan dengan data pembayaran ini tidak akan menerima tagihan"
+                alertWarningText: "Siswa yang telah menerima tagihan dengan data pembayaran ini tidak akan menerima tagihan",
+                invoiceSended: "Tagihan berhasil dikirim",
+                invoiceFailedToSend: "Tagihan gagal dikirim"
             }
         },
         login: {
