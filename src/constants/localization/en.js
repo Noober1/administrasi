@@ -12,10 +12,12 @@ export default function english() {
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
             alertLogoutText: "Logout",
+            alertConfirmTitle: "Are you sure?",
             anErrorOccured: "An error occured",
             editText: "Edit",
             addText: "Add",
             saveText: "Save",
+            sendText: "Send",
             savedText: "Data has been saved",
             importText:"Import",
             deleteText:"Delete",
@@ -46,6 +48,16 @@ export default function english() {
             hideMenuTooltipText: "Hide menu",
             toggleMiniMenu: "Show / hide menu",
             settingMiniMenuText: "Settings"
+        },
+        components:{
+            sendBatchInvoice: {
+                dialogTitle: "Send Batch Invoice",
+                dialogContentText: "Please fill the criteria(s) below",
+                lassFormHelper: "You can choose the class more than one data",
+                classFormLabel:"Class List",
+                alertConfirmText: "Are you sure want to send the invoices?",
+                alertWarningText: "Student will not received the invoice if he/she has been received this invoice"
+            }
         },
         login: {
             usernamePasswordWrongText: "Username or password incorrect",

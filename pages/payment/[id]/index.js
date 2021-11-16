@@ -14,9 +14,11 @@ import { BackButton } from '../../../src/components/atoms'
 import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
+import SendBatchInvoice from '../../../src/components/templates/forms/SendBatchInvoice'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
+    const sendBatchInvoiceRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
@@ -144,7 +146,9 @@ const PaymentWithId = ({paymentId}) => {
                         Menu
                     </Typography>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-                        <Button variant="contained">
+                        <Button variant="contained" onClick={() => {
+                            sendBatchInvoiceRef.current.openDialog()
+                        }}>
                             {paymentPage.sendBatchInvoice}
                         </Button>
                         <Button variant="contained">
@@ -173,6 +177,7 @@ const PaymentWithId = ({paymentId}) => {
                 url={`/administrasi/payment/${paymentId}/invoices`}
                 columns={columns}
             />
+            <SendBatchInvoice ref={sendBatchInvoiceRef}/>
         </Box>
     )
 }

@@ -12,10 +12,12 @@ export default function indonesian() {
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
             alertLogoutText: "Keluar",
+            alertConfirmTitle: "Apakah Anda yakin?",
             anErrorOccured: "Terjadi kesalahan",
             editText: "Sunting",
             addText: "Tambah",
             saveText: "Simpan",
+            sendText: "Kirim",
             savedText: "Data berhasil disimpan",
             importText:"Import",
             deleteText:"Hapus",
@@ -46,6 +48,16 @@ export default function indonesian() {
             hideMenuTooltipText: "Sembunyikan menu",
             toggleMiniMenu: "Tampilkan / sembunyikan menu",
             settingMiniMenuText: "Pengaturan"
+        },
+        components:{
+            sendBatchInvoice: {
+                dialogTitle: "Kirim Tagihan Massal",
+                dialogContentText: "Silahkah untuk mengisi kriteria dibawah ini",
+                classFormHelper: "Anda dapat memilih kelas lebih dari 1 kelas",
+                classFormLabel:"Daftar Kelas",
+                alertConfirmText: "Apakah Anda yakin ingin mengirim tagihan?",
+                alertWarningText: "Siswa yang telah menerima tagihan dengan data pembayaran ini tidak akan menerima tagihan"
+            }
         },
         login: {
             usernamePasswordWrongText: "Nama pengguna atau kata sandi salah",
@@ -142,7 +154,7 @@ export default function indonesian() {
                 paymentWithId: {
                     titlePage: "Rincian Pembayaran",
                     invoiceTableTitle: "Daftar Tagihan",
-                    sendBatchInvoice: "Kirim Batch Tagihan"
+                    sendBatchInvoice: "Kirim tagihan massal"
                 }
             }
         },

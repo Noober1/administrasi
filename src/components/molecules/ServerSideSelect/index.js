@@ -17,10 +17,10 @@ import { useDebounce, useEffectOnce, useUpdateEffect } from 'react-use'
  * @param {string} onChange - onChange event, parameter: event, newOptionValue, newObjectValue
  * @returns {null}
  */
-const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, required, className, value:initValue}) => {
+const ServerSideSelect = ({url, multiple, optionValue, optionLabel, label, onChange, required, className, value:initValue}) => {
 	const auth = useSelector(selectAuth)
 	const [open, setOpen] = useState(false)
-	const [value, setvalue] = useState('')
+	const [value, setvalue] = useState(multiple ? [] : '')
 	const [initValueDone, setinitValueDone] = useState(false)
 	const [tempSearchText, settempSearchText] = useState('')
 	const [searchText, setsearchText] = useState('')
@@ -45,7 +45,7 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 		if (options.length > 0 && !initValueDone && initValue) {
 			let getDataFromFetchedData = options.find(item => item[optionValue] == initValue)
 			if (getDataFromFetchedData) {
-				setvalue(getDataFromFetchedData)
+				setvalue(multiple ? [getDataFromFetchedData] : getDataFromFetchedData)
 			}
 		}
 	}, [options])
@@ -64,16 +64,22 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 	}, [open]);
 
 	const handleOnChange = (event, newValue) => {
+		let newVal = null
 		if (process.env.NODE_ENV === 'development') {
 			console.log('Components > ServerSideSelect: handleOnChange newValue', newValue)
 		}
 		if (typeof onChange === 'function') {
 			try {
-				onChange(event, newValue[optionValue], newValue)
+				if (multiple) {
+					newVal = newValue.map(item => item[optionValue])
+				} else {
+					newVal = newValue[optionValue]
+				}
+				onChange(event, newVal, newValue)
 				setvalue(newValue)
 			} catch (error) {
 				onChange(event, '', {})
-				setvalue({})
+				setvalue(multiple ? [] : {})
 			}
 		}
 	}
@@ -86,6 +92,7 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 
 	return (
 		<Autocomplete
+			multiple={multiple}
 			className={className}
 			fullWidth
 			open={open}
@@ -125,6 +132,7 @@ const ServerSideSelect = ({url, optionValue, optionLabel, label, onChange, requi
 }
 
 ServerSideSelect.defaultProps = {
+	multiple: false,
 	url: '/student',
 	optionValue: 'id',
 	optionLabel: 'fullName',
@@ -133,6 +141,7 @@ ServerSideSelect.defaultProps = {
 }
 
 ServerSideSelect.propTypes = {
+	multiple: PropTypes.bool,
 	url: PropTypes.string.isRequired,
 	optionValue: PropTypes.string.isRequired,
 	optionLabel: PropTypes.string.isRequired,
