@@ -4,12 +4,13 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Button, ButtonGroup } from '@mui/material'
 import { Box } from '@mui/system'
 import { PanelContentHead } from '../../src/components/atoms/dashboard'
+import { PageHead } from '../../src/components/atoms'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import StudentForm from '../../src/components/templates/forms/studentForm';
 
 const Student = () => {
-    const strings = useLocalization()
+    const {panel:{pages:{student:studentPage}},table:{columns:{student}},...strings} = useLocalization()
     const [formStudentMode, setformStudentMode] = useState('add')
     const [formStudentOpen, setformStudentOpen] = useState(false)
     const [formStudentEditId, setformStudentEditId] = useState(null)
@@ -30,8 +31,6 @@ const Student = () => {
         if (error || typeof tableRef.current.refresh === 'undefined') return
         tableRef.current.refresh()
     }
-
-    const { student } = strings.table.columns
 
     const columns = [
         {
@@ -69,35 +68,40 @@ const Student = () => {
     ];
 
     return (
-        <Box>
-            <PanelContentHead
-                title={strings.panel.pages.student.titlePage}
-                buttonGroup={(
-                    <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddStudentButton}>
-                            {strings.default.addText}
-                        </Button>
-                        <StudentForm
-                            open={formStudentOpen}
-                            mode={formStudentMode}
-                            id={formStudentEditId}
-                            handleClose={() => setformStudentOpen(false)}
-                            callback={handleFormCallback}
-                        />
-                        <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
-                            {strings.default.importText}
-                        </Button>
-                    </ButtonGroup>
-                )}
-                helpButtonHandler={event => console.log('click tombol bantuan siswa')}
+        <>
+            <PageHead
+                title={studentPage.titlePage}
             />
-            <ServerSideTable
-                ref={tableRef}
-                url='/student'
-                columns={columns}
-                deleteUrl='/student'
-            />
-        </Box>
+            <Box>
+                <PanelContentHead
+                    title={studentPage.titlePage}
+                    buttonGroup={(
+                        <ButtonGroup>
+                            <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddStudentButton}>
+                                {strings.default.addText}
+                            </Button>
+                            <StudentForm
+                                open={formStudentOpen}
+                                mode={formStudentMode}
+                                id={formStudentEditId}
+                                handleClose={() => setformStudentOpen(false)}
+                                callback={handleFormCallback}
+                            />
+                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
+                                {strings.default.importText}
+                            </Button>
+                        </ButtonGroup>
+                    )}
+                    helpButtonHandler={event => console.log('click tombol bantuan siswa')}
+                />
+                <ServerSideTable
+                    ref={tableRef}
+                    url='/student'
+                    columns={columns}
+                    deleteUrl='/student'
+                />
+            </Box>
+        </>
     )
 }
 

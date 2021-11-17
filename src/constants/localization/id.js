@@ -132,6 +132,7 @@ export default function indonesian() {
             },
             pages:{
                 dashboard:{
+                    titlePage: "Beranda",
                     welcomeMessage: "Selamat Datang"
                 },
                 student:{
@@ -161,6 +162,9 @@ export default function indonesian() {
                     titlePage: "Rincian Pembayaran",
                     invoiceTableTitle: "Daftar Tagihan",
                     sendBatchInvoice: "Kirim tagihan massal"
+                },
+                invoiceWithCode: {
+                    titlePage: "Rincian Tagihan"
                 }
             }
         },

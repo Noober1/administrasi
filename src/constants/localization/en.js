@@ -132,6 +132,7 @@ export default function english() {
             },
             pages:{
                 dashboard:{
+                    titlePage: "Dashboard",
                     welcomeMessage: "Welcome back"
                 },
                 student:{
@@ -161,6 +162,9 @@ export default function english() {
                     titlePage: "Payment detail",
                     invoiceTableTitle: "Invoices",
                     sendBatchInvoice: "Send Batch Invoice"
+                },
+                invoiceWithCode: {
+                    titlePage: "Invoice Detail"
                 }
             }
         },

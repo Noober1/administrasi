@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, Button, ButtonGroup } from '@mui/material'
 import { Box } from '@mui/system'
+import { PageHead } from '../../src/components/atoms'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization';
 import { PanelContentHead } from '../../src/components/atoms/dashboard';
@@ -11,8 +12,7 @@ import Link from 'next/link'
 import PaymentForm from '../../src/components/templates/forms/paymentForm';
 
 const Payment = (props) => {
-    const strings = useLocalization()
-    const { payment } = strings.table.columns
+    const {panel:{pages:{payment:paymentPage}},table:{columns:{payment}},...strings} = useLocalization()
     const tableRef = useRef(null)
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
     const [dataToDelete, setdataToDelete] = useState(null)
@@ -99,47 +99,52 @@ const Payment = (props) => {
     ]
 
     return (
-        <Box>
-            <PanelContentHead
-                title={strings.panel.pages.payment.titlePage}
-                buttonGroup={(
-                    <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
-                            {strings.default.addText}
-                        </Button>
-                    </ButtonGroup>
-                )}
-                helpButtonHandler={event => console.log('hehe')}
+        <>
+            <PageHead
+                title={paymentPage.titlePage}
             />
-            <ServerSideTable
-                ref={tableRef}
-                url='/administrasi/payment'
-                showDeleteButton={false}
-                columns={columns}
-                enableCheckbox={false}
-            />
-            <DeleteDialog
-                dialogOpen={deleteDialogOpen}
-                closeHandle={() => setdeleteDialogOpen(false)}
-                data={[dataToDelete]}
-                additionalMessage={(
-                    <Alert severity="warning">
-                        {strings.panel.pages.payment.warningDeleteItem}
-                    </Alert>
-                )}
-                url="/administrasi/payment"
-                refreshTableHandler={() => {
-                    tableRef.current.refresh()
-                }}
-            />
-            <PaymentForm
-                open={formOpen}
-                mode={formMode}
-                id={formEditId}
-                handleClose={() => setformOpen(false)}
-                callback={handleFormCallback}
-            />
-        </Box>
+            <Box>
+                <PanelContentHead
+                    title={paymentPage.titlePage}
+                    buttonGroup={(
+                        <ButtonGroup>
+                            <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
+                                {strings.default.addText}
+                            </Button>
+                        </ButtonGroup>
+                    )}
+                    helpButtonHandler={event => console.log('hehe')}
+                />
+                <ServerSideTable
+                    ref={tableRef}
+                    url='/administrasi/payment'
+                    showDeleteButton={false}
+                    columns={columns}
+                    enableCheckbox={false}
+                />
+                <DeleteDialog
+                    dialogOpen={deleteDialogOpen}
+                    closeHandle={() => setdeleteDialogOpen(false)}
+                    data={[dataToDelete]}
+                    additionalMessage={(
+                        <Alert severity="warning">
+                            {paymentPage.warningDeleteItem}
+                        </Alert>
+                    )}
+                    url="/administrasi/payment"
+                    refreshTableHandler={() => {
+                        tableRef.current.refresh()
+                    }}
+                />
+                <PaymentForm
+                    open={formOpen}
+                    mode={formMode}
+                    id={formEditId}
+                    handleClose={() => setformOpen(false)}
+                    callback={handleFormCallback}
+                />
+            </Box>
+        </>
     )
 }
 

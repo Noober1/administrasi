@@ -8,10 +8,11 @@ import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import { DeleteDialog } from '../../src/components/molecules'
 import ClassForm from '../../src/components/templates/forms/classForm';
+import { PageHead } from '../../src/components/atoms';
 
 const Class = () => {
     const tableRef = useRef(null)
-    const strings = useLocalization()
+    const {panel: {pages:{class:classPage}},...strings} = useLocalization()
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
     const [dataToDelete, setdataToDelete] = useState(null)
     const [formOpen, setformOpen] = useState(false)
@@ -83,50 +84,55 @@ const Class = () => {
     ];
 
     return (
-        <Box>
-            <PanelContentHead
-                title={strings.panel.pages.class.titlePage}
-                buttonGroup={(
-                    <ButtonGroup>
-                        <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
-                            {strings.default.addText}
-                        </Button>
-                        <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
-                            {strings.default.importText}
-                        </Button>
-                    </ButtonGroup>
-                )}
-                helpButtonHandler={event => console.log('click tombol bantuan pembayaran')}
+        <>
+            <PageHead
+                title={classPage.titlePage}
             />
-            <ServerSideTable
-                ref={tableRef}
-                enableCheckbox={false}
-                showDeleteButton={false}
-                url='/class'
-                columns={columns}
-            />
-            <DeleteDialog
-                dialogOpen={deleteDialogOpen}
-                closeHandle={() => setdeleteDialogOpen(false)}
-                data={[dataToDelete]}
-                additionalMessage={(
-                    <Alert severity="warning">
-                        {strings.panel.pages.class.warningDeleteItem}
-                    </Alert>
-                )}
-                url="/class"
-                refreshTableHandler={() => {
-                    tableRef.current.refresh()
-                }}
-            />
-            <ClassForm
-                open={formOpen}
-                mode={formMode}
-                id={formEditId}
-                handleClose={() => setformOpen(false)}
-                callback={handleFormCallback}
-            />
-        </Box>
+            <Box>
+                <PanelContentHead
+                    title={classPage.titlePage}
+                    buttonGroup={(
+                        <ButtonGroup>
+                            <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
+                                {strings.default.addText}
+                            </Button>
+                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
+                                {strings.default.importText}
+                            </Button>
+                        </ButtonGroup>
+                    )}
+                    helpButtonHandler={event => console.log('click tombol bantuan pembayaran')}
+                />
+                <ServerSideTable
+                    ref={tableRef}
+                    enableCheckbox={false}
+                    showDeleteButton={false}
+                    url='/class'
+                    columns={columns}
+                />
+                <DeleteDialog
+                    dialogOpen={deleteDialogOpen}
+                    closeHandle={() => setdeleteDialogOpen(false)}
+                    data={[dataToDelete]}
+                    additionalMessage={(
+                        <Alert severity="warning">
+                            {classPage.warningDeleteItem}
+                        </Alert>
+                    )}
+                    url="/class"
+                    refreshTableHandler={() => {
+                        tableRef.current.refresh()
+                    }}
+                />
+                <ClassForm
+                    open={formOpen}
+                    mode={formMode}
+                    id={formEditId}
+                    handleClose={() => setformOpen(false)}
+                    callback={handleFormCallback}
+                />
+            </Box>
+        </>
     )
 }
 

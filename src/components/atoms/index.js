@@ -7,6 +7,7 @@ import Tooltip from './tooltip'
 import SpinnerBackdrop from './spinnerBackdrop'
 import MainSnackbar from './MainSnackbar'
 import BackButton from './backButton'
+import PageHead from './PageHead'
 
 export {
     Link,
@@ -17,5 +18,6 @@ export {
     Tooltip,
     SpinnerBackdrop,
     MainSnackbar,
-    BackButton
+    BackButton,
+    PageHead
 }

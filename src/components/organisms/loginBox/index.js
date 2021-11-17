@@ -6,9 +6,8 @@ import { Tooltip } from '../../atoms'
 import useLocalization from '../../../lib/useLocalization'
 import { useDispatch } from 'react-redux'
 import { hideSpinner,  showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
-import { selectAuth, setAuthToken } from '../../../lib/redux/slices/authSlice'
+import { setAuthToken } from '../../../lib/redux/slices/authSlice'
 import fetchAPI from '../../../lib/fetchApi'
-import { useSelector } from 'react-redux'
 
 const LoginBox = () => {
     const dispatch = useDispatch()
@@ -87,7 +86,6 @@ const LoginBox = () => {
             component="form"
             className="max-w-md p-5 mb-2"
             onSubmit={handleSubmitForm}
-            autoComplete="off"
         >
             <Typography
                 variant="h4"

@@ -10,11 +10,12 @@ import useFetchApi from '../../../src/lib/useFetchApi'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../src/lib/redux/slices/authSlice'
 import { tools } from '../../../src/lib'
-import { BackButton } from '../../../src/components/atoms'
+import { BackButton, PageHead } from '../../../src/components/atoms'
 import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
 import SendBatchInvoice from '../../../src/components/templates/forms/SendBatchInvoice'
+import Link from 'next/link'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
@@ -105,11 +106,10 @@ const PaymentWithId = ({paymentId}) => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
-                            {strings.default.editText}
-                        </Button>
-                        <Button size="small" variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
-                            {strings.default.deleteText}
+                        <Button size="small" variant="contained">
+                            <Link href={`/invoice?code=${params.row.code}`}>
+                                {strings.default.detailText}
+                            </Link>
                         </Button>
                     </ButtonGroup>
                 )
@@ -118,77 +118,70 @@ const PaymentWithId = ({paymentId}) => {
     ];
 
     return (
-        <Box>
-            <PanelContentHead
+        <>
+            <PageHead
                 title={paymentWithId.titlePage}
-                buttonGroup={(
-                    <>
-                    <BackButton/>
-                    <ButtonGroup>
-                        <Button variant="contained" color="info" startIcon={<EditIcon/>} onClick={() => handleEditButton(paymentId)}>
-                            {strings.default.editText}
-                        </Button>
-                    </ButtonGroup>
-                    </>
-                )}
-                helpButtonHandler={() => console.log('help button clicked')}
             />
-            <PaymentForm
-                open={formOpen}
-                mode="edit"
-                id={paymentId}
-                handleClose={() => setformOpen(false)}
-                callback={handleFormCallback}
-            />
-            <Box className="mb-5">
-                <DetailPaper
-                    loading={loading}
-                    error={fetchError}
-                    title={strings.default.detailText}
-                    list={detailList}
+            <Box>
+                <PanelContentHead
+                    title={paymentWithId.titlePage}
+                    buttonGroup={(
+                        <>
+                        <BackButton/>
+                        <ButtonGroup>
+                            <Button variant="contained" color="info" startIcon={<EditIcon/>} onClick={() => handleEditButton(paymentId)}>
+                                {strings.default.editText}
+                            </Button>
+                        </ButtonGroup>
+                        </>
+                    )}
+                    helpButtonHandler={() => console.log('help button clicked')}
                 />
-                <Paper elevation={0} className="p-5">
-                    <Typography variant="h5" gutterBottom>
-                        Menu
-                    </Typography>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-                        <Button variant="contained" onClick={() => {
-                            sendBatchInvoiceRef.current.openDialog()
-                        }}>
-                            {paymentPage.sendBatchInvoice}
-                        </Button>
-                        <Button variant="contained">
-                            test
-                        </Button>
-                        <Button variant="contained">
-                            test
-                        </Button>
-                        <Button variant="contained">
-                            test
-                        </Button>
-                        <Button variant="contained">
-                            test
-                        </Button>
-                    </div>
-                </Paper>
+                <PaymentForm
+                    open={formOpen}
+                    mode="edit"
+                    id={paymentId}
+                    handleClose={() => setformOpen(false)}
+                    callback={handleFormCallback}
+                />
+                <Box className="mb-5">
+                    <DetailPaper
+                        loading={loading}
+                        error={fetchError}
+                        title={strings.default.detailText}
+                        list={detailList}
+                    />
+                    <Paper elevation={0} className="p-5">
+                        <Typography variant="h5" gutterBottom>
+                            Menu
+                        </Typography>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+                            <Button variant="contained" onClick={() => {
+                                sendBatchInvoiceRef.current.openDialog()
+                            }}>
+                                {paymentPage.sendBatchInvoice}
+                            </Button>
+                        </div>
+                    </Paper>
+                </Box>
+                <PanelContentHead
+                    title={paymentWithId.invoiceTableTitle}
+                    helpButtonHandler={() => console.log('help button from invoices triggered')}
+                />
+                <ServerSideTable
+                    ref={tableRef}
+                    enableCheckbox={false}
+                    showDeleteButton={false}
+                    url={`/administrasi/payment/${paymentId}/invoices`}
+                    columns={columns}
+                />
+                <SendBatchInvoice
+                    ref={sendBatchInvoiceRef}
+                    paymentId={paymentId}
+                    callback={sendBatchInvoiceCallback}
+                />
             </Box>
-            <PanelContentHead
-                title={paymentWithId.invoiceTableTitle}
-                helpButtonHandler={() => console.log('help button from invoices triggered')}
-            />
-            <ServerSideTable
-                ref={tableRef}
-                enableCheckbox={false}
-                showDeleteButton={false}
-                url={`/administrasi/payment/${paymentId}/invoices`}
-                columns={columns}
-            />
-            <SendBatchInvoice
-                ref={sendBatchInvoiceRef}
-                paymentId={paymentId}
-                callback={sendBatchInvoiceCallback}
-            />
-        </Box>
+        </>
     )
 }
 
