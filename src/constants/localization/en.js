@@ -94,8 +94,11 @@ export default function english() {
                 },
                 class: {
                     name: "Class name",
-                    semster: "Semester",
+                    semester: "Semester",
                     angkatan: "Angkatan",
+                    status: "Status",
+                    statusActive: "Active",
+                    statusInactive: "Inactive",
                     action: "Action"
                 },
                 payment:{

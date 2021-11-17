@@ -96,6 +96,9 @@ export default function indonesian() {
                     name: "Nama kelas",
                     semester: "Semester",
                     angkatan: "Angkatan",
+                    status: "Status",
+                    statusActive: "Aktif",
+                    statusInactive: "Nonaktif",
                     action: "Aksi"
                 },
                 payment:{

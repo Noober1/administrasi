@@ -12,11 +12,11 @@ import { PageHead } from '../../src/components/atoms';
 
 const Class = () => {
     const tableRef = useRef(null)
-    const {panel: {pages:{class:classPage}},...strings} = useLocalization()
+    const {panel: {pages:{class:classPage}},table:{columns:{class:classTable}},...strings} = useLocalization()
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
     const [dataToDelete, setdataToDelete] = useState(null)
     const [formOpen, setformOpen] = useState(false)
-    const [formMode, setformMode] = useState('')
+    const [formMode, setformMode] = useState('add')
     const [formEditId, setformEditId] = useState(null)
 
     const handleOpenDeleteDialog = (data) => {
@@ -52,17 +52,30 @@ const Class = () => {
     const columns = [
         {
             field:'name',
-            headerName:'Nama kelas',
+            headerName:classTable.name,
             flex:1
         },
         {
             field: 'semester',
-            headerName: 'Semester',
-            width: 150
+            headerName: classTable.semester,
+            width: 150,
+            valueGetter: params => `${classTable.semester} ${params.value}`
         },
         {
             field: 'angkatan',
-            headerName: 'Angkatan'
+            headerName: classTable.angkatan
+        },
+        {
+            field: 'isActive',
+            headerName: 'Status',
+            renderCell: params => {
+                let isActive = params.value == true
+                let label = isActive ? classTable.statusActive : classTable.statusInactive
+                let color = isActive ? 'success' : 'error'
+                return(
+                    <Button fullWidth variant="contained" size="small" color={color}>{label}</Button>
+                )
+            }
         },
         {
             field: 'id',

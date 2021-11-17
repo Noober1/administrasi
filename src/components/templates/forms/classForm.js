@@ -14,7 +14,8 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
     let formStructure = {
         name:'',
         semester:'',
-        angkatan: new Date().getFullYear()
+        angkatan: new Date().getFullYear(),
+        isActive:true
     }
 
     // don't edit this
@@ -181,7 +182,7 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                             required
                         />
                         <FormControl fullWidth>
-                            <InputLabel>{classTable.semster}</InputLabel>
+                            <InputLabel>{classTable.semester}</InputLabel>
                             <Select
                                 name="semester"
                                 value={formValue.semester}
@@ -206,6 +207,18 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                             }}
                             required={mode === 'add'}
                         />
+                        <FormControl fullWidth>
+                            <InputLabel>{classTable.status}</InputLabel>
+                            <Select
+                                name="isActive"
+                                value={formValue.isActive}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <MenuItem value={true}>{classTable.statusActive}</MenuItem>
+                                <MenuItem value={false}>{classTable.statusInactive}</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
                     {/* FORM END HERE */}
                 </DialogContent>
