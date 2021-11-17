@@ -1,19 +1,23 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material'
 import { ConfirmDialog, ServerSideSelect } from '../../molecules'
 import useLocalization from '../../../lib/useLocalization'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
+import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
+import PropTypes from 'prop-types'
 
 const SendBatchInvoice = forwardRef((props, ref) => {
     const { components:{ sendBatchInvoice }, ...strings } = useLocalization()
+    const { authToken } = useSelector(selectAuth)
     const confirmDialogRef = useRef(null)
     const dispatch = useDispatch()
     const [open, setopen] = useState(false)
     const [formValue, setformValue] = useState({
         prodi: [],
-        class: []
+        class: [],
+        includeBeasiswa: false
     })
 
     const openDialog = () => setopen(true)
@@ -29,17 +33,22 @@ const SendBatchInvoice = forwardRef((props, ref) => {
         event.preventDefault()
         dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
-            url:'/administrasi/invoice/',
+            url:`/administrasi/payment/${props.paymentId}/invoices`,
+            token: authToken,
             method: 'POST',
             data: formValue
         }))
         .then(result => {
+            closeDialog()
             dispatch(hideSpinner())
             dispatch(openSnackbar({
                 severity: 'success',
                 position: 'top-right',
                 message:sendBatchInvoice.invoiceSended
             }))
+            if (typeof props.callback == 'function') {
+                props.callback(false, result)
+            }
         })
         .catch(error => {
             console.error(error)
@@ -49,6 +58,9 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                 position: 'top-right',
                 message:sendBatchInvoice.invoiceFailedToSend
             }))
+            if (typeof props.callback == 'function') {
+                props.callback(true, result)
+            }
         })
         console.log('submitted')
     }
@@ -61,6 +73,13 @@ const SendBatchInvoice = forwardRef((props, ref) => {
         setformValue(prevValue => ({
             ...prevValue,
             [name]:value
+        }))
+    }
+
+    const handleSwitchOnChange = event => {
+        setformValue(prevValue => ({
+            ...prevValue,
+            [event.target.name]: !prevValue[event.target.name]
         }))
     }
 
@@ -96,7 +115,6 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                                     name="class"
                                     multiple
                                     value={formValue}
-                                    className="col-span-2"
                                     url="/class"
                                     urlParams={{
                                         isActive: true
@@ -125,10 +143,24 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                                     optionLabel="name"
                                     label={sendBatchInvoice.prodiFormLabel}
                                     onChange={(event,value) => handleMultipleSelectOnChange('prodi', value)}
-                                    required
                                 />
                                 <FormHelperText>
                                     {sendBatchInvoice.prodiFormHelper}
+                                </FormHelperText>
+                            </FormControl>
+                            <FormControl>
+                                <FormControlLabel
+                                    label={sendBatchInvoice.includeBeasiswaLabel}
+                                    control={
+                                        <Switch
+                                            checked={formValue.includeBeasiswa}
+                                            onChange={handleSwitchOnChange}
+                                            name="includeBeasiswa"
+                                        />
+                                    }
+                                />
+                                <FormHelperText>
+                                    {sendBatchInvoice.includeBeasiswaHelper}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -137,7 +169,7 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                         <Button onClick={closeDialog}>
                             {strings.default.alertDialogCancelButtonText}
                         </Button>
-                        <Button onClick={showConfirm} disabled={formValue.prodi.length < 1 || formValue.class.length < 1}>
+                        <Button onClick={showConfirm} disabled={formValue.class.length < 1}>
                             {strings.default.sendText}
                         </Button>
                     </DialogActions>
@@ -153,11 +185,13 @@ const SendBatchInvoice = forwardRef((props, ref) => {
 })
 
 SendBatchInvoice.defaultProps = {
-    
+    paymentId: 0,
+    callback: null
 }
 
 SendBatchInvoice.propTypes = {
-    
+    paymentId: PropTypes.number.isRequired,
+    callback: PropTypes.func
 }
 
 export default SendBatchInvoice

@@ -47,6 +47,12 @@ const PaymentWithId = ({paymentId}) => {
         }
     }
 
+    const sendBatchInvoiceCallback = (isError, result) => {
+        if (!isError) {
+            tableRef.current.refresh()
+        }
+    }
+
     useEffect(() => {
         if (!loading) {
             setpaymentDetailData(data)
@@ -177,7 +183,11 @@ const PaymentWithId = ({paymentId}) => {
                 url={`/administrasi/payment/${paymentId}/invoices`}
                 columns={columns}
             />
-            <SendBatchInvoice ref={sendBatchInvoiceRef}/>
+            <SendBatchInvoice
+                ref={sendBatchInvoiceRef}
+                paymentId={paymentId}
+                callback={sendBatchInvoiceCallback}
+            />
         </Box>
     )
 }

@@ -56,11 +56,13 @@ export default function indonesian() {
                 classFormHelper: "Anda dapat memilih kelas lebih dari 1 kelas",
                 classFormLabel:"Daftar Kelas",
                 prodiFormLabel: "Daftar Prodi",
-                prodiFormHelper: "Anda dapat memilih prodi lebih dari 1 prodi",
+                prodiFormHelper: "Anda dapat memilih prodi lebih dari 1 prodi. Kolom isian prodi tidak wajib.",
                 alertConfirmText: "Apakah Anda yakin ingin mengirim tagihan?",
                 alertWarningText: "Siswa yang telah menerima tagihan dengan data pembayaran ini tidak akan menerima tagihan",
                 invoiceSended: "Tagihan berhasil dikirim",
-                invoiceFailedToSend: "Tagihan gagal dikirim"
+                invoiceFailedToSend: "Tagihan gagal dikirim",
+                includeBeasiswaLabel: "Dengan status 'Beasiswa'",
+                includeBeasiswaHelper: "Jika dihidupkan maka mahasiswa yang berjenis 'Mahasiswa'akan dimasukan kedalam daftar penerima tagihan"
             }
         },
         login: {

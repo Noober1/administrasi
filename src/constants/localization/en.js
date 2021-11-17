@@ -56,11 +56,13 @@ export default function english() {
                 classFormHelper: "You can choose the class more than one data",
                 classFormLabel:"Class List",
                 prodiFormLabel: "Prodi List",
-                prodiFormHelper: "You can choose the prodi more than one data",
+                prodiFormHelper: "You can choose the prodi more than one data. This field isn't required.",
                 alertConfirmText: "Are you sure want to send the invoices?",
                 alertWarningText: "Student will not received the invoice if he/she has been received this invoice",
                 invoiceSended: "Invoice sended",
-                invoiceFailedToSend: "Invoice failed to send"
+                invoiceFailedToSend: "Invoice failed to send",
+                includeBeasiswaLabel: "With 'Beasiswa' student type",
+                includeBeasiswaHelper: "If turned on, the student of the type 'Mahasiswa' will be added to the list of invoice recipients"
             }
         },
         login: {
