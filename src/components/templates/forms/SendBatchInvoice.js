@@ -190,7 +190,10 @@ SendBatchInvoice.defaultProps = {
 }
 
 SendBatchInvoice.propTypes = {
-    paymentId: PropTypes.number.isRequired,
+    paymentId: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]).isRequired,
     callback: PropTypes.func
 }
 

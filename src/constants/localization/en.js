@@ -69,6 +69,10 @@ export default function english() {
             usernamePasswordWrongText: "Username or password incorrect",
             loginForbiddenText: "This account has no permission"
         },
+        forbiddenPage: {
+            pageTitle: "Forbidden",
+            pageMessage: "You don't have permission to access the page"
+        },
         table: {
             refresh: "Refresh",
             dialogDeleteTitle: "Delete selected",
@@ -130,8 +134,7 @@ export default function english() {
                 paymentText: "Payment",
                 invoicesText: "Invoice",
                 studentListText: "Student List",
-                classListText: "Class List",
-                billText: "Bill"
+                classListText: "Class List"
             },
             pages:{
                 dashboard:{

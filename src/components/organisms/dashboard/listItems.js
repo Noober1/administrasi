@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { selectNoPersistConfig } from '../../../lib/redux/slices/noPersistConfigSlice';
 
 const Menus = ({menuOpen}) => {
-	const strings = useLocalization()
+	const {panel:{menu}} = useLocalization()
 	const { profile } = useSelector(selectNoPersistConfig)
 	const router = useRouter()
 	const firstRoute = '/' + router.pathname.split('/')[1] || '/'
@@ -65,12 +65,12 @@ const Menus = ({menuOpen}) => {
 		<div>
 			<MenuLink
 				link="/class"
-				text={strings.panel.menu.classListText}
+				text={menu.classListText}
 				icon={<PeopleIcon />}
 			/>
 			<MenuLink
 				link="/student"
-				text={strings.panel.menu.studentListText}
+				text={menu.studentListText}
 				icon={<PersonIcon />}
 			/>
 		</div>
@@ -94,14 +94,9 @@ const Menus = ({menuOpen}) => {
 	const StudentMenu = () => (
 		<div>
 			<MenuLink
-				link="/bill"
-				text={strings.panel.menu.billText}
-				icon={<AttachMoneyIcon />}
-			/>
-			<MenuLink
 				link="/invoice"
-				text={'menu siswa 2'}
-				icon={<FileCopyIcon />}
+				text={menu.invoicesText}
+				icon={<AttachMoneyIcon />}
 			/>
 		</div>
 	);
@@ -110,12 +105,12 @@ const Menus = ({menuOpen}) => {
 		<div>
 			<MenuLink
 				link="/payment"
-				text={strings.panel.menu.paymentText}
+				text={menu.paymentText}
 				icon={<AttachMoneyIcon />}
 			/>
 			<MenuLink
 				link="/invoice"
-				text={strings.panel.menu.invoicesText}
+				text={menu.invoicesText}
 				icon={<FileCopyIcon />}
 			/>
 		</div>
@@ -126,7 +121,7 @@ const Menus = ({menuOpen}) => {
 			<List className="p-0">
 				<MenuLink
 					link="/dashboard"
-					text={strings.panel.menu.dashboardText}
+					text={menu.dashboardText}
 					icon={<DashboardIcon />}
 				/>
 			</List>

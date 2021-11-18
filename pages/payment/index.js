@@ -61,12 +61,12 @@ const Payment = (props) => {
             field: 'admin',
             headerName: payment.admin,
             valueGetter: params => params.row.admin.fullName,
-            flex:1
+            width:250
         },
         {
             field: 'type',
             headerName: payment.type,
-            width:150
+            flex:1
         },
         {
             field: 'price',

@@ -79,7 +79,7 @@ const PaymentWithId = ({paymentId}) => {
         {
             field:'code',
             headerName:'No. Invoice',
-            width:130
+            flex:1
         },
         {
             field: 'paymentMethod',

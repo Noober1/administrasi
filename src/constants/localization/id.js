@@ -69,6 +69,10 @@ export default function indonesian() {
             usernamePasswordWrongText: "Nama pengguna atau kata sandi salah",
             loginForbiddenText: "Akun ini tidak mempunyai hak akses"
         },
+        forbiddenPage: {
+            pageTitle: "Forbidden",
+            pageMessage: "Anda tidak mempunyai akses untuk mengakses halaman"
+        },
         table: {
             refresh: "Segarkan",
             dialogDeleteTitle: "Hapus yang dipilih",
@@ -130,8 +134,7 @@ export default function indonesian() {
                 paymentText: "Pembayaran",
                 invoicesText: "Tagihan",
                 studentListText: "Mahasiswa",
-                classListText: "Kelas / Angkatan",
-                billText: "Tagihan"
+                classListText: "Kelas / Angkatan"
             },
             pages:{
                 dashboard:{

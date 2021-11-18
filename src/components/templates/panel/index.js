@@ -31,6 +31,7 @@ import { hideSpinner, selectNoPersistConfig, setProfile } from '../../../lib/red
 import { useUpdateEffect } from 'react-use';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { selectConfig, togglePanelOpen } from '../../../lib/redux/slices/configSlice';
+import useProfile from '../../../lib/useProfile';
 
 
 const drawerWidth = 300;
@@ -76,15 +77,29 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+const pathnames = {
+	admin: [
+		'/dashboard',
+		'/student',
+		'/class',
+		'/payment',
+		'/payment/[id]',
+		'/invoice'
+	],
+	student:[
+		'/dashboard',
+		'/invoice'
+	]
+}
+
 const Panel = ({children}) => {
-	
 	const strings = useLocalization()
 	const dispatch = useDispatch()
 	const router = useRouter()
 	const noPersistConfig = useSelector(selectNoPersistConfig)
 	const auth = useSelector(selectAuth)
+	const profile = useProfile()
 
-	// const [open, setOpen] = useState(true);
 	const { panelOpen:open } = useSelector(selectConfig)
 	const [loadingAuth, setloadingAuth] = useState(true)
 	const [loadingProfile, setloadingProfile] = useState(true)
@@ -111,11 +126,23 @@ const Panel = ({children}) => {
             if (auth.authToken == null) {
                 router.push('/')
             } else {
-                setloadingAuth(false)
-				dispatch(hideSpinner())
+				setloadingAuth(true)
+				if (profile?.accountType) {
+					if (pathnames[profile.accountType].includes(router.pathname)) {
+						setloadingAuth(false)
+						dispatch(hideSpinner())
+					} else {
+						router.push('/forbidden')
+					}
+				}
             }
         }
-	}, [auth])
+	}, [auth, router.pathname, profile])
+
+	// useUpdateEffect(() => {
+	// 	console.log('Component > Panel = router.pathname: ', router.pathname)
+		
+	// }, [router.pathname])
 
 	if (process.env.NODE_ENV === 'development') {
 		useEffect(() => {
@@ -138,7 +165,6 @@ const Panel = ({children}) => {
 		}
 	}, [errorData])
 
-	// if (fetchProfileError) {
 	if (fetchProfileError) {
 		if(errorData) {
 			if(errorData.status == 403) {
@@ -162,9 +188,6 @@ const Panel = ({children}) => {
 					</div>
 				</div>
 			</Box>
-			// <div>
-			// 	{strings.default.anErrorOccured}: {errorMessage}
-			// </div>
 		)
 	}
 
