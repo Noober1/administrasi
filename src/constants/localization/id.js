@@ -117,6 +117,25 @@ export default function indonesian() {
                     action: "Aksi",
                     adminCantChanged: "Administrator akan terisi secara otomatis dengan Email Anda",
                     adminDefault: "Administrator akan tetap terisi oleh data awal"
+                },
+                invoice: {
+                    code: "No. Tagihan",
+                    date: "Tanggal Tagihan",
+                    paymentMethod: "Metode Pembayaran",
+                    studentFullName: "Nama Mahasiswa",
+                    destinationAccount: "Tujuan Rekening",
+                    statusPaid:"Lunas",
+                    statusConfirming:"Menunggu Verifikasi",
+                    statusInvalid:"Invalid",
+                    statusUnpaid:"Belum Lunas",
+                    statusUnknown: "Tidak diketahui",
+                    status: "Status",
+                    price: "Nominal",
+                    action: "Aksi",
+                    actionSendPaymentDetail: "Kirim Bukti Transfer",
+                    actionResendPaymentDetail: "Kirim Ulang Bukti",
+                    actionDetail: "Rincian",
+                    actionPrint: "Cetak"
                 }
             }
         },
@@ -168,6 +187,9 @@ export default function indonesian() {
                     titlePage: "Rincian Pembayaran",
                     invoiceTableTitle: "Daftar Tagihan",
                     sendBatchInvoice: "Kirim tagihan massal"
+                },
+                invoice:{
+                    titlePage: "Daftar tagihan"
                 },
                 invoiceWithCode: {
                     titlePage: "Rincian Tagihan"

@@ -139,11 +139,6 @@ const Panel = ({children}) => {
         }
 	}, [auth, router.pathname, profile])
 
-	// useUpdateEffect(() => {
-	// 	console.log('Component > Panel = router.pathname: ', router.pathname)
-		
-	// }, [router.pathname])
-
 	if (process.env.NODE_ENV === 'development') {
 		useEffect(() => {
 			console.log('Components > Panel : profile initialization',noPersistConfig.profile)

@@ -117,6 +117,25 @@ export default function english() {
                     action: "Action",
                     adminCantChanged: "Administrator will be filled automatically with your email",
                     adminDefault: "Administrator will still be filled with initial data"
+                },
+                invoice: {
+                    code: "Invoice",
+                    date: "Invoice Date",
+                    paymentMethod: "Payment Method",
+                    studentFullName: "Student Name",
+                    destinationAccount: "Dest. Account",
+                    statusPaid:"Paid",
+                    statusConfirming:"Verifying",
+                    statusInvalid:"Invalid",
+                    statusUnpaid:"Unpaid",
+                    statusUnknown: "Unknown",
+                    status: "Status",
+                    price: "Price",
+                    action: "Action",
+                    actionSendPaymentDetail: "Send Transfer Receipt",
+                    actionResendPaymentDetail: "Resend Transfer Receipt",
+                    actionDetail: "Detail",
+                    actionPrint: "Print"
                 }
             }
         },
@@ -168,6 +187,9 @@ export default function english() {
                     titlePage: "Payment detail",
                     invoiceTableTitle: "Invoices",
                     sendBatchInvoice: "Send Batch Invoice"
+                },
+                invoice:{
+                    titlePage: "Invoices"
                 },
                 invoiceWithCode: {
                     titlePage: "Invoice Detail"
