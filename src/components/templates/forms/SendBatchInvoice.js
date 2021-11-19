@@ -99,80 +99,80 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                 keepMounted
             >
                 <DialogTitle>
-                        {sendBatchInvoice.dialogTitle}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText className="mb-5">
-                        {sendBatchInvoice.dialogContentText}
-                        </DialogContentText>
-                        <div className="grid grid-cols-1 gap-2">
-                            <FormControl
-                                variant="outlined"
-                                className="mb-5"
-                                fullWidth
-                            >
-                                <ServerSideSelect
-                                    name="class"
-                                    multiple
-                                    value={formValue}
-                                    url="/class"
-                                    urlParams={{
-                                        isActive: true
-                                    }}
-                                    optionValue="id"
-                                    optionLabel="name"
-                                    label={sendBatchInvoice.classFormLabel}
-                                    onChange={(event,value) => handleMultipleSelectOnChange('class', value)}
-                                    required
-                                />
-                                <FormHelperText>
-                                    {sendBatchInvoice.classFormHelper}
-                                </FormHelperText>
-                            </FormControl>
-                            <FormControl
-                                variant="outlined"
-                                className="mb-5"
-                                fullWidth
-                            >
-                                <ServerSideSelect
-                                    multiple
-                                    value={formValue}
-                                    className="col-span-2"
-                                    url="/prodi"
-                                    optionValue="id"
-                                    optionLabel="name"
-                                    label={sendBatchInvoice.prodiFormLabel}
-                                    onChange={(event,value) => handleMultipleSelectOnChange('prodi', value)}
-                                />
-                                <FormHelperText>
-                                    {sendBatchInvoice.prodiFormHelper}
-                                </FormHelperText>
-                            </FormControl>
-                            <FormControl>
-                                <FormControlLabel
-                                    label={sendBatchInvoice.includeBeasiswaLabel}
-                                    control={
-                                        <Switch
-                                            checked={formValue.includeBeasiswa}
-                                            onChange={handleSwitchOnChange}
-                                            name="includeBeasiswa"
-                                        />
-                                    }
-                                />
-                                <FormHelperText>
-                                    {sendBatchInvoice.includeBeasiswaHelper}
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={closeDialog}>
-                            {strings.default.alertDialogCancelButtonText}
-                        </Button>
-                        <Button onClick={showConfirm} disabled={formValue.class.length < 1}>
-                            {strings.default.sendText}
-                        </Button>
-                    </DialogActions>
+                    {sendBatchInvoice.dialogTitle}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText className="mb-5">
+                    {sendBatchInvoice.dialogContentText}
+                    </DialogContentText>
+                    <div className="grid grid-cols-1 gap-2">
+                        <FormControl
+                            variant="outlined"
+                            className="mb-5"
+                            fullWidth
+                        >
+                            <ServerSideSelect
+                                name="class"
+                                multiple
+                                value={formValue}
+                                url="/class"
+                                urlParams={{
+                                    isActive: true
+                                }}
+                                optionValue="id"
+                                optionLabel="name"
+                                label={sendBatchInvoice.classFormLabel}
+                                onChange={(event,value) => handleMultipleSelectOnChange('class', value)}
+                                required
+                            />
+                            <FormHelperText>
+                                {sendBatchInvoice.classFormHelper}
+                            </FormHelperText>
+                        </FormControl>
+                        <FormControl
+                            variant="outlined"
+                            className="mb-5"
+                            fullWidth
+                        >
+                            <ServerSideSelect
+                                multiple
+                                value={formValue}
+                                className="col-span-2"
+                                url="/prodi"
+                                optionValue="id"
+                                optionLabel="name"
+                                label={sendBatchInvoice.prodiFormLabel}
+                                onChange={(event,value) => handleMultipleSelectOnChange('prodi', value)}
+                            />
+                            <FormHelperText>
+                                {sendBatchInvoice.prodiFormHelper}
+                            </FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <FormControlLabel
+                                label={sendBatchInvoice.includeBeasiswaLabel}
+                                control={
+                                    <Switch
+                                        checked={formValue.includeBeasiswa}
+                                        onChange={handleSwitchOnChange}
+                                        name="includeBeasiswa"
+                                    />
+                                }
+                            />
+                            <FormHelperText>
+                                {sendBatchInvoice.includeBeasiswaHelper}
+                            </FormHelperText>
+                        </FormControl>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog}>
+                        {strings.default.alertDialogCancelButtonText}
+                    </Button>
+                    <Button onClick={showConfirm} disabled={formValue.class.length < 1}>
+                        {strings.default.sendText}
+                    </Button>
+                </DialogActions>
             </Dialog>
             <ConfirmDialog
                 ref={confirmDialogRef}

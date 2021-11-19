@@ -24,7 +24,8 @@ export default function english() {
             helpButtonLabel: "Help",
             retryText: "Try again",
             detailText: "Detail",
-            returnText: "Back"
+            returnText: "Back",
+            closeText: "Close"
         },
         errors:{
             failedToSaveText: "Data failed to save",
@@ -63,6 +64,27 @@ export default function english() {
                 invoiceFailedToSend: "Invoice failed to send",
                 includeBeasiswaLabel: "With 'Beasiswa' student type",
                 includeBeasiswaHelper: "If turned on, the student of the type 'Mahasiswa' will be added to the list of invoice recipients"
+            },
+            invoiceDetailDialog: {
+                dialogTitle: "Invoice Detail",
+                code: "Invoice",
+                sentTo: "Send to",
+                status: "Payment status",
+                statusPaid:"Paid",
+                statusConfirming:"Verifying",
+                statusInvalid:"Invalid",
+                statusUnpaid:"Unpaid",
+                statusUnknown: "Unknown",
+                accountNumber: "Account number",
+                destinationAccount: "Destination account",
+                invoiceDate: "Invoice date",
+                transactionDate: "Transaction date",
+                verificationDate: "Verification date",
+                refNumber: "Ref number",
+                picture: "Picture",
+                actionSendPaymentDetail: "Send receipt",
+                actionResendPaymentDetail: "Resend receipt",
+                actionPrint: "Print"
             }
         },
         login: {
@@ -132,10 +154,7 @@ export default function english() {
                     status: "Status",
                     price: "Price",
                     action: "Action",
-                    actionSendPaymentDetail: "Send Transfer Receipt",
-                    actionResendPaymentDetail: "Resend Transfer Receipt",
-                    actionDetail: "Detail",
-                    actionPrint: "Print"
+                    actionDetail: "Detail"
                 }
             }
         },

@@ -24,7 +24,8 @@ export default function indonesian() {
             helpButtonLabel: "Bantuan",
             retryText: "Coba Lagi",
             detailText: "Rincian",
-            returnText: "Kembali"
+            returnText: "Kembali",
+            closeText: "Tutup"
         },
         errors:{
             failedToSaveText: "Data gagal disimpan",
@@ -63,6 +64,27 @@ export default function indonesian() {
                 invoiceFailedToSend: "Tagihan gagal dikirim",
                 includeBeasiswaLabel: "Dengan status 'Beasiswa'",
                 includeBeasiswaHelper: "Jika dihidupkan maka mahasiswa yang berjenis 'Mahasiswa'akan dimasukan kedalam daftar penerima tagihan"
+            },
+            invoiceDetailDialog: {
+                dialogTitle: "Rincian Tagihan",
+                code: "No. Tagihan",
+                sentTo: "Diberikan kepada",
+                status: "Status pembayaran",
+                statusPaid:"Lunas",
+                statusConfirming:"Menunggu Verifikasi",
+                statusInvalid:"Invalid",
+                statusUnpaid:"Belum Lunas",
+                statusUnknown: "Tidak diketahui",
+                accountNumber: "No. Rekening",
+                destinationAccount: "Tujuan rekening",
+                invoiceDate: "Tanggal tagihan",
+                transactionDate: "Tanggal transaksi",
+                verificationDate: "Tanggal verifikasi",
+                refNumber: "No. Ref",
+                picture: "Gambar",
+                actionSendPaymentDetail: "Kirim Bukti Transfer",
+                actionResendPaymentDetail: "Kirim Ulang Bukti",
+                actionPrint: "Cetak"
             }
         },
         login: {
@@ -125,17 +147,14 @@ export default function indonesian() {
                     studentFullName: "Nama Mahasiswa",
                     destinationAccount: "Tujuan Rekening",
                     statusPaid:"Lunas",
-                    statusConfirming:"Menunggu Verifikasi",
+                    statusConfirming:"Verifikasi",
                     statusInvalid:"Invalid",
                     statusUnpaid:"Belum Lunas",
                     statusUnknown: "Tidak diketahui",
                     status: "Status",
                     price: "Nominal",
                     action: "Aksi",
-                    actionSendPaymentDetail: "Kirim Bukti Transfer",
-                    actionResendPaymentDetail: "Kirim Ulang Bukti",
-                    actionDetail: "Rincian",
-                    actionPrint: "Cetak"
+                    actionDetail: "Rincian"
                 }
             }
         },

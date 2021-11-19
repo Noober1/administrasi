@@ -40,9 +40,11 @@ const DetailPaper = ({title, list, loading, error}) => {
             }
             {!error &&
                 <>
-                    <Typography variant="h5" gutterBottom>
-                        {loading ? <Skeleton variant="text" width={200}/> : title}
-                    </Typography>
+                    {title &&
+                        <Typography variant="h5" gutterBottom>
+                            {loading ? <Skeleton variant="text" width={200}/> : title}
+                        </Typography>
+                    }
                     <List className="grid grid-cols-2">
                         <RenderList/>
                     </List>
@@ -53,7 +55,7 @@ const DetailPaper = ({title, list, loading, error}) => {
 }
 
 DetailPaper.defaultProps = {
-    title: "No Title",
+    title: null,
     loading: true,
     error: false
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import useLocalization from '../../../lib/useLocalization'
 import { Box } from '@mui/system'
@@ -7,9 +7,16 @@ import { Button, ButtonGroup, Typography } from '@mui/material'
 import { BackButton } from '../../atoms'
 import { ServerSideTable } from '..'
 import { tools } from '../../../lib'
+import { InvoiceDetail } from '../../organisms'
 
 const StudentInvoice = props => {
+    const invoiceDetailRef = useRef(null)
     const {panel: {pages: { invoiceWithCode, invoice:invoicePage }}, table: {columns:{invoice:invoiceTable}},default:{nameOfMonths}} = useLocalization()
+
+    const openInvoiceDetail = code => {
+        invoiceDetailRef.current.setInvoice(code)
+        invoiceDetailRef.current.openDialog(true)
+    }
 
     if (props.code) {
         return(
@@ -108,14 +115,8 @@ const StudentInvoice = props => {
                 }
                 return(
                     <ButtonGroup>
-                        <Button variant="contained" color={color}>
-                            {label}
-                        </Button>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => openInvoiceDetail(params.row.code)}>
                             {invoiceTable.actionDetail}
-                        </Button>
-                        <Button variant="contained" color="primary">
-                            {invoiceTable.actionPrint}
                         </Button>
                     </ButtonGroup>
                 )
@@ -136,6 +137,9 @@ const StudentInvoice = props => {
                 url={`/administrasi/invoice`}
                 columns={columns}
                 enableCheckbox={false}
+            />
+            <InvoiceDetail
+                ref={invoiceDetailRef}
             />
         </Box>
     )
