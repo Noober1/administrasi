@@ -1,8 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Skeleton, Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Skeleton, Typography } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
-import { useFetchApi } from '../../../lib'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import { useSelector } from 'react-redux'
 import { useUpdateEffect } from 'react-use'
@@ -11,10 +10,12 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { tools } from '../../../lib'
 import DetailText from './DetailText'
 import { DataGrid } from '@mui/x-data-grid'
+import { ServerSideSelect } from '../../molecules'
 
 const InvoiceDetail = forwardRef((props,ref) => {
     const { default:defaultText, components: {invoiceDetailDialog} } = useLocalization()
     const [open, setopen] = useState(false)
+    const [bankAccount, setbankAccount] = useState(null)
     const [invoiceCode, setinvoiceCode] = useState(null)
     const [fetchData, setfetchData] = useState({})
     const [fetchLoading, setfetchLoading] = useState(true)
@@ -45,6 +46,10 @@ const InvoiceDetail = forwardRef((props,ref) => {
     const helpButtonHandler = () => {
 
     }
+
+    useUpdateEffect(() => {
+        console.log('bank selection', bankAccount)
+    }, [bankAccount])
 
     useUpdateEffect(() => {
         if (invoiceCode && open) {
@@ -142,10 +147,31 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                 }
                             </div>
                         </div>
+                        <div className="col-span-3 text-right grid grid-cols-2">
+                            <span></span>
+                            <div>
+                                {loading ? 
+                                    <Skeleton height="75px"/> :
+                                    <ServerSideSelect
+                                        name="account"
+                                        value={bankAccount}
+                                        url="/administrasi/account"
+                                        urlParams={{
+                                            isActive: true
+                                        }}
+                                        optionValue="id"
+                                        optionLabel="alias"
+                                        label={invoiceDetailDialog.chooseDestinationAccount}
+                                        onChange={(event,value, objectValue) => setbankAccount(objectValue)}
+                                        required
+                                    />
+                                }
+                            </div>
+                        </div>
                         <div className='col-span-3 grid grid-cols-2 gap-4 mb-5'>
                             <div>
                                 <Typography variant="h6">
-                                    {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo}
+                                    {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo + ':'}
                                 </Typography>
                                 <Typography className="capitalize">
                                     {loading ? <Skeleton/> : fetchData?.student?.fullName
@@ -166,10 +192,15 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                         <span> </span>
                                         <Skeleton/>
                                     </div> : 
-                                    <Typography>
-                                        BANK CENTRAL ASIA(BCA)<br/>
-                                        1209389238901283
-                                    </Typography>
+                                    <>
+                                        {bankAccount &&
+                                            <Typography>
+                                                <span className="capitalize">Atas nama: {bankAccount.owner}</span><br/>
+                                                {bankAccount.name}({bankAccount.alias})<br/>
+                                                {bankAccount.number}
+                                            </Typography>
+                                        }
+                                    </>
                                 }
                             </div>
                         </div>
@@ -187,7 +218,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                         {
                                             field: 'date',
                                             headerName: invoiceDetailDialog.invoiceDate,
-                                            width:200,
+                                            width:150,
                                             valueGetter: params => tools.dateFormatting(params.value || new Date(), 'd M y', defaultText.nameOfMonths)
                                         },
                                         {
@@ -208,7 +239,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                         {
                                             field:'price',
                                             headerName: invoiceDetailDialog.paymentPrice,
-                                            width:250
+                                            width:170
                                         },
                                     ]}
                                     rows={[

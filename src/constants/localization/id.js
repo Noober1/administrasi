@@ -82,6 +82,7 @@ export default function indonesian() {
                 paymentTotal: "Total",
                 accountNumber: "No. Rekening",
                 destinationAccount: "Tujuan rekening",
+                chooseDestinationAccount: "Pilih Tujuan rekening",
                 invoiceDate: "Tanggal tagihan",
                 transactionDate: "Tanggal transaksi",
                 verificationDate: "Tanggal verifikasi",

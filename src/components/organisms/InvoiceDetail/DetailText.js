@@ -9,7 +9,7 @@ const DetailText = ({list, loading}) => {
         return(
             <>
                 {list.map((item, index) => (
-                    <ListItemButton key={item.title} className="p-0 pl-2">
+                    <ListItemButton key={item.title || index} className="p-0 pl-2">
                         <ListItemIcon classes={{
                             root:"min-w-0 mr-3"
                         }}>

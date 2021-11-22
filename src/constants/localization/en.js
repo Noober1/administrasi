@@ -82,6 +82,7 @@ export default function english() {
                 paymentPrice: "Price",
                 paymentTotal: "Total",
                 destinationAccount: "Destination account",
+                chooseDestinationAccount: "Choose destination account",
                 invoiceDate: "Invoice date",
                 transactionDate: "Transaction date",
                 verificationDate: "Verification date",

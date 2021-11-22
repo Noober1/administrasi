@@ -104,6 +104,7 @@ const Panel = ({children}) => {
 	const [loadingAuth, setloadingAuth] = useState(true)
 	const [loadingProfile, setloadingProfile] = useState(true)
 	const [refreshProfile, setrefreshProfile] = useState(0)
+	const [initialProfile, setinitialProfile] = useState('')
 
 	const [profileData, loadingFetchProfile, fetchProfileError, errorMessage, errorData] = useFetchApi('/auth/profile' + refreshProfile, {
 		url: '/auth/profile',
@@ -138,6 +139,14 @@ const Panel = ({children}) => {
             }
         }
 	}, [auth, router.pathname, profile])
+
+	useUpdateEffect(() => {
+		if (profile) {
+			let firstNameInitial = profile.firstName.split('')[0]
+			let lastNameInitial = profile.lastName.split('')[0] || ''
+			setinitialProfile((firstNameInitial + lastNameInitial).toUpperCase())
+		}
+	}, [profile])
 
 	if (process.env.NODE_ENV === 'development') {
 		useEffect(() => {
@@ -246,7 +255,7 @@ const Panel = ({children}) => {
 						<Avatar
 							className="mr-6 bg-blue-500 font-bold"
 						>
-							TS
+							{initialProfile || ''}
 						</Avatar>
 						<Typography width="100%" className="overflow-hidden overflow-ellipsis text-base capitalize" >
 							{noPersistConfig.profile.fullName || ''}
