@@ -47,10 +47,12 @@ const InvoiceDetail = forwardRef((props,ref) => {
 
     }
 
-    useUpdateEffect(() => {
-        console.log('bank selection', bankAccount)
-    }, [bankAccount])
-
+    if(process.env.NODE_ENV === 'development') {
+        useUpdateEffect(() => {
+            console.log('Component > Invoice Detail: Bank Account Data Fetch', bankAccount)
+        }, [bankAccount])
+    }
+    
     useUpdateEffect(() => {
         if (invoiceCode && open) {
             setfetchLoading(true)
