@@ -95,7 +95,7 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
             </DialogContent>
             <DialogActions>
                 <Button onClick={closeHandle}>
-                    {strings.default.alertDialogCancelButtonText}
+                    {strings.default.cancelText}
                 </Button>
                 <Button onClick={handleDeleteItem}>
                     {strings.default.deleteText}

@@ -8,6 +8,7 @@ import SpinnerBackdrop from './spinnerBackdrop'
 import MainSnackbar from './MainSnackbar'
 import BackButton from './backButton'
 import PageHead from './PageHead'
+import DraggablePaperComponent  from './DraggablePaperComponent'
 
 export {
     Link,
@@ -19,5 +20,6 @@ export {
     SpinnerBackdrop,
     MainSnackbar,
     BackButton,
-    PageHead
+    PageHead,
+    DraggablePaperComponent
 }

@@ -97,7 +97,7 @@ const AlertDialog = ({
 						<Button onClick={handleConfirm}>{confirmLabel ?? strings.default.alertDialogConfirmButtonText}</Button>
 					}
 					{showCancelButton &&
-						<Button onClick={handleCancel}>{cancelLabel ?? strings.default.alertDialogCancelButtonText}</Button>
+						<Button onClick={handleCancel}>{cancelLabel ?? strings.default.cancelText}</Button>
 					}
 				</DialogActions>
 			</Dialog>

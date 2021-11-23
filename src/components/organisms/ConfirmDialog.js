@@ -44,7 +44,7 @@ const ConfirmDialog = forwardRef((props, ref) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={closeConfirm}>
-                    {strings.default.alertDialogCancelButtonText}
+                    {strings.default.cancelText}
                 </Button>
                 <Button onClick={handleConfirm}>
                     {strings.default.sendText}

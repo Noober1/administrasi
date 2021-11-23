@@ -167,7 +167,7 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>
-                        {strings.default.alertDialogCancelButtonText}
+                        {strings.default.cancelText}
                     </Button>
                     <Button onClick={showConfirm} disabled={formValue.class.length < 1}>
                         {strings.default.sendText}
