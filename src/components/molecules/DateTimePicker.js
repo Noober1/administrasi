@@ -14,7 +14,7 @@ const locale = {
     EN: enLocale
 }
 
-const DateTimePicker = ({value, label}) => {
+const DateTimePicker = ({value, label, valueGetter}) => {
     const { languange, default:defaultText } = useLocalization()
     const [dateValue, setDateValue] = useState(value);
 
@@ -31,6 +31,9 @@ const DateTimePicker = ({value, label}) => {
                 value={dateValue}
                 onChange={(newValue) => {
                     setDateValue(newValue);
+                    if (typeof valueGetter == 'function') {
+                        valueGetter(newValue)
+                    }
                 }}
             />
         </LocalizationProvider>
@@ -42,7 +45,8 @@ DateTimePicker.defaultProps = {
 }
 
 DateTimePicker.propTypes = {
-    value: PropTypes.instanceOf(Date)
+    value: PropTypes.instanceOf(Date),
+    valueGetter: PropTypes.func
 }
 
 export default DateTimePicker

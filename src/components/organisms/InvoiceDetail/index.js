@@ -75,7 +75,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                     {title: invoiceDetailDialog.paymentMethod, content: result.paymentMethod},
                     {title: invoiceDetailDialog.refNumber, content: result.refNumber || '-'},
                     {title: invoiceDetailDialog.accountNumber, content: result.accountNumber || '-'},
-                    {title: invoiceDetailDialog.transactionDate, content: result.date.transaction || '-'},
+                    {title: invoiceDetailDialog.transactionDate, content: result.date.transaction ? tools.dateFormatting(result.date.transaction, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                     {title: invoiceDetailDialog.destinationAccount, content: result.destinationAccount || '-'},
                     {title: invoiceDetailDialog.verificationDate, content: result.date.verification || '-'}
                 ])
@@ -112,10 +112,6 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 onClose={closeDialog}
                 fullWidth
                 PaperComponent={DraggablePaperComponent}
-                PaperProps={{
-                    handle: '#invoice-detail-dialog'
-                }}
-                aria-labelledby="invoice-detail-dialog"
             >
                 <DialogTitle className="cursor-move"></DialogTitle>
                 {fetchError &&
@@ -280,9 +276,15 @@ const InvoiceDetail = forwardRef((props,ref) => {
                     </>
                 }
             </Dialog>
-            <SendReceipt
-                ref={receiptDialog}
-            />
+            {(!fetchLoading && fetchData) &&
+                <SendReceipt
+                    ref={receiptDialog}
+                    transactionDate={fetchData?.date?.transaction}
+                    accountNumber={fetchData?.accountNumber}
+                    sender="dummy"
+                    refNumber={fetchData?.refNumber}
+                />
+            }
         </>
     )
 })
