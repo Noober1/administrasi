@@ -35,7 +35,7 @@ const FormDialog = memo(({buttonText, confirmButtonText, buttonProps, dialogTitl
                     {children}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>{strings.default.alertDialogCancelButtonText}</Button>
+                    <Button onClick={handleClose}>{strings.default.cancelText}</Button>
                     <Button onClick={onSubmit ?? handleClose}>{confirmButtonText ?? strings.default.saveText}</Button>
                 </DialogActions>
             </Dialog>

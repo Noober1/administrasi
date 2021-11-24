@@ -287,12 +287,10 @@ const Panel = ({children}) => {
 				}}
 			>
 				<Toolbar />
-				<Container maxWidth="xl" className="mx-auto p-3">
-					<Grid container spacing={1}>
-						<Grid item xs={12} md={12} lg={12} xl={8}>
-							{children}
-						</Grid>
-					</Grid>
+				<Container maxWidth="xl" className="mx-auto p-5">
+					<main className="block">
+						{children}
+					</main>
 					<Copyright sx={{ pt: 4 }} />
 				</Container>
 			</Box>

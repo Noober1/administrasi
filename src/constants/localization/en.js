@@ -8,11 +8,12 @@ export default function english() {
         default:{
             nameOfMonths: ['January','February','March','April','May','June','July','August','September','October','November','December'],
             alertDialogConfirmButtonText: "OK",
-            alertDialogCancelButtonText: "Cancel",
+            cancelText: "Cancel",
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
             alertLogoutText: "Logout",
             alertConfirmTitle: "Are you sure?",
+            chooseDateAndTime: "Choose date and time",
             anErrorOccured: "An error occured",
             editText: "Edit",
             addText: "Add",
@@ -87,10 +88,14 @@ export default function english() {
                 transactionDate: "Transaction date",
                 verificationDate: "Verification date",
                 refNumber: "Ref number",
+                refNumberHelper: "The Ref number is listed in the transaction details when you make a transfer",
                 picture: "Picture",
                 actionSendPaymentDetail: "Send receipt",
                 actionResendPaymentDetail: "Resend receipt",
-                actionPrint: "Print"
+                actionPrint: "Print",
+                sendReceiptContentText: "Please fill this form below",
+                senderName: "Sender Name",
+                senderNameHelper: "Account owner name",
             }
         },
         login: {

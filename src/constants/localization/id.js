@@ -8,11 +8,12 @@ export default function indonesian() {
         default:{
             nameOfMonths: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
             alertDialogConfirmButtonText: "Oke",
-            alertDialogCancelButtonText: "Batal",
+            cancelText: "Batal",
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
             alertLogoutText: "Keluar",
             alertConfirmTitle: "Apakah Anda yakin?",
+            chooseDateAndTime: "Pilih tanggal dan waktu",
             anErrorOccured: "Terjadi kesalahan",
             editText: "Sunting",
             addText: "Tambah",
@@ -87,10 +88,14 @@ export default function indonesian() {
                 transactionDate: "Tanggal transaksi",
                 verificationDate: "Tanggal verifikasi",
                 refNumber: "No. Ref",
+                refNumberHelper: "Nomor Ref tercantum pada rincian transaksi ketika Anda melakukan transfer",
                 picture: "Gambar",
                 actionSendPaymentDetail: "Kirim Bukti Transfer",
                 actionResendPaymentDetail: "Kirim Ulang Bukti",
-                actionPrint: "Cetak"
+                actionPrint: "Cetak",
+                sendReceiptContentText: "Silahkan isi form dibawah ini",
+                senderName: "Nama Pengirim",
+                senderNameHelper: "Nama pemilik nomor rekening",
             }
         },
         login: {

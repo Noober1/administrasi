@@ -230,7 +230,7 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
                     {/* FORM END HERE */}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseFromDismiss}>{strings.default.alertDialogCancelButtonText}</Button>
+                    <Button onClick={handleCloseFromDismiss}>{strings.default.cancelText}</Button>
                     <Button type="submit">{strings.default.saveText}</Button>
                 </DialogActions>
             </form>
