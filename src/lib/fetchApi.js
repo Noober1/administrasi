@@ -46,8 +46,35 @@ const fetchWithToken = (options) => {
 	}
 }
 
+const uploadAPI = (data) => {
+
+	const instance = axios.create({
+		baseURL: process.env.NEXT_PUBLIC_API_URL
+	});
+
+	return new Promise(async(resolve,reject) => {
+		try {
+			const fetching = await instance({
+				url: '/media',
+				method: 'POST',
+				data: data
+			});
+
+			if (fetching.status < 200 || fetching.status > 299) {
+				throw new Error(fetching.status)
+			}
+			
+			resolve(fetching.data)
+		} catch (error) {
+			console.log(error)
+			reject(error)
+		}
+	})
+}
+
 export default fetchAPI
 export {
 	fetchAPI,
-	fetchWithToken
+	fetchWithToken,
+	uploadAPI
 }

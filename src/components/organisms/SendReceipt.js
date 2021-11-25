@@ -5,6 +5,7 @@ import { DraggablePaperComponent } from '../atoms'
 import { DateTimePicker } from '../molecules'
 import PropTypes from 'prop-types'
 import { useUpdateEffect } from 'react-use'
+import { Uploader } from '../templates'
 
 const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumber, ...props},ref) => {
     const { components: { invoiceDetailDialog }, default:textDefault } = useLocalization()
@@ -105,6 +106,7 @@ const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumb
                             helperText={invoiceDetailDialog.refNumberHelper}
                             required
                         />
+                        <Uploader/>
                     </div>
                 </DialogContent>
                 <DialogActions className="cursor-move">
