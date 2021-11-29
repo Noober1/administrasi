@@ -260,18 +260,23 @@ const InvoiceDetail = forwardRef((props,ref) => {
                             </div>
                         </DialogContent>
                         <DialogActions className="p-5">
-                            <Button variant="contained" size="large" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
-                                {defaultText.helpButtonLabel}
-                            </Button>
-                            <Button variant="contained" size="large" onClick={openReceiptDialog}>
-                                {invoiceDetailDialog.actionSendPaymentDetail}
-                            </Button>
-                            <Button variant="contained" size="large">
-                                {invoiceDetailDialog.actionPrint}
-                            </Button>
-                            <Button variant="contained" color="error" size="large" onClick={closeDialog}>
-                                {defaultText.closeText}
-                            </Button>
+                            {loading ?
+                                <Skeleton width="50%" height="75px"/> :
+                                <>
+                                    <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
+                                        {defaultText.helpButtonLabel}
+                                    </Button>
+                                    <Button variant="contained" onClick={openReceiptDialog}>
+                                        {invoiceDetailDialog.actionSendPaymentDetail}
+                                    </Button>
+                                    <Button variant="contained">
+                                        {invoiceDetailDialog.actionPrint}
+                                    </Button>
+                                    <Button variant="contained" color="error" onClick={closeDialog}>
+                                        {defaultText.closeText}
+                                    </Button>
+                                </>
+                            }
                         </DialogActions>
                     </>
                 }

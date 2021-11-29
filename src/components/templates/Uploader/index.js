@@ -5,12 +5,14 @@ import CloseIcon from '@mui/icons-material/Close'
 import fetchAPI, { uploadAPI } from '../../../lib/fetchApi'
 import AddIcon from '@mui/icons-material/Add'
 import clsx from 'clsx'
-import { useSelector } from 'react-redux'
 import useProfile from '../../../lib/useProfile'
 import { useDispatch } from 'react-redux'
 import { openSnackbar } from '../../../lib/redux/slices/noPersistConfigSlice'
+import useLocalization from '../../../lib/useLocalization'
+import UploadIcon from '@mui/icons-material/Upload'
 
 const Uploader = props => {
+    const {default:defaultText, components: {uploader}} = useLocalization()
     const profile = useProfile()
     const dispatch = useDispatch()
 
@@ -30,6 +32,7 @@ const Uploader = props => {
     const urlParam = new URLSearchParams()
     urlParam.append('page', page)
     urlParam.append('limit', itemLimit)
+    urlParam.append('email', profile.email || '')
     const handleChangePage = (event,value) => {
         if (loading) return
         setpage(value)
@@ -40,9 +43,15 @@ const Uploader = props => {
 
     // selection
     const [fileSelected, setfileSelected] = useState('')
+    const [itemSelected, setitemSelected] = useState({})
+    const [formValue, setformValue] = useState('')
     const handleConfirmFile = () => {
         if (fileSelected === '') return
         setdialogOpen(false)
+    }
+    const handleFileClick = item => {
+        setfileSelected(item.name)
+        setitemSelected(item)
     }
 
     // fetch
@@ -52,6 +61,7 @@ const Uploader = props => {
     const [refreshData, setrefreshData] = useState(0)
 
     useEffect(() => {
+        let active = true
         // only trigger if dialog is open
         if (dialogOpen) {
             setLoading(true)
@@ -59,21 +69,31 @@ const Uploader = props => {
             setfetchedData([])
             fetchAPI('/media/image?' + urlParam.toString())
             .then(result => {
-                setfetchedData(result.data)
-                if (Object.keys(fetchedPaginationData).length < 1) {
-                    setfetchedPaginationData(result.pagination)
+                if (active) {
+                    setfetchedData(result.data)
+                    if (Object.keys(fetchedPaginationData).length < 1 || page == 1) {
+                        setfetchedPaginationData(result.pagination)
+                    }
+                    if (initLoading) {
+                        setinitLoading(false)
+                    }
+                    setLoading(false)
                 }
-                if (initLoading) {
-                    setinitLoading(false)
-                }
-                setLoading(false)
             })
             .catch(error => {
-                console.error(error)
-                if (error?.response) {
-                    fetchError(error.response)
+                if (active) {
+                    console.error(error)
+                    if (error?.response) {
+                        setfetchError(error.response)
+                    } else {
+                        setfetchError(true)
+                    }
+                    setLoading(false)
                 }
             })
+        }
+        return () => {
+            active = false
         }
     }, [dialogOpen, page, refreshData])
 
@@ -107,20 +127,24 @@ const Uploader = props => {
         // uploading
         uploadAPI(formData)
             .then(result => {
-                setrefreshData(refreshData + 1)
                 dispatch(openSnackbar({
-                    position:'top-right',
+                    position:'top-center',
                     severity: 'success',
-                    message: 'OKE KEKNYA'
+                    message: uploader.uploadFileSuccess
                 }))
                 setuploadLoading(false)
+                if (page == 1) {
+                    setrefreshData(refreshData + 1)
+                } else {
+                    setpage(1)
+                }
             })
             .catch(error => {
                 console.error(error)
                 dispatch(openSnackbar({
-                    position:'top-right',
+                    position:'top-center',
                     severity: 'error',
-                    message: 'GK OKE KEKNYA'
+                    message: uploader.uploadFileFailed
                 }))
                 setuploadLoading(false)
             })
@@ -128,9 +152,31 @@ const Uploader = props => {
 
     return (
         <>
-            <Button variant="contained" onClick={openDialog}>
-                [OPEN IMAGE]
-            </Button>
+            <Paper
+                tabIndex="0"
+                elevation={0}
+                className="ratio-1-1 cursor-pointer border-2 border-blue-700 bg-center bg-no-repeat bg-cover"
+                onClick={openDialog}
+                style={{
+                    backgroundImage: `url(${itemSelected?.url || ''})`
+                }}
+            >
+                <div className="ratio-content bg-gray-900 opacity-40"></div>
+                <div
+                    className="ratio-content flex items-center"
+                >
+                    <div className="mx-auto text-center overflow-ellipsis overflow-x-hidden px-3" color="primary">
+                        {fileSelected == '' &&
+                            <Fab size="small" className="mb-5 shadow-none">
+                                <AddIcon/>
+                            </Fab>
+                        }
+                        <Typography noWrap fontSize="12px" color="white">
+                            {fileSelected == '' ? props.title : fileSelected}
+                        </Typography>
+                    </div>
+                </div>
+            </Paper>
             <Dialog
                 open={dialogOpen}
                 fullScreen
@@ -148,86 +194,89 @@ const Uploader = props => {
                         <Typography variant="h6" className="ml-2 flex-1">
                             {props.title}
                         </Typography>
-                        {/* dev only start */}
-                        <Button color="inherit" onClick={() => {
-                            setLoading(!loading)
-                            setinitLoading(!initLoading)
-                        }}>
-                            [DEV ONLY loading toggle]
-                        </Button>
-                        <Button color="inherit" onClick={() => setuploadLoading(!uploadLoading)}>
-                            [DEV ONLY upload loading toggle]
-                        </Button>
-                        {/* dev only end */}
-                        <Button color="inherit" onClick={handleConfirmFile} disabled={fileSelected === ''}>
-                            [PILIH]
+                        <Button onClick={handleConfirmFile} disabled={fileSelected === ''} className="text-white">
+                            {fileSelected == '' ? defaultText.noSelectedText : defaultText.selectText}
                         </Button>
                     </Toolbar>
                 </AppBar>
                 <DialogContent className="flex flex-col justify-between">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                        {!initLoading &&
-                            <>
-                                <label htmlFor="file-upload-input">
-                                    <Paper className="ratio-16-9 relative cursor-pointer">
-                                        <div className="absolute top-0 left-0 buttom-0 right-0 h-full flex items-center">
-                                            <div className="mx-auto text-center">
-                                                {!uploadLoading ?
-                                                    <>
-                                                        <Fab size="small" color="primary" className="mb-2">
-                                                            <AddIcon/>
-                                                        </Fab>
-                                                        <Typography>
-                                                            [UPLOAD]
-                                                        </Typography>
-                                                    </> : 
-                                                    <CircularProgress/>
-                                                }
-                                            </div>
-                                        </div>
-                                    </Paper>
-                                </label>
-                                <input ref={fileInputRef} onChange={handleChangeFileInput} id="file-upload-input" type="file" accept="image/*" className="sr-only" name="file-upload-input"/>
-                            </>
-                        }
-                        {initLoading &&
-                            <>
-                                {[1,2,3,4,5,6].map(item => (
-                                    <Skeleton key={item} animation="wave" variant="rectangular" className="ratio-16-9"/>
-                                ))}
-                            </>
-                        }
-                        {!initLoading &&
-                            <>
-                                {fetchedData.map(item => {
-                                    return(
-                                        <Paper
-                                            tabIndex="0"
-                                            key={item.id}
-                                            className={
-                                                clsx(
-                                                    'bg-no-repeat bg-cover bg-center border-4  outline-none cursor-pointer',
-                                                    item.name === fileSelected ? 'border-gray-700' : 'border-white'
-                                                )
-                                            }
-                                            onClick={() => setfileSelected(item.name)}
-                                            style={{
-                                                backgroundImage:`url(${item.url})`,
-                                                paddingTop: '56.25%'
-                                            }}
-                                        >
-                                        </Paper>
-                                    )
-                                })}
-                            </>
-                        }
-                    </div>
-                    <div className="flex flex-row-reverse justify-between">
-                        {initLoading ? 
-                            <Skeleton className="max-w-sm" width="100%" height="40px"/> : 
-                            <Pagination count={fetchedPaginationData?.lastPage || 1} page={page} onChange={handleChangePage}/>
-                        }
-                    </div>
+                    {fetchError &&
+                        <div className="text-center">
+                            <Typography gutterBottom>
+                                {defaultText.anErrorOccured}
+                            </Typography>
+                            <Button variant="contained" color="primary" onClick={() => setrefreshData(prevValue => prevValue + 1)}>
+                                {defaultText.retryText}
+                            </Button>
+                        </div>
+                    }
+                    {!fetchError &&
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                {!initLoading &&
+                                    <>
+                                        <label htmlFor="file-upload-input">
+                                            <Paper className="ratio-16-9 cursor-pointer shadow-none border-4 border-blue-900 border-dashed bg-gray-200">
+                                                <div className="ratio-content flex items-center">
+                                                    <div className="mx-auto text-center">
+                                                        {!uploadLoading ?
+                                                            <>
+                                                                <Fab size="small" color="primary" className="mb-2 shadow-none">
+                                                                    <UploadIcon/>
+                                                                </Fab>
+                                                                <Typography>
+                                                                    {uploader.uploadText}
+                                                                </Typography>
+                                                            </> : 
+                                                            <CircularProgress/>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </Paper>
+                                        </label>
+                                        <input ref={fileInputRef} onChange={handleChangeFileInput} id="file-upload-input" type="file" accept="image/*" className="sr-only"/>
+                                    </>
+                                }
+                                {initLoading &&
+                                    <>
+                                        {[1,2,3,4,5,6].map(item => (
+                                            <Skeleton key={item} animation="wave" variant="rectangular" className="ratio-16-9"/>
+                                        ))}
+                                    </>
+                                }
+                                {!initLoading &&
+                                    <>
+                                        {fetchedData.map(item => {
+                                            return(
+                                                <Paper
+                                                    tabIndex="0"
+                                                    key={item.id}
+                                                    className={
+                                                        clsx(
+                                                            'bg-no-repeat bg-cover bg-center border-4 outline-none cursor-pointer',
+                                                            item.name === fileSelected ? 'border-blue-700' : 'border-white'
+                                                        )
+                                                    }
+                                                    onClick={() => handleFileClick(item)}
+                                                    style={{
+                                                        backgroundImage:`url(${item.url})`,
+                                                        paddingTop: '56.25%'
+                                                    }}
+                                                >
+                                                </Paper>
+                                            )
+                                        })}
+                                    </>
+                                }
+                            </div>
+                            <div className="flex flex-row-reverse justify-between">
+                                {initLoading ? 
+                                    <Skeleton className="max-w-sm" width="100%" height="40px"/> : 
+                                    <Pagination count={fetchedPaginationData?.lastPage || 1} page={page} onChange={handleChangePage}/>
+                                }
+                            </div>
+                        </>
+                    }
                 </DialogContent>
             </Dialog>
         </>
@@ -236,12 +285,18 @@ const Uploader = props => {
 
 Uploader.defaultProps = {
     title: 'No title',
-    perPage: 6
+    invalid: false,
+    name: 'file',
+    perPage: 6,
+    required: false
 }
 
 Uploader.propTypes = {
     title: PropTypes.string,
-    perPage: PropTypes.number
+    invalid: PropTypes.bool,
+    name: PropTypes.string,
+    perPage: PropTypes.number,
+    required: PropTypes.bool,
 }
 
 export default Uploader

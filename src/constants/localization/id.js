@@ -16,6 +16,8 @@ export default function indonesian() {
             chooseDateAndTime: "Pilih tanggal dan waktu",
             anErrorOccured: "Terjadi kesalahan",
             editText: "Sunting",
+            selectText: "Pilih",
+            noSelectedText: "Tidak ada yang dipilih",
             addText: "Tambah",
             saveText: "Simpan",
             sendText: "Kirim",
@@ -96,6 +98,14 @@ export default function indonesian() {
                 sendReceiptContentText: "Silahkan isi form dibawah ini",
                 senderName: "Nama Pengirim",
                 senderNameHelper: "Nama pemilik nomor rekening",
+                sendReceiptSuccess: "Pengiriman bukti berhasil",
+                sendReceiptFailed: "Pengiriman bukti gagal",
+                pickImage: "Pilih gambar"
+            },
+            uploader: {
+                uploadFileSuccess: "Unggah berkas berhasil",
+                uploadFileFailed: "Unggah berkas gagal",
+                uploadText: "Unggah"
             }
         },
         login: {

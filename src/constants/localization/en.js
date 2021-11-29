@@ -16,6 +16,8 @@ export default function english() {
             chooseDateAndTime: "Choose date and time",
             anErrorOccured: "An error occured",
             editText: "Edit",
+            selectText: "Choose",
+            noSelectedText: "No data selected",
             addText: "Add",
             saveText: "Save",
             sendText: "Send",
@@ -96,6 +98,14 @@ export default function english() {
                 sendReceiptContentText: "Please fill this form below",
                 senderName: "Sender Name",
                 senderNameHelper: "Account owner name",
+                sendReceiptSuccess: "Send receipt success",
+                sendReceiptFailed: "Send receipt failed",
+                pickImage: "Choose image"
+            },
+            uploader: {
+                uploadFileSuccess: "Uploading file success",
+                uploadFileFailed: "Uploading file failed",
+                uploadText: "Upload"
             }
         },
         login: {

@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, DialogContentText, TextField } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, DialogContentText, TextField, Typography } from '@mui/material'
 import useLocalization from '../../lib/useLocalization'
 import { DraggablePaperComponent } from '../atoms'
 import { DateTimePicker } from '../molecules'
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useUpdateEffect } from 'react-use'
 import { Uploader } from '../templates'
 
-const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumber, ...props},ref) => {
+const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumber, picture, ...props},ref) => {
     const { components: { invoiceDetailDialog }, default:textDefault } = useLocalization()
     const [dialogOpen, setdialogOpen] = useState(false)
     const openSendReceiptDialog = () => setdialogOpen(true)
@@ -16,7 +16,8 @@ const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumb
         transactionDate: new Date(),
         accountNumber: accountNumber || '',
         sender: sender || '',
-        refNumber: refNumber || ''
+        refNumber: refNumber || '',
+        picture: picture || ''
     })
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumb
             </DialogTitle>
             <form onSubmit={handleFormSubmit} className="drag-cancel">
                 <DialogContent>
-                    <DialogContentText className="mb-2">{invoiceDetailDialog.sendReceiptContentText}</DialogContentText>
+                    <DialogContentText className="mb-5">{invoiceDetailDialog.sendReceiptContentText}</DialogContentText>
                     <div className="grid grid-cols-1 gap-4">
                         <DateTimePicker
                             value={formValue.transactionDate}
@@ -106,14 +107,24 @@ const SendReceipt = forwardRef(({transactionDate, accountNumber, sender, refNumb
                             helperText={invoiceDetailDialog.refNumberHelper}
                             required
                         />
-                        <Uploader/>
+                        <div className="grid grid-cols-3">
+                            <div>
+                            <Typography gutterBottom>
+                                {invoiceDetailDialog.picture}
+                            </Typography>
+                            <Uploader
+                                title={invoiceDetailDialog.pickImage}
+                                required
+                            />
+                            </div>
+                        </div>
                     </div>
                 </DialogContent>
                 <DialogActions className="cursor-move">
                     <Button onClick={closeSendReceiptDialog}>
                         {textDefault.cancelText}
                     </Button>
-                    <Button type="submit">
+                    <Button type="submit" disabled={formValue.picture === ''}>
                         {textDefault.sendText}
                     </Button>
                 </DialogActions>
