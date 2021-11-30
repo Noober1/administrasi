@@ -44,10 +44,12 @@ const Uploader = props => {
     // selection
     const [fileSelected, setfileSelected] = useState('')
     const [itemSelected, setitemSelected] = useState({})
-    const [formValue, setformValue] = useState('')
-    const handleConfirmFile = () => {
+    const handleConfirmFile = (event) => {
         if (fileSelected === '') return
         setdialogOpen(false)
+        if (typeof props?.onChange == 'function') {
+            props.onChange(event, fileSelected, itemSelected)
+        }
     }
     const handleFileClick = item => {
         setfileSelected(item.name)
@@ -288,7 +290,8 @@ Uploader.defaultProps = {
     invalid: false,
     name: 'file',
     perPage: 6,
-    required: false
+    required: false,
+    onChange: (event,value,objectValue) => {}
 }
 
 Uploader.propTypes = {
@@ -297,6 +300,7 @@ Uploader.propTypes = {
     name: PropTypes.string,
     perPage: PropTypes.number,
     required: PropTypes.bool,
+    onChange: PropTypes.func
 }
 
 export default Uploader

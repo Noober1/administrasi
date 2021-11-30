@@ -95,7 +95,7 @@ export default function indonesian() {
                 actionSendPaymentDetail: "Kirim Bukti Transfer",
                 actionResendPaymentDetail: "Kirim Ulang Bukti",
                 actionPrint: "Cetak",
-                sendReceiptContentText: "Silahkan isi form dibawah ini",
+                sendReceiptContentText: "Silahkan isi form dibawah ini. Jika Anda pernah mengirim bukti transfer, maka data yang akan dikirim saat ini akan memperbarui data tagihan",
                 senderName: "Nama Pengirim",
                 senderNameHelper: "Nama pemilik nomor rekening",
                 sendReceiptSuccess: "Pengiriman bukti berhasil",

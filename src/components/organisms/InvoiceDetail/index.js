@@ -16,6 +16,7 @@ import { DraggablePaperComponent } from '../../atoms'
 
 const InvoiceDetail = forwardRef((props,ref) => {
     const receiptDialog = useRef(null)
+    const [refreshCount, setrefreshCount] = useState(0)
     const { default:defaultText, components: {invoiceDetailDialog} } = useLocalization()
     const [open, setopen] = useState(false)
     const [bankAccount, setbankAccount] = useState(null)
@@ -46,8 +47,15 @@ const InvoiceDetail = forwardRef((props,ref) => {
         setopen(false)
     }
 
+    // TODO: helper button popup
     const helpButtonHandler = () => {
 
+    }
+
+    const callbackSendReceipt = (error, data) => {
+        if (!error) {
+            setrefreshCount(prevValue => prevValue + 1)
+        }
     }
 
     if(process.env.NODE_ENV === 'development') {
@@ -88,7 +96,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 }
             })
         }
-    }, [invoiceCode])
+    }, [invoiceCode, refreshCount])
 
     useImperativeHandle(ref, () => ({
         open: open,
@@ -193,7 +201,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                                         <span className="capitalize">Atas nama: {bankAccount.owner}</span><br/>
                                                         {bankAccount.name}({bankAccount.alias})<br/>
                                                         {bankAccount.number}
-                                                    </> : '-'
+                                                    </> : fetchData?.destinationAccount || '-'
                                                 }
                                             </Typography>
                                         </>
@@ -281,13 +289,15 @@ const InvoiceDetail = forwardRef((props,ref) => {
                     </>
                 }
             </Dialog>
-            {(!fetchLoading && fetchData) &&
+            {Object.keys(fetchData).length > 0 &&
                 <SendReceipt
                     ref={receiptDialog}
+                    invoiceId={fetchData?.id}
                     transactionDate={fetchData?.date?.transaction}
                     accountNumber={fetchData?.accountNumber}
-                    sender="dummy"
+                    sender={fetchData?.sender}
                     refNumber={fetchData?.refNumber}
+                    callback={callbackSendReceipt}
                 />
             }
         </>

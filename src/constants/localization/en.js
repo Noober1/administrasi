@@ -95,7 +95,7 @@ export default function english() {
                 actionSendPaymentDetail: "Send receipt",
                 actionResendPaymentDetail: "Resend receipt",
                 actionPrint: "Print",
-                sendReceiptContentText: "Please fill this form below",
+                sendReceiptContentText: "Please fill this form below. If you have sent proof of transfer, the data that will be sent at this time will update the invoice data.",
                 senderName: "Sender Name",
                 senderNameHelper: "Account owner name",
                 sendReceiptSuccess: "Send receipt success",
