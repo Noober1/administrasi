@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -37,6 +37,7 @@
     "swr": "^1.0.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "8.0.1",
     "eslint-config-next": "11.1.2",
     "tailwindcss": "^2.2.17"
