@@ -32,6 +32,7 @@ import { useUpdateEffect } from 'react-use';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { selectConfig, togglePanelOpen } from '../../../lib/redux/slices/configSlice';
 import useProfile from '../../../lib/useProfile';
+import pathnames from '../../../constants/accessList'
 
 
 const drawerWidth = 300;
@@ -77,21 +78,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const pathnames = {
-	admin: [
-		'/dashboard',
-		'/student',
-		'/class',
-		'/payment',
-		'/payment/[id]',
-		'/invoice'
-	],
-	student:[
-		'/dashboard',
-		'/invoice'
-	]
-}
-
 const Panel = ({children}) => {
 	const strings = useLocalization()
 	const dispatch = useDispatch()
@@ -129,6 +115,7 @@ const Panel = ({children}) => {
             } else {
 				setloadingAuth(true)
 				if (profile?.accountType) {
+					// if pathname included in white list
 					if (pathnames[profile.accountType].includes(router.pathname)) {
 						setloadingAuth(false)
 						dispatch(hideSpinner())
