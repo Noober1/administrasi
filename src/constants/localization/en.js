@@ -41,7 +41,8 @@ export default function english() {
             noDataSelected: "No data selected",
             deleteUrlInvalid: "Delete URL not valid",
             deleteItemsError: 'Deleting item(s) failed',
-            dataExist: 'Data already exist in database'
+            dataExist: 'Data already exist in database',
+            ERR_PAYMENT_HAVE_INVOICE: 'Payment have invoice(s)'
         },
         success:{
             deleteItemsSuccess: 'Item(s) has been deleted'
@@ -158,6 +159,7 @@ export default function english() {
                     priceHelperNoEdit:"This field cannot be edited",
                     description: "Description",
                     action: "Action",
+                    sendBatchInvoiceButton: "Send Invoices",
                     adminCantChanged: "Administrator will be filled automatically with your email",
                     adminDefault: "Administrator will still be filled with initial data"
                 },

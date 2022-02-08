@@ -7,18 +7,20 @@ import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slice
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import PropTypes from 'prop-types'
+import { DraggablePaperComponent } from '../../atoms'
 
 const SendBatchInvoice = forwardRef((props, ref) => {
     const { components:{ sendBatchInvoice }, ...strings } = useLocalization()
+    const defaultValue = {
+        prodi: [],
+        class: [],
+        includeBeasiswa: false
+    }
     const { authToken } = useSelector(selectAuth)
     const confirmDialogRef = useRef(null)
     const dispatch = useDispatch()
     const [open, setopen] = useState(false)
-    const [formValue, setformValue] = useState({
-        prodi: [],
-        class: [],
-        includeBeasiswa: false
-    })
+    const [formValue, setformValue] = useState(defaultValue)
 
     const openDialog = () => setopen(true)
     const closeDialog = () => setopen(false)
@@ -87,6 +89,10 @@ const SendBatchInvoice = forwardRef((props, ref) => {
         useEffect(() => {
             console.log('Component > Templates > Forms > SendBatchInvoice. Form Value:', formValue)
         }, [formValue])
+        useEffect(() => {
+          console.log('Component > Templates > Forms > SendBatchInvoice. PaymentId: ', props.paymentId)
+        }, [props.paymentId]);
+        
     }
 
     return (
@@ -94,11 +100,12 @@ const SendBatchInvoice = forwardRef((props, ref) => {
             <Dialog
                 open={open}
                 onClose={closeDialog}
+                PaperComponent={DraggablePaperComponent}
                 maxWidth="sm"
                 fullWidth
                 keepMounted
             >
-                <DialogTitle>
+                <DialogTitle className='cursor-move'>
                     {sendBatchInvoice.dialogTitle}
                 </DialogTitle>
                 <DialogContent>

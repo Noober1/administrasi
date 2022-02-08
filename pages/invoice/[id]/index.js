@@ -14,17 +14,14 @@ import { BackButton, PageHead } from '../../../src/components/atoms'
 import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
-import SendBatchInvoice from '../../../src/components/templates/forms/SendBatchInvoice'
 import Link from 'next/link'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
-    const sendBatchInvoiceRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
     const { payment } = strings.table.columns
-    const { paymentWithId: paymentPage } = strings.panel.pages
     const [paymentDetailData, setpaymentDetailData] = useState({})
     const [refreshCount, setrefreshCount] = useState(0)
 
@@ -45,12 +42,6 @@ const PaymentWithId = ({paymentId}) => {
     const handleFormCallback = (error, data) => {
         if (!error) {
             setrefreshCount(refreshCount + 1)
-        }
-    }
-
-    const sendBatchInvoiceCallback = (isError, result) => {
-        if (!isError) {
-            tableRef.current.refresh()
         }
     }
 
@@ -151,18 +142,6 @@ const PaymentWithId = ({paymentId}) => {
                         title={strings.default.detailText}
                         list={detailList}
                     />
-                    <Paper elevation={0} className="p-5">
-                        <Typography variant="h5" gutterBottom>
-                            Menu
-                        </Typography>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-                            <Button variant="contained" onClick={() => {
-                                sendBatchInvoiceRef.current.openDialog()
-                            }}>
-                                {paymentPage.sendBatchInvoice}
-                            </Button>
-                        </div>
-                    </Paper>
                 </Box>
                 <PanelContentHead
                     title={paymentWithId.invoiceTableTitle}
@@ -174,11 +153,6 @@ const PaymentWithId = ({paymentId}) => {
                     showDeleteButton={false}
                     url={`/administrasi/payment/${paymentId}/invoices`}
                     columns={columns}
-                />
-                <SendBatchInvoice
-                    ref={sendBatchInvoiceRef}
-                    paymentId={paymentId}
-                    callback={sendBatchInvoiceCallback}
                 />
             </Box>
         </>

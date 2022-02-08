@@ -76,21 +76,6 @@ const Menus = ({menuOpen}) => {
 		</div>
 	)
 
-	const AdminMenu = () => (
-		<div>
-			<MenuLink
-				link="/payment"
-				text={'menu admin 1'}
-				icon={<AttachMoneyIcon />}
-			/>
-			<MenuLink
-				link="/invoice"
-				text={'menu admin 2'}
-				icon={<FileCopyIcon />}
-			/>
-		</div>
-	);
-
 	const StudentMenu = () => (
 		<div>
 			<MenuLink
@@ -101,7 +86,7 @@ const Menus = ({menuOpen}) => {
 		</div>
 	);
 
-	const SecondaryListItems = () => (
+	const AdminMenu = () => (
 		<div>
 			<MenuLink
 				link="/payment"
@@ -130,10 +115,6 @@ const Menus = ({menuOpen}) => {
 				<>
 				<List className="p-0">
 					<MasterDataList/>
-				</List>
-				<Divider/>
-				<List className="p-0">
-					<SecondaryListItems/>
 				</List>
 				<Divider/>
 				<List className="p-0">

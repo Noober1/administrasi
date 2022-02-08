@@ -8,13 +8,20 @@ import useLocalization from '../../src/lib/useLocalization';
 import { PanelContentHead } from '../../src/components/atoms/dashboard';
 import { tools } from '../../src/lib';
 import { DeleteDialog } from '../../src/components/molecules';
-import Link from 'next/link'
 import PaymentForm from '../../src/components/templates/forms/paymentForm';
+import SendBatchInvoice from '../../src/components/templates/forms/SendBatchInvoice';
 
 const Payment = (props) => {
     const {panel:{pages:{payment:paymentPage}},table:{columns:{payment}},...strings} = useLocalization()
+
+    // table ref
     const tableRef = useRef(null)
+
+    // ref for send batch invoice components
+    const sendBatchInvoiceRef = useRef(null)
+
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
+    const [paymentId, setpaymentId] = useState(null);
     const [dataToDelete, setdataToDelete] = useState(null)
     const [formOpen, setformOpen] = useState(false)
     const [formMode, setformMode] = useState('add')
@@ -81,10 +88,11 @@ const Payment = (props) => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained">
-                            <Link href={`/payment/${params.value}`}>
-                                {strings.default.detailText}
-                            </Link>
+                        <Button variant="contained" onClick={() => {
+                            setpaymentId(params.value)
+                            sendBatchInvoiceRef.current.openDialog()
+                        }}>
+                            {payment.sendBatchInvoiceButton}
                         </Button>
                         <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
                             {strings.default.editText}
@@ -134,6 +142,15 @@ const Payment = (props) => {
                     url="/administrasi/payment"
                     refreshTableHandler={() => {
                         tableRef.current.refresh()
+                    }}
+                />
+                <SendBatchInvoice
+                    ref={sendBatchInvoiceRef}
+                    paymentId={paymentId}
+                    callback={(isError, result) => {
+                        if (!isError) {
+                            tableRef.current.refresh()
+                        }
                     }}
                 />
                 <PaymentForm

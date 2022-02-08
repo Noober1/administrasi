@@ -7,6 +7,7 @@ import { hideSpinner, openSnackbar, selectNoPersistConfig, showSpinner } from '.
 import { useUpdateEffect } from 'react-use'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
+import { DraggablePaperComponent } from '../../atoms'
 
 const PaymentForm = ({open, handleClose, mode, callback, id}) => {
 
@@ -173,9 +174,10 @@ const PaymentForm = ({open, handleClose, mode, callback, id}) => {
             scroll="body"
             maxWidth="sm"
             fullWidth
+            PaperComponent={DraggablePaperComponent}
         >
             <form onSubmit={handleSubmitForm}>
-                <DialogTitle>{mode === 'add' ? paymentPage.addPaymentTitle : paymentPage.editPaymentTitle}</DialogTitle>
+                <DialogTitle className='cursor-move'>{mode === 'add' ? paymentPage.addPaymentTitle : paymentPage.editPaymentTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText className="mb-5">
                         {mode === 'add' ? paymentPage.addPaymentDescription : paymentPage.editPaymentDescription}

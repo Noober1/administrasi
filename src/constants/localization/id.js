@@ -41,7 +41,8 @@ export default function indonesian() {
             deleteUrlInvalid: "Delete URL tidak valid",
             noDataSelected: "Tidak ada data yang dipilih",
             deleteItemsError: 'Gagal menghapus data',
-            dataExist: 'Data telah ada di database'
+            dataExist: 'Data telah ada di database',
+            ERR_PAYMENT_HAVE_INVOICE: 'Pembayaran mempunyai data tagihan'
         },
         success:{
             deleteItemsSuccess: 'Data berhasil dihapus'
@@ -158,6 +159,7 @@ export default function indonesian() {
                     priceHelperNoEdit:"Kolom ini tidak dapat disunting",
                     description: "Deskripsi",
                     action: "Aksi",
+                    sendBatchInvoiceButton: "Kirim Tagihan",
                     adminCantChanged: "Administrator akan terisi secara otomatis dengan Email Anda",
                     adminDefault: "Administrator akan tetap terisi oleh data awal"
                 },
@@ -190,8 +192,8 @@ export default function indonesian() {
         panel: {
             menu:{
                 dashboardText: "Beranda",
-                paymentText: "Pembayaran",
-                invoicesText: "Tagihan",
+                paymentText: "Jenis Pembayaran",
+                invoicesText: "Transaksi",
                 studentListText: "Mahasiswa",
                 classListText: "Kelas / Angkatan"
             },
