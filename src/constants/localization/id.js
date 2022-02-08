@@ -231,7 +231,7 @@ export default function indonesian() {
                     sendBatchInvoice: "Kirim tagihan massal"
                 },
                 invoice:{
-                    titlePage: "Daftar tagihan"
+                    titlePage: "Daftar Transaksi"
                 },
                 invoiceWithCode: {
                     titlePage: "Rincian Tagihan"
