@@ -13,6 +13,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import { ServerSideSelect } from '../../molecules'
 import SendReceipt from '../SendReceipt'
 import { DraggablePaperComponent } from '../../atoms'
+import { useReactToPrint } from 'react-to-print'
 
 const InvoiceDetail = forwardRef((props,ref) => {
     const receiptDialog = useRef(null)
@@ -57,6 +58,12 @@ const InvoiceDetail = forwardRef((props,ref) => {
             setrefreshCount(prevValue => prevValue + 1)
         }
     }
+
+    // print invoice
+    const invoiceBoxRef = useRef()
+    const handleInvoicePrint = useReactToPrint({
+        content: () => invoiceBoxRef.current,
+    });
 
     if(process.env.NODE_ENV === 'development') {
         useUpdateEffect(() => {
@@ -112,12 +119,152 @@ const InvoiceDetail = forwardRef((props,ref) => {
         }
     }
 
+    const InvoiceBox = forwardRef((propx, ref) => {
+        return(
+            <DialogContent
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                ref={ref}
+            >
+                <div className="col-span-3 flex items-center mb-5">
+                    <div className="flex-1">
+                        {loading ?
+                            <Skeleton variant="text" height="75px" width="75%"/> :
+                            <Typography variant="h5">
+                                {process.env.NEXT_PUBLIC_COMPANY_NAME}
+                            </Typography>
+                        }
+                    </div>
+                    <div className="flex-1">
+                        {loading ? 
+                            <div className="block">
+                                <div className="w-3/4 mx-auto">
+                                    <Skeleton variant="text" height="74px"/>
+                                    <Skeleton variant="text" height="25px"/>
+                                </div>
+                            </div> :
+                            <div>
+                                <Typography variant="h5" align="center" className="uppercase font-bold" color={fetchData.status == 'unpaid' ? 'red' : 'green'}>
+                                    {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
+                                    fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid :
+                                    fetchData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
+                                    fetchData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
+                                    invoiceDetailDialog.statusUnknown
+                                    }
+                                </Typography>
+                                <Typography variant="body1" align="center">
+                                    {fetchData.code || ''}
+                                </Typography>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div className='col-span-3 grid grid-cols-2 gap-4 mb-5'>
+                    <div>
+                        <Typography variant="h6">
+                            {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo}
+                        </Typography>
+                        <Typography className="capitalize">
+                            {loading ? <Skeleton/> : fetchData?.student?.fullName
+                            }
+                        </Typography>
+                    </div>
+                    <div className="text-right">
+                        <Typography variant="h6">
+                            {loading ? <div className="grid grid-cols-4">
+                                <span></span>
+                                <Skeleton className="col-span-3"/>
+                            </div> : invoiceDetailDialog.destinationAccount}
+                        </Typography>
+                        {loading ?
+                            <div className="grid grid-cols-2">
+                                <span></span>
+                                <Skeleton/>
+                                <span> </span>
+                                <Skeleton/>
+                            </div> : 
+                            <>
+                                <Typography>
+                                    {bankAccount ?
+                                        <>
+                                            <span className="capitalize">Atas nama: {bankAccount.owner}</span><br/>
+                                            {bankAccount.name}({bankAccount.alias})<br/>
+                                            {bankAccount.number}
+                                        </> : fetchData?.destinationAccount || '-'
+                                    }
+                                </Typography>
+                            </>
+                        }
+                    </div>
+                </div>
+                <div className="col-span-3">
+                    {loading ? 
+                        <div className="block">
+                            <Skeleton height="150px"/>
+                        </div> :
+                        <DataGrid
+                            disableColumnFilter
+                            disableColumnMenu
+                            disableSelectionOnClick
+                            disableColumnSelector
+                            disableDensitySelector
+                            autoHeight
+                            columns={[
+                                {
+                                    field: 'date',
+                                    headerName: invoiceDetailDialog.invoiceDate,
+                                    width:150,
+                                    valueGetter: params => tools.dateFormatting(params.value || new Date(), 'd M y', defaultText.nameOfMonths)
+                                },
+                                {
+                                    field:'description',
+                                    headerName: invoiceDetailDialog.paymentType,
+                                    flex:1,
+                                    renderCell: params => (
+                                        <>
+                                            <Typography variant="body1">
+                                                {params.value}<br/>
+                                                <Typography variant="caption" noWrap>
+                                                    {fetchData?.payment?.description || ''}
+                                                </Typography>
+                                            </Typography>
+                                        </>
+                                    )
+                                },
+                                {
+                                    field:'price',
+                                    headerName: invoiceDetailDialog.paymentPrice,
+                                    width:170
+                                },
+                            ]}
+                            rows={[
+                                {
+                                    id: 1,
+                                    date: fetchData?.date?.invoice,
+                                    description: fetchData?.payment?.type || '',
+                                    price: tools.rupiahFormatting(fetchData?.payment?.price || 0)
+                                }
+                            ]}
+                            hideFooter
+                        />
+                    }
+                </div>
+                <div className="col-span-3">
+                    <DetailText
+                        loading={loading}
+                        list={detailList}
+                    />
+                </div>
+            </DialogContent>
+        )
+    })
+
     return (
         <>
             <Dialog
                 open={open}
                 maxWidth="md"
                 onClose={closeDialog}
+                scroll="body"
                 fullWidth
                 PaperComponent={DraggablePaperComponent}
             >
@@ -134,139 +281,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 }
                 {!fetchError &&
                     <>
-                        <DialogContent
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                        >
-                            <div className="col-span-3 flex items-center mb-5">
-                                <div className="flex-1">
-                                    {loading ?
-                                        <Skeleton variant="text" height="75px" width="75%"/> :
-                                        <Typography variant="h5">
-                                            {process.env.NEXT_PUBLIC_COMPANY_NAME}
-                                        </Typography>
-                                    }
-                                </div>
-                                <div className="flex-1">
-                                    {loading ? 
-                                        <div className="block">
-                                            <div className="w-3/4 mx-auto">
-                                                <Skeleton variant="text" height="74px"/>
-                                                <Skeleton variant="text" height="25px"/>
-                                            </div>
-                                        </div> :
-                                        <div>
-                                            <Typography variant="h5" align="center" className="uppercase font-bold" color={fetchData.status == 'unpaid' ? 'red' : 'green'}>
-                                                {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
-                                                fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid :
-                                                fetchData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
-                                                fetchData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
-                                                invoiceDetailDialog.statusUnknown
-                                                }
-                                            </Typography>
-                                            <Typography variant="body1" align="center">
-                                                {fetchData.code || ''}
-                                            </Typography>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div className='col-span-3 grid grid-cols-2 gap-4 mb-5'>
-                                <div>
-                                    <Typography variant="h6">
-                                        {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo}
-                                    </Typography>
-                                    <Typography className="capitalize">
-                                        {loading ? <Skeleton/> : fetchData?.student?.fullName
-                                        }
-                                    </Typography>
-                                </div>
-                                <div className="text-right">
-                                    <Typography variant="h6">
-                                        {loading ? <div className="grid grid-cols-4">
-                                            <span></span>
-                                            <Skeleton className="col-span-3"/>
-                                        </div> : invoiceDetailDialog.destinationAccount}
-                                    </Typography>
-                                    {loading ?
-                                        <div className="grid grid-cols-2">
-                                            <span></span>
-                                            <Skeleton/>
-                                            <span> </span>
-                                            <Skeleton/>
-                                        </div> : 
-                                        <>
-                                            <Typography>
-                                                {bankAccount ?
-                                                    <>
-                                                        <span className="capitalize">Atas nama: {bankAccount.owner}</span><br/>
-                                                        {bankAccount.name}({bankAccount.alias})<br/>
-                                                        {bankAccount.number}
-                                                    </> : fetchData?.destinationAccount || '-'
-                                                }
-                                            </Typography>
-                                        </>
-                                    }
-                                </div>
-                            </div>
-                            <div className="col-span-3">
-                                {loading ? 
-                                    <div className="block">
-                                        <Skeleton height="150px"/>
-                                    </div> :
-                                    <DataGrid
-                                        disableColumnFilter
-                                        disableColumnMenu
-                                        disableSelectionOnClick
-                                        disableColumnSelector
-                                        disableDensitySelector
-                                        autoHeight
-                                        columns={[
-                                            {
-                                                field: 'date',
-                                                headerName: invoiceDetailDialog.invoiceDate,
-                                                width:150,
-                                                valueGetter: params => tools.dateFormatting(params.value || new Date(), 'd M y', defaultText.nameOfMonths)
-                                            },
-                                            {
-                                                field:'description',
-                                                headerName: invoiceDetailDialog.paymentType,
-                                                flex:1,
-                                                renderCell: params => (
-                                                    <>
-                                                        <Typography variant="body1">
-                                                            {params.value}<br/>
-                                                            <Typography variant="caption" noWrap>
-                                                                {fetchData?.payment?.description || ''}
-                                                            </Typography>
-                                                        </Typography>
-                                                    </>
-                                                )
-                                            },
-                                            {
-                                                field:'price',
-                                                headerName: invoiceDetailDialog.paymentPrice,
-                                                width:170
-                                            },
-                                        ]}
-                                        rows={[
-                                            {
-                                                id: 1,
-                                                date: fetchData?.date?.invoice,
-                                                description: fetchData?.payment?.type || '',
-                                                price: tools.rupiahFormatting(fetchData?.payment?.price || 0)
-                                            }
-                                        ]}
-                                        hideFooter
-                                    />
-                                }
-                            </div>
-                            <div className="col-span-3">
-                                <DetailText
-                                    loading={loading}
-                                    list={detailList}
-                                />
-                            </div>
-                        </DialogContent>
+                        <InvoiceBox ref={invoiceBoxRef}/>
                         <DialogActions className="p-5">
                             {loading ?
                                 <Skeleton width="50%" height="75px"/> :
@@ -277,7 +292,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                     <Button variant="contained" onClick={openReceiptDialog}>
                                         {invoiceDetailDialog.actionSendPaymentDetail}
                                     </Button>
-                                    <Button variant="contained">
+                                    <Button variant="contained" onClick={handleInvoicePrint}>
                                         {invoiceDetailDialog.actionPrint}
                                     </Button>
                                     <Button variant="contained" color="error" onClick={closeDialog}>
@@ -292,7 +307,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
             {Object.keys(fetchData).length > 0 &&
                 <SendReceipt
                     ref={receiptDialog}
-                    invoiceId={fetchData?.id}
+                    invoiceId={fetchData?.id || 0}
                     transactionDate={fetchData?.date?.transaction}
                     accountNumber={fetchData?.accountNumber}
                     sender={fetchData?.sender}

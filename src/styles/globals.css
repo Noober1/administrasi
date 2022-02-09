@@ -48,6 +48,15 @@
 	font-display: swap;
 }
 
+@page {
+	orientation: landscape;
+	size: 9.5in 11in!important;
+}
+
+.invoice-print-area {
+	@apply print:block print:absolute print:top-0 print:left-0 print:right-0 print:bottom-0;
+}
+
 .ratio-16-9,.ratio-1-1 {
 	width:100%;
 	height: 0;

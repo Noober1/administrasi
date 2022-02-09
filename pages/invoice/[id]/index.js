@@ -71,7 +71,7 @@ const PaymentWithId = ({paymentId}) => {
         {
             field:'code',
             headerName: invoiceText.code,
-            flex:1
+            width:230
         },
         {
             field:'paymentMethod',
@@ -163,7 +163,7 @@ const PaymentWithId = ({paymentId}) => {
                     helpButtonHandler={() => console.log('help button from invoices triggered')}
                 />
                 <ServerSideTable
-                    perPage={30}
+                    perPage="30"
                     ref={tableRef}
                     enableCheckbox={false}
                     showDeleteButton={false}

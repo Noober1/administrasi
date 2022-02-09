@@ -234,7 +234,8 @@ export default function english() {
                     titlePage: "Invoices"
                 },
                 invoiceWithCode: {
-                    titlePage: "Invoice Detail"
+                    titlePage: "Invoice Detail",
+                    printText: "Print"
                 }
             }
         },

@@ -234,7 +234,8 @@ export default function indonesian() {
                     titlePage: "Daftar Transaksi"
                 },
                 invoiceWithCode: {
-                    titlePage: "Rincian Tagihan"
+                    titlePage: "Rincian Tagihan",
+                    printText: "Cetak"
                 }
             }
         },

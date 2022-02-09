@@ -215,7 +215,7 @@ const Panel = ({children}) => {
 					>
 						{process.env.NEXT_PUBLIC_COMPANY_NAME}
 					</Typography>
-					<Tooltip
+					{/* <Tooltip
 						title={strings.appBar.notificationTooltipText}
 					>
 						<IconButton color="inherit">
@@ -223,7 +223,7 @@ const Panel = ({children}) => {
 									<NotificationsIcon />
 							</Badge>
 						</IconButton>
-					</Tooltip>
+					</Tooltip> */}
 					<ButtonSwitchLanguage />
 					<ButtonToggleDarkMode variant="icon"/>
 					<MenuDropdown/>
