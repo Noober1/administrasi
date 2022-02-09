@@ -21,7 +21,8 @@ const PaymentWithId = ({paymentId}) => {
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
-    const { payment } = strings.table.columns
+    const { payment, invoice:invoiceText } = strings.table.columns
+    const { invoice:invoiceTableText } = strings.table.columns
     const [paymentDetailData, setpaymentDetailData] = useState({})
     const [refreshCount, setrefreshCount] = useState(0)
 
@@ -69,30 +70,39 @@ const PaymentWithId = ({paymentId}) => {
     const columns = [
         {
             field:'code',
-            headerName:'No. Invoice',
+            headerName: invoiceText.code,
             flex:1
         },
         {
-            field: 'paymentMethod',
-            headerName: 'Metode Pembayaran',
+            field:'paymentMethod',
+            headerName:invoiceText.paymentMethod,
+            width:130,
+            renderCell: params => <span className='capitalize'>{params.value}</span>
+        },
+        {
+            field: 'status',
+            headerName: invoiceText.status,
             width: 150,
-            renderCell: params => <div className="capitalize">{params.value}</div>
+            renderCell: params => (
+                <div className="capitalize">
+                    {
+                        params.value == 'paid' ? invoiceTableText.statusPaid :
+                        params.value == 'unpaid' ? invoiceTableText.statusUnpaid : 
+                        params.value == 'confirming' ? invoiceTableText.statusConfirming : 
+                        params.value == 'invalid' ? invoiceTableText.statusInvalid : invoiceTableText.statusUnknown
+                    }
+                </div>
+            )
         },
         {
             field: 'student',
-            headerName: 'Nama Siswa',
+            headerName: invoiceText.studentFullName,
             flex:1,
             renderCell: params => <div className="capitalize">{params?.value?.fullName}</div>
         },
         {
-            field:'destinationAccount',
-            headerName:'Tujuan Rekening',
-            width:130,
-            valueGetter: params => params.value ?? '-'
-        },
-        {
             field: 'id',
-            headerName: 'Aksi',
+            headerName: invoiceText.action,
             flex:1,
             renderCell: params => {
                 return(
@@ -145,9 +155,15 @@ const PaymentWithId = ({paymentId}) => {
                 </Box>
                 <PanelContentHead
                     title={paymentWithId.invoiceTableTitle}
+                    buttonGroup={(
+                        <ButtonGroup>
+                            <BackButton/>
+                        </ButtonGroup>
+                    )}
                     helpButtonHandler={() => console.log('help button from invoices triggered')}
                 />
                 <ServerSideTable
+                    perPage={30}
                     ref={tableRef}
                     enableCheckbox={false}
                     showDeleteButton={false}

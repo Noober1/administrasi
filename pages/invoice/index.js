@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
-import { PageHead } from '../../src/components/atoms'
-import { AdminInvoice, Panel, StudentInvoice } from '../../src/components/templates'
-import fetchAPI from '../../src/lib/fetchApi'
+import { Panel, StudentInvoice } from '../../src/components/templates'
+import AdminInvoice from '../../src/components/templates/pages/AdminInvoice'
 import useProfile from '../../src/lib/useProfile'
 
 const Invoice = ({code}) => {

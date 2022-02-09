@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormHelperText, Switch, Typography } from '@mui/material'
 import { ConfirmDialog, ServerSideSelect } from '../../molecules'
 import useLocalization from '../../../lib/useLocalization'
 import { useDispatch, useSelector } from 'react-redux'
@@ -109,8 +109,14 @@ const SendBatchInvoice = forwardRef((props, ref) => {
                     {sendBatchInvoice.dialogTitle}
                 </DialogTitle>
                 <DialogContent>
+                    <Typography
+                        variant='h5'
+                        gutterBottom
+                    >
+                        {props?.paymentName || ''}
+                    </Typography>
                     <DialogContentText className="mb-5">
-                    {sendBatchInvoice.dialogContentText}
+                        {sendBatchInvoice.dialogContentText}
                     </DialogContentText>
                     <div className="grid grid-cols-1 gap-2">
                         <FormControl
@@ -193,10 +199,12 @@ const SendBatchInvoice = forwardRef((props, ref) => {
 
 SendBatchInvoice.defaultProps = {
     paymentId: 0,
+    paymentName: '',
     callback: null
 }
 
 SendBatchInvoice.propTypes = {
+    paymentName: PropTypes.string,
     paymentId: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.string

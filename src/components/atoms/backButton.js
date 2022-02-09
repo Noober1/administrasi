@@ -4,12 +4,16 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import useLocalization from '../../lib/useLocalization'
 import { useRouter } from 'next/router'
 
-const BackButton = () => {
+const BackButton = ({onClick}) => {
     const router = useRouter()
     const strings = useLocalization()
 
     const handleButtonClick = event => {
-        router.back()
+        if (typeof onClick == 'function') {
+            onClick()
+        } else {
+            router.back()
+        }
     }
 
     return (
@@ -17,6 +21,10 @@ const BackButton = () => {
             {strings.default.returnText}
         </Button>
     )
+}
+
+BackButton.defaultProps = {
+    onClick: null
 }
 
 export default BackButton

@@ -1,17 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import useLocalization from '../../../lib/useLocalization'
+import React, { useRef } from 'react'
+import useLocalization from '../../../../lib/useLocalization'
 import Box from '@mui/system/Box'
-import PanelContentHead from '../../atoms/dashboard/PanelContentHead'
+import PanelContentHead from '../../../atoms/dashboard/PanelContentHead'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
-import ServerSideTable from '../serverSideTable'
-import tools from '../../../lib/tools'
-import { useRef } from 'react'
-import { PageHead } from '../../atoms'
+import ServerSideTable from '../../serverSideTable'
+import tools from '../../../../lib/tools'
+import { PageHead } from '../../../atoms'
 import Link from 'next/link'
 
-const AdminInvoice = props => {
+const AdminWithoutInvoice = () => {
     const {panel: {pages: { invoice }},table:{columns:{payment}}, default: stringDef} = useLocalization()
     const adminInvoiceTableRef = useRef(null);
     const adminInvoiceTableColumns = [
@@ -56,49 +54,26 @@ const AdminInvoice = props => {
         }
     ]
 
-    if (!props.code) {
-        return(
-            <>
-                <PageHead
+    return(
+        <>
+            <PageHead
+                title={invoice.titlePage}
+            />
+            <Box>
+                <PanelContentHead
                     title={invoice.titlePage}
+                    helpButtonHandler={event => console.log('triggered help button panel_content_head_title')}
                 />
-                <Box>
-                    <PanelContentHead
-                        title={invoice.titlePage}
-                        buttonGroup={(
-                            <ButtonGroup>
-                                <Button>test</Button>
-                            </ButtonGroup>
-                        )}
-                        helpButtonHandler={event => console.log('triggered help button panel_content_head_title')}
-                    />
-                    <ServerSideTable
-                        ref={adminInvoiceTableRef}
-                        url='/administrasi/payment'
-                        showDeleteButton={false}
-                        columns={adminInvoiceTableColumns}
-                        enableCheckbox={false}
-                    />
-                </Box>
-            </>
-        )
-    }
-    
-    return (
-        <div>
-            No. Invoice
-        </div>
+                <ServerSideTable
+                    ref={adminInvoiceTableRef}
+                    url='/administrasi/payment'
+                    showDeleteButton={false}
+                    columns={adminInvoiceTableColumns}
+                    enableCheckbox={false}
+                />
+            </Box>
+        </>
     )
 }
 
-AdminInvoice.propTypes = {
-    code: null
-}
-
-AdminInvoice.propTypes = {
-    code: PropTypes.oneOfType([
-        PropTypes.string
-    ])
-}
-
-export default AdminInvoice
+export default AdminWithoutInvoice

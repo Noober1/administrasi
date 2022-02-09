@@ -17,11 +17,12 @@ const Payment = (props) => {
     // table ref
     const tableRef = useRef(null)
 
-    // ref for send batch invoice components
+    // for batch invoice components
     const sendBatchInvoiceRef = useRef(null)
+    const [paymentName, setpaymentName] = useState('')
+    const [paymentId, setpaymentId] = useState(null);
 
     const [deleteDialogOpen, setdeleteDialogOpen] = useState(false)
-    const [paymentId, setpaymentId] = useState(null);
     const [dataToDelete, setdataToDelete] = useState(null)
     const [formOpen, setformOpen] = useState(false)
     const [formMode, setformMode] = useState('add')
@@ -90,6 +91,7 @@ const Payment = (props) => {
                     <ButtonGroup>
                         <Button variant="contained" onClick={() => {
                             setpaymentId(params.value)
+                            setpaymentName(params.row.type)
                             sendBatchInvoiceRef.current.openDialog()
                         }}>
                             {payment.sendBatchInvoiceButton}
@@ -147,6 +149,7 @@ const Payment = (props) => {
                 <SendBatchInvoice
                     ref={sendBatchInvoiceRef}
                     paymentId={paymentId}
+                    paymentName={paymentName}
                     callback={(isError, result) => {
                         if (!isError) {
                             tableRef.current.refresh()
