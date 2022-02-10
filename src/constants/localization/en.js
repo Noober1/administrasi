@@ -8,6 +8,7 @@ export default function english() {
         default:{
             nameOfMonths: ['January','February','March','April','May','June','July','August','September','October','November','December'],
             alertDialogConfirmButtonText: "OK",
+            loadingText: "Loading...",
             cancelText: "Cancel",
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
@@ -107,6 +108,17 @@ export default function english() {
                 uploadFileSuccess: "Uploading file success",
                 uploadFileFailed: "Uploading file failed",
                 uploadText: "Upload"
+            },
+            verifyOrManualDialog: {
+                verifyTitle: "Verify Payment",
+                manualTitle: "Manual Payment",
+                detail: "Detail",
+                picture: "Picture",
+                clickToView: "Click to view image",
+                accountNumber: "Account Number",
+                sender: "From",
+                administrator: "Administrator",
+                refNumber: "Ref Number"
             }
         },
         login: {

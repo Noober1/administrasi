@@ -9,6 +9,7 @@ export default function indonesian() {
             nameOfMonths: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
             alertDialogConfirmButtonText: "Oke",
             cancelText: "Batal",
+            loadingText: "Memuat...",
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
             alertLogoutText: "Keluar",
@@ -107,6 +108,17 @@ export default function indonesian() {
                 uploadFileSuccess: "Unggah berkas berhasil",
                 uploadFileFailed: "Unggah berkas gagal",
                 uploadText: "Unggah"
+            },
+            verifyOrManualDialog: {
+                verifyTitle: "Verifikasi Pembayaran",
+                manualTitle: "Pembayaran Manual",
+                detail: "Rincian",
+                picture: "Gambar",
+                clickToView: "Click untuk melihat gambar",
+                accountNumber: "Nomor Rekening",
+                sender: "Atas Nama",
+                administrator: "Administrator",
+                refNumber: "No. Ref"
             }
         },
         login: {

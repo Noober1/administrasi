@@ -15,9 +15,11 @@ import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
 import Link from 'next/link'
+import VerifyOrManualDialog from '../../../src/components/organisms/VerifyOrManualDialog'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
+    const verifyOrManualDialogRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
@@ -38,6 +40,11 @@ const PaymentWithId = ({paymentId}) => {
 
     const handleEditButton = id => {
         setformOpen(true)
+    }
+
+    const handleOpenVerifyOrManualDialog = invoiceCode => {
+        verifyOrManualDialogRef.current.setInvoiceCode(invoiceCode)
+        verifyOrManualDialogRef.current.openDialog()
     }
 
     const handleFormCallback = (error, data) => {
@@ -112,7 +119,7 @@ const PaymentWithId = ({paymentId}) => {
                                 {invoiceTableText.actionPrint}
                             </Link>
                         </Button>
-                        <Button>
+                        <Button onClick={() => handleOpenVerifyOrManualDialog(params.row.code)}>
                             {params.row.status == 'confirming' ? invoiceTableText.actionVerify : invoiceTableText.actionManualPay}
                         </Button>
                     </ButtonGroup>
@@ -172,6 +179,9 @@ const PaymentWithId = ({paymentId}) => {
                     showDeleteButton={false}
                     url={`/administrasi/payment/${paymentId}/invoices`}
                     columns={columns}
+                />
+                <VerifyOrManualDialog
+                    ref={verifyOrManualDialogRef}
                 />
             </Box>
         </>
