@@ -109,8 +109,11 @@ const PaymentWithId = ({paymentId}) => {
                     <ButtonGroup>
                         <Button size="small" variant="contained">
                             <Link href={`/invoice?code=${params.row.code}`}>
-                                {strings.default.detailText}
+                                {invoiceTableText.actionPrint}
                             </Link>
+                        </Button>
+                        <Button>
+                            {params.row.status == 'confirming' ? invoiceTableText.actionVerify : invoiceTableText.actionManualPay}
                         </Button>
                     </ButtonGroup>
                 )

@@ -62,6 +62,13 @@ const InvoiceDetail = forwardRef((props,ref) => {
     // print invoice
     const invoiceBoxRef = useRef()
     const handleInvoicePrint = useReactToPrint({
+        documentTitle:'Cetak Invoice',
+        pageStyle:`
+            @page {
+                orientation: landscape;
+                size: 9,5cm 11cm;
+            }
+        `,
         content: () => invoiceBoxRef.current,
     });
 

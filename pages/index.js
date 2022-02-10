@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectAuth } from '../src/lib/redux/slices/authSlice'
 import { useRouter } from 'next/router'
 import { hideSpinner } from '../src/lib/redux/slices/noPersistConfigSlice'
+import { Box } from '@mui/system'
 
 const Index = () => {
     const [loading, setloading] = useState(true)
@@ -38,7 +39,15 @@ const Index = () => {
             <PageHead
                 title={''}
             />
-            <div className="w-screen h-screen flex items-center text-center flex-col justify-center">
+            <Box
+                sx={{
+                    backgroundColor: (theme) =>
+						theme.palette.mode === 'light'
+						? theme.palette.grey[100]
+						: theme.palette.grey[900]
+                }}
+                className="w-screen h-screen flex items-center text-center flex-col justify-center"
+            >
                 <div className="mb-2">
                     <ButtonToggleDarkMode
                         variant="icon"
@@ -51,9 +60,9 @@ const Index = () => {
                     <LoginBox/>
                     <div className="grid grid-cols-2 px-3">
                         <div className="text-left">
-                            <NextLink variant="body1" underline="none" className="cursor-pointer" href="/test">
+                            {/* <NextLink variant="body1" underline="none" className="cursor-pointer" href="/test">
                                 {strings.forgotPasswordButtonText}
-                            </NextLink>
+                            </NextLink> */}
                             {/* <AlertDialog
                                 showCancelButton={true}
                                 showConfirmButton={false}
@@ -70,14 +79,14 @@ const Index = () => {
                                 showConfirmButton={false}
                                 title={strings.accountInformationButtonText}
                                 cancelLabel={strings.default.alertDialogConfirmButtonText}
-                                content="Sistem ini menggunakan akun Moodle, Silahkan untuk login menggunakan akun Moodle"
+                                content="Silahkan untuk menghubungi administrator sistem untuk informasi lebih lanjut"
                             >
                                 <Link variant="body1" underline="none" className="cursor-pointer">{strings.accountInformationButtonText}</Link>
                             </AlertDialog>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Box>
         </>
     )
 }

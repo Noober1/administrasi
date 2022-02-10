@@ -177,6 +177,9 @@ export default function indonesian() {
                     status: "Status",
                     price: "Nominal",
                     action: "Aksi",
+                    actionPrint: "Cetak",
+                    actionVerify: "Verifikasi",
+                    actionManualPay: "Bayar Manual",
                     actionDetail: "Rincian"
                 }
             }

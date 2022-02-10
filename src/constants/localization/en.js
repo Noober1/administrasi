@@ -177,6 +177,9 @@ export default function english() {
                     status: "Status",
                     price: "Price",
                     action: "Action",
+                    actionPrint: "Print",
+                    actionVerify: "Verify",
+                    actionManualPay: "Manual Pay",
                     actionDetail: "Detail"
                 }
             }
