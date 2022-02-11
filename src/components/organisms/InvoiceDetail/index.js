@@ -94,13 +94,20 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 setfetchLoading(false)
                 setfetchData(result)
                 setdetailList([
-                    {title: invoiceDetailDialog.paymentMethod, content: result.paymentMethod},
                     {title: invoiceDetailDialog.refNumber, content: result.refNumber || '-'},
                     {title: invoiceDetailDialog.accountNumber, content: result.accountNumber || '-'},
                     {title: invoiceDetailDialog.transactionDate, content: result.date.transaction ? tools.dateFormatting(result.date.transaction, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                     {title: invoiceDetailDialog.destinationAccount, content: result.destinationAccount || '-'},
-                    {title: invoiceDetailDialog.verificationDate, content: result.date.verification || '-'}
+                    {title: invoiceDetailDialog.verificationDate, content: result.date.verification ? tools.dateFormatting(result.date.verification, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                 ])
+                if (result.sender) {
+                    setdetailList(prevValue => {
+                        return [
+                            ...prevValue,
+                            {title: invoiceDetailDialog.senderName, content: result.sender},
+                        ]
+                    })
+                }
             })
             .catch(error => {
                 setfetchError(true)
@@ -152,7 +159,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                             <div>
                                 <Typography variant="h5" align="center" className="uppercase font-bold" color={fetchData.status == 'unpaid' ? 'red' : 'green'}>
                                     {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
-                                    fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid :
+                                    fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${fetchData.paymentMethod})` :
                                     fetchData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                     fetchData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
                                     invoiceDetailDialog.statusUnknown

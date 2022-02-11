@@ -55,13 +55,20 @@ const AdminWithInvoice = ({code}) => {
         if (!fetchError && !loading) {
             setinvoiceData(data)
             setdetailList([
-                {title: invoiceDetailDialog.paymentMethod, content: data.paymentMethod},
                 {title: invoiceDetailDialog.refNumber, content: data.refNumber || '-'},
                 {title: invoiceDetailDialog.accountNumber, content: data.accountNumber || '-'},
                 {title: invoiceDetailDialog.transactionDate, content: data.date.transaction ? tools.dateFormatting(data.date.transaction, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                 {title: invoiceDetailDialog.destinationAccount, content: data.destinationAccount || '-'},
-                {title: invoiceDetailDialog.verificationDate, content: data.date.verification || '-'}
+                {title: invoiceDetailDialog.verificationDate, content: data.date.verification ? tools.dateFormatting(data.date.verification, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'}
             ])
+            if (data.sender) {
+                setdetailList(prevValue => {
+                    return [
+                        ...prevValue,
+                        {title: invoiceDetailDialog.senderName, content: data.sender},
+                    ]
+                })
+            }
         }
     }, [loading])
 
@@ -74,7 +81,7 @@ const AdminWithInvoice = ({code}) => {
     const InvoiceBox = forwardRef((props, ref) => {
         return (
             <Paper
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 invoice-print-area"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 invoice-print-area shadow-lg print:shadow-none"
                 elevation={0}
                 ref={ref}
             >
@@ -104,7 +111,7 @@ const AdminWithInvoice = ({code}) => {
                                 >
                                     {
                                         invoiceData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
-                                        invoiceData.status == 'paid' ? invoiceDetailDialog.statusPaid :
+                                        invoiceData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${invoiceData.paymentMethod})` :
                                         invoiceData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                         invoiceData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
                                         invoiceDetailDialog.statusUnknown
@@ -164,6 +171,7 @@ const AdminWithInvoice = ({code}) => {
                             disableColumnMenu
                             disableSelectionOnClick
                             disableColumnSelector
+                            disableExtendRowFullWidth
                             disableDensitySelector
                             autoHeight
                             columns={[
@@ -191,7 +199,7 @@ const AdminWithInvoice = ({code}) => {
                                 {
                                     field:'price',
                                     headerName: invoiceDetailDialog.paymentPrice,
-                                    width:170
+                                    flex:1
                                 },
                             ]}
                             rows={[

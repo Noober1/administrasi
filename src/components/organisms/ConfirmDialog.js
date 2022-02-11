@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
 import useLocalization from '../../lib/useLocalization'
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import { DraggablePaperComponent } from '../atoms'
 
 const ConfirmDialog = forwardRef((props, ref) => {
     const strings = useLocalization()
@@ -25,10 +26,11 @@ const ConfirmDialog = forwardRef((props, ref) => {
         <Dialog
             open={open}
             onClose={closeConfirm}
+            PaperComponent={DraggablePaperComponent}
             maxWidth="xs"
             fullWidth
         >
-            <DialogTitle>
+            <DialogTitle className='cursor-move'>
                 {strings.default.alertConfirmTitle}
             </DialogTitle>
             <DialogContent>

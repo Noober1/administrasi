@@ -111,7 +111,13 @@ export default function english() {
             },
             verifyOrManualDialog: {
                 verifyTitle: "Verify Payment",
+                verifyMessage: "Make sure to check the data carefully before verifying.",
+                verifyButton: "Verify",
+                verifyOptionsText: "Verification Options",
                 manualTitle: "Manual Payment",
+                paymentMethodText:"Payment Method",
+                paymentMethodManualText:"Manual",
+                paymentMethodTransferText:"Transfer",
                 detail: "Detail",
                 picture: "Picture",
                 clickToView: "Click to view image",

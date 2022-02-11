@@ -120,7 +120,11 @@ const PaymentWithId = ({paymentId}) => {
                             </Link>
                         </Button>
                         <Button onClick={() => handleOpenVerifyOrManualDialog(params.row.code)}>
-                            {params.row.status == 'confirming' ? invoiceTableText.actionVerify : invoiceTableText.actionManualPay}
+                            {
+                                params.row.status == 'confirming' ? invoiceTableText.actionVerify :
+                                params.row.status == 'paid' ? '[EDIT]' :
+                                invoiceTableText.actionManualPay
+                            }
                         </Button>
                     </ButtonGroup>
                 )
@@ -182,6 +186,11 @@ const PaymentWithId = ({paymentId}) => {
                 />
                 <VerifyOrManualDialog
                     ref={verifyOrManualDialogRef}
+                    callback={isError => {
+                        if (typeof tableRef.current.refresh == 'function') {
+                            tableRef.current.refresh()
+                        }
+                    }}
                 />
             </Box>
         </>

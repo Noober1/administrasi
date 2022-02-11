@@ -111,7 +111,13 @@ export default function indonesian() {
             },
             verifyOrManualDialog: {
                 verifyTitle: "Verifikasi Pembayaran",
+                verifyMessage: "Pastikan untuk memeriksa data yang diterima sebelum melakukan verifikasi.",
+                verifyButton: "Verifikasi",
+                verifyOptionsText: "Opsi Verifikasi",
                 manualTitle: "Pembayaran Manual",
+                paymentMethodText:"Metode Pembayaran",
+                paymentMethodManualText:"Manual",
+                paymentMethodTransferText:"Transfer",
                 detail: "Rincian",
                 picture: "Gambar",
                 clickToView: "Click untuk melihat gambar",
