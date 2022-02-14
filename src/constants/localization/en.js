@@ -43,10 +43,14 @@ export default function english() {
             deleteUrlInvalid: "Delete URL not valid",
             deleteItemsError: 'Deleting item(s) failed',
             dataExist: 'Data already exist in database',
-            ERR_PAYMENT_HAVE_INVOICE: 'Payment have invoice(s)'
+            imageNotFound: 'Image not found',
+            ERR_PAYMENT_HAVE_INVOICE: 'Payment have invoice(s)',
         },
         success:{
-            deleteItemsSuccess: 'Item(s) has been deleted'
+            deleteItemsSuccess: 'Item(s) has been deleted',
+            deleteItemSuccessWithRange: (deleted,total) => {
+                return `${deleted || 0} data deleted from ${total || 0} data selected`
+            }
         },
         appBar: {
             notificationTooltipText: "Notification",

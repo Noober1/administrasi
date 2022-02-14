@@ -12,12 +12,14 @@ import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slice
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 
+const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/media/`
+
 const VerifyOrManualDialog = forwardRef((props,ref) => {
 
     const dispatch = useDispatch()
     const { authToken } = useSelector(selectAuth)
 
-    const { default:defaultText, components: {verifyOrManualDialog: verifyOrManualDialogText} } = useLocalization()
+    const { default:defaultText, errors: errorText, components: {verifyOrManualDialog: verifyOrManualDialogText} } = useLocalization()
     const confirmVerifyDialogRef = useRef(null)
     const [formVerify, setformVerify] = useState({
         paymentMethod: 'manual'
@@ -134,38 +136,37 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                     {verifyOrManualDialogText.detail}
                 </Typography>
                 <div className='pt-3'>
-                    {fetchData.picture &&
-                        <a
-                            href={`${process.env.NEXT_PUBLIC_API_URL}/media/${fetchData.picture}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                    <a
+                        href={fetchData.picture ? imageUrl + fetchData.picture : '#'}
+                        target={fetchData?.picture ? "_blank" : ''}
+                    >
+                        <div
+                            className='ratio-16-9'
                         >
-                            <div
-                                className='ratio-16-9'
-                            >
-                                <Paper className='ratio-content rounded-none opacity-60'>
-                                    <img class="w-full h-full" src={`${process.env.NEXT_PUBLIC_API_URL}/media/${fetchData.picture}`}/>
-                                </Paper>
-                                <div className="ratio-content flex items-center">
-                                    <span className="mx-auto">
-                                        <span className='block md:hidden'>
-                                            <Tooltip title={verifyOrManualDialogText.clickToView}>
-                                                <Fab color='default'>
-                                                    <ZoomInIcon/>
-                                                </Fab>
-                                            </Tooltip>
-                                        </span>
-                                        <Paper className='hidden md:block p-1'>{verifyOrManualDialogText.clickToView}</Paper>
+                            <Paper className='ratio-content rounded-none opacity-60'>
+                                <img class="w-full h-full" src={fetchData.picture ? imageUrl + fetchData.picture : imageUrl + 'not-found.jpg'}/>
+                            </Paper>
+                            <div className="ratio-content flex items-center">
+                                <span className="mx-auto">
+                                    <span className='block md:hidden'>
+                                        <Tooltip title={verifyOrManualDialogText.clickToView}>
+                                            <Fab color='default'>
+                                                <ZoomInIcon/>
+                                            </Fab>
+                                        </Tooltip>
                                     </span>
-                                </div>
+                                    <Paper className='hidden md:block p-1'>
+                                        {fetchData?.picture ? verifyOrManualDialogText.clickToView : errorText.imageNotFound}
+                                    </Paper>
+                                </span>
                             </div>
-                        </a>
-                    }
+                        </div>
+                    </a>
                 </div>
                 <div className="grid grid-cols-1 p-3">
-                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.accountNumber} value={fetchData.accountNumber} aria-readonly/>
-                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.sender} value={fetchData.sender} aria-readonly/>
-                    <TextField fullWidth className="capitalize mb-2" variant='standard' label={verifyOrManualDialogText.refNumber} value={fetchData?.refNumber || 'Empty'} aria-readonly/>
+                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.accountNumber} value={fetchData?.accountNumber  || 'No data'} aria-readonly/>
+                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.sender} value={fetchData?.sender  || 'No data'} aria-readonly/>
+                    <TextField fullWidth className="capitalize mb-2" variant='standard' label={verifyOrManualDialogText.refNumber} value={fetchData?.refNumber || 'No data'} aria-readonly/>
                 </div>
                 <Typography className="col-span-2 mb-4" variant='h6' gutterBottom>
                     {verifyOrManualDialogText.verifyOptionsText}

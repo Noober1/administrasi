@@ -43,10 +43,14 @@ export default function indonesian() {
             noDataSelected: "Tidak ada data yang dipilih",
             deleteItemsError: 'Gagal menghapus data',
             dataExist: 'Data telah ada di database',
+            imageNotFound: 'Gambar tidak ditemukan',
             ERR_PAYMENT_HAVE_INVOICE: 'Pembayaran mempunyai data tagihan'
         },
         success:{
-            deleteItemsSuccess: 'Data berhasil dihapus'
+            deleteItemsSuccess: 'Data berhasil dihapus',
+            deleteItemSuccessWithRange: (deleted,total) => {
+                return `${deleted || 0} data telah dihapus dari ${total || 0} data dipilih`
+            }
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",

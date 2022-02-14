@@ -12,7 +12,17 @@ import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import { DeleteDialog } from '../../molecules'
 
-const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder, enableCheckbox = true, customButtons, deleteUrl = null, showDeleteButton = true}, ref) => {
+const ServerSideTable = forwardRef(({
+    url,
+    perPage = "10",
+    columns,
+    placeholder,
+    enableCheckbox = true,
+    customButtons,
+    deleteUrl = null,
+    showDeleteButton = true,
+    deleteAdditionalMessage
+}, ref) => {
     const strings = useLocalization()
     const { authToken } = useSelector(selectAuth)
     const localeText = tableLocalization(strings.languange.initial)
@@ -184,6 +194,7 @@ const ServerSideTable = forwardRef(({ url, perPage = "10", columns, placeholder,
                         data={selections}
                         url={deleteUrl || ''}
                         refreshTableHandler={refreshTable}
+                        additionalMessage={deleteAdditionalMessage || ''}
                     />
                 </div>
             </div>
