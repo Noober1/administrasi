@@ -83,6 +83,7 @@ export default function english() {
                 statusConfirming:"Verifying",
                 statusInvalid:"Invalid",
                 statusUnpaid:"Unpaid",
+                statusPending: "Pending",
                 statusUnknown: "Unknown",
                 paymentMethod: "Payment Method",
                 accountNumber: "Account number",
@@ -116,6 +117,7 @@ export default function english() {
             verifyOrManualDialog: {
                 verifyTitle: "Verify Payment",
                 verifyMessage: "Make sure to check the data carefully before verifying.",
+                verifyConfirmingVerify: "Are you sure want to verify?",
                 verifyButton: "Verify",
                 verifyOptionsText: "Verification Options",
                 manualTitle: "Manual Payment",
@@ -195,6 +197,7 @@ export default function english() {
                     statusConfirming:"Verifying",
                     statusInvalid:"Invalid",
                     statusUnpaid:"Unpaid",
+                    statusPending: "Pending",
                     statusUnknown: "Unknown",
                     status: "Status",
                     price: "Price",

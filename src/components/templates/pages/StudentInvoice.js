@@ -68,9 +68,13 @@ const StudentInvoice = props => {
                         color = 'info'
                         break;
                     case 'invalid':
-                            label = invoiceTable.statusInvalid
-                            color = 'secondary'
-                            break;
+                        label = invoiceTable.statusInvalid
+                        color = 'secondary'
+                        break;
+                    case 'pending':
+                        label = invoiceTable.statusPending
+                        color = 'warning'
+                        break;
                     default:
                         label = invoiceTable.statusUnknown
                         color = 'warning'
@@ -91,20 +95,13 @@ const StudentInvoice = props => {
                 let label = invoiceTable.statusUnknown
                 let color = 'warning'
                 const { status } = params.row
-                if (status == 'paid') {
-                    label = invoiceTable.statusPaid
-                    color = 'success'
-                } else if(
-                    status == 'invalid'
-                ) {
-
-                }
                 switch (status) {
                     case 'paid':
                         label = invoiceTable.statusPaid
                         color = 'success'
                         break;
                     case 'unpaid':
+                    case 'pending':
                         label = invoiceTable.actionSendPaymentDetail
                         color = 'primary'
                         break;

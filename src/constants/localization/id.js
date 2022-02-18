@@ -84,6 +84,7 @@ export default function indonesian() {
                 statusInvalid:"Invalid",
                 statusUnpaid:"Belum Lunas",
                 statusUnknown: "Tidak diketahui",
+                statusPending: "Pending",
                 paymentMethod: "Metode Pembayaran",
                 paymentType: "Nama Pembayaran",
                 paymentDescription: "Deskripsi Pembayaran",
@@ -116,6 +117,7 @@ export default function indonesian() {
             verifyOrManualDialog: {
                 verifyTitle: "Verifikasi Pembayaran",
                 verifyMessage: "Pastikan untuk memeriksa data yang diterima sebelum melakukan verifikasi.",
+                verifyConfirmingVerify: "Apakah Anda yakin ingin ingin verifikasi tagihan?",
                 verifyButton: "Verifikasi",
                 verifyOptionsText: "Opsi Verifikasi",
                 manualTitle: "Pembayaran Manual",
@@ -196,6 +198,7 @@ export default function indonesian() {
                     statusInvalid:"Invalid",
                     statusUnpaid:"Belum Lunas",
                     statusUnknown: "Tidak diketahui",
+                    statusPending: "Pending",
                     status: "Status",
                     price: "Nominal",
                     action: "Aksi",

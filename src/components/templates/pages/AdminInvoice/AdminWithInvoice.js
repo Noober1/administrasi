@@ -107,13 +107,14 @@ const AdminWithInvoice = ({code}) => {
                                     variant="h5"
                                     align="center"
                                     className="uppercase font-bold"
-                                    color={invoiceData.status == 'unpaid' ? 'red' : 'green'}
+                                    color={invoiceData.status == 'paid' ? 'green' : invoiceData.status == 'pending' ? 'orange' : 'red'}
                                 >
                                     {
                                         invoiceData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
                                         invoiceData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${invoiceData.paymentMethod})` :
                                         invoiceData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                         invoiceData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
+                                        invoiceData.status == 'pending' ? invoiceDetailDialog.statusPending :
                                         invoiceDetailDialog.statusUnknown
                                     }
                                 </Typography>

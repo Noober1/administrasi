@@ -157,11 +157,17 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                 </div>
                             </div> :
                             <div>
-                                <Typography variant="h5" align="center" className="uppercase font-bold" color={fetchData.status == 'unpaid' ? 'red' : 'green'}>
+                                <Typography
+                                    variant="h5"
+                                    align="center"
+                                    className="uppercase font-bold"
+                                    color={fetchData.status == 'paid' ? 'green' : fetchData.status == 'pending' ? 'orange' : 'green'}
+                                >
                                     {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
                                     fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${fetchData.paymentMethod})` :
                                     fetchData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                     fetchData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
+                                    fetchData.status == 'pending' ? invoiceDetailDialog.statusPending :
                                     invoiceDetailDialog.statusUnknown
                                     }
                                 </Typography>

@@ -97,7 +97,9 @@ const PaymentWithId = ({paymentId}) => {
                         params.value == 'paid' ? invoiceTableText.statusPaid :
                         params.value == 'unpaid' ? invoiceTableText.statusUnpaid : 
                         params.value == 'confirming' ? invoiceTableText.statusConfirming : 
-                        params.value == 'invalid' ? invoiceTableText.statusInvalid : invoiceTableText.statusUnknown
+                        params.value == 'invalid' ? invoiceTableText.statusInvalid : 
+                        params.value == 'pending' ? invoiceTableText.statusPending :
+                        invoiceTableText.statusUnknown
                     }
                 </div>
             )

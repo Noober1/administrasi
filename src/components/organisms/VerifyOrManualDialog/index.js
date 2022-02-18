@@ -144,7 +144,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                             className='ratio-16-9'
                         >
                             <Paper className='ratio-content rounded-none opacity-60'>
-                                <img class="w-full h-full" src={fetchData.picture ? imageUrl + fetchData.picture : imageUrl + 'not-found.jpg'}/>
+                                <img className="w-full h-full" src={fetchData.picture ? imageUrl + fetchData.picture : imageUrl + 'not-found.jpg'}/>
                             </Paper>
                             <div className="ratio-content flex items-center">
                                 <span className="mx-auto">
@@ -235,11 +235,18 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
             </DialogActions>
         </Dialog>
         {!fetchError &&
-            <ConfirmDialog
-                ref={confirmVerifyDialogRef}
-                dialogText="[Apakah Anda yakin ingin ingin verifikasi tagihan?]"
-                onConfirm={handleSubmitVerify}
-            />
+            // verify confirm dialog
+            <>
+                {
+                    fetchData.status == 'confirming' ? 
+                    <ConfirmDialog
+                        ref={confirmVerifyDialogRef}
+                        dialogText={verifyOrManualDialogText.verifyConfirmingVerify}
+                        onConfirm={handleSubmitVerify}
+                    /> : 
+                    <ConfirmDialog/>
+                }
+            </>
         }
         </>
     )
