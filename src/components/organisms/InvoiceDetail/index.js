@@ -14,9 +14,11 @@ import { ServerSideSelect } from '../../molecules'
 import SendReceipt from '../SendReceipt'
 import { DraggablePaperComponent } from '../../atoms'
 import { useReactToPrint } from 'react-to-print'
+import History from './History'
 
 const InvoiceDetail = forwardRef((props,ref) => {
     const receiptDialog = useRef(null)
+    const historyRef = useRef(null)
     const [refreshCount, setrefreshCount] = useState(0)
     const { default:defaultText, components: {invoiceDetailDialog} } = useLocalization()
     const [open, setopen] = useState(false)
@@ -133,7 +135,11 @@ const InvoiceDetail = forwardRef((props,ref) => {
         }
     }
 
-    const InvoiceBox = forwardRef((propx, ref) => {
+    const handleOpenHistory = () => {
+        historyRef.current.openDialog()
+    }
+
+    const InvoiceBox = forwardRef((props, ref) => {
         return(
             <DialogContent
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
@@ -184,8 +190,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                             {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo}
                         </Typography>
                         <Typography className="capitalize">
-                            {loading ? <Skeleton/> : fetchData?.student?.fullName
-                            }
+                            {loading ? <Skeleton/> : fetchData?.student?.fullName}
                         </Typography>
                     </div>
                     <div className="text-right">
@@ -309,6 +314,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                     <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
                                         {defaultText.helpButtonLabel}
                                     </Button>
+                                    <Button variant="contained" color="info" onClick={handleOpenHistory}>[TRANSAKSI]</Button>
                                     <Button variant="contained" onClick={openReceiptDialog}>
                                         {invoiceDetailDialog.actionSendPaymentDetail}
                                     </Button>
@@ -325,15 +331,21 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 }
             </Dialog>
             {Object.keys(fetchData).length > 0 &&
-                <SendReceipt
-                    ref={receiptDialog}
-                    invoiceId={fetchData?.id || 0}
-                    transactionDate={fetchData?.date?.transaction}
-                    accountNumber={fetchData?.accountNumber}
-                    sender={fetchData?.sender}
-                    refNumber={fetchData?.refNumber}
-                    callback={callbackSendReceipt}
-                />
+                <>
+                    <SendReceipt
+                        ref={receiptDialog}
+                        invoiceId={fetchData?.id || 0}
+                        transactionDate={fetchData?.date?.transaction}
+                        accountNumber={fetchData?.accountNumber}
+                        sender={fetchData?.sender}
+                        refNumber={fetchData?.refNumber}
+                        callback={callbackSendReceipt}
+                    />
+                    <History
+                        ref={historyRef}
+                        data={fetchData?.paymentHistory || []}
+                    />
+                </>
             }
         </>
     )

@@ -120,6 +120,7 @@ export default function english() {
                 verifyConfirmingVerify: "Are you sure want to verify?",
                 verifyButton: "Verify",
                 verifyOptionsText: "Verification Options",
+                verifyNominal: "Nominal",
                 manualTitle: "Manual Payment",
                 paymentMethodText:"Payment Method",
                 paymentMethodManualText:"Manual",

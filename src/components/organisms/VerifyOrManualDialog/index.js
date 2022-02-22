@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Paper, Select, TextField, Typography } from '@mui/material'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { useEffect } from 'react'
 import useLocalization from '../../../lib/useLocalization'
@@ -16,12 +16,14 @@ const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/media/`
 
 const VerifyOrManualDialog = forwardRef((props,ref) => {
 
+    var nominalValue = 0
     const dispatch = useDispatch()
     const { authToken } = useSelector(selectAuth)
 
     const { default:defaultText, errors: errorText, components: {verifyOrManualDialog: verifyOrManualDialogText} } = useLocalization()
     const confirmVerifyDialogRef = useRef(null)
     const [formVerify, setformVerify] = useState({
+        nominal: 0,
         paymentMethod: 'manual'
     })
 
@@ -81,11 +83,6 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         }
     }
 
-    const handleSubmitForm = event => {
-        event.preventDefault()
-        console.log('form submitted')
-    }
-
     const handleSubmitVerify = () => {
         if (
             !invoiceCode ||
@@ -98,12 +95,15 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
             url: '/administrasi/getInvoice?code=' + invoiceCode,
             method: "PATCH",
             token: authToken,
-            data: formVerify
+            data: {
+                ...formVerify,
+                nominal: nominalValue
+            }
         })).then(result => {
             closeDialog()
             dispatch(openSnackbar({
                 position: 'top-right',
-                message: '[DATA BERHASIL DISIMPAN]',
+                message: defaultText.savedText,
                 severity: 'success'
             }))
             executeCallback(false)
@@ -112,7 +112,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         .catch(error => {
             dispatch(openSnackbar({
                 position: 'top-right',
-                message: '[DATA GAGAL DISIMPAN]',
+                message: errorText.failedToSaveText,
                 severity: 'error'
             }))
             executeCallback(true)
@@ -126,66 +126,100 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         </div>
     )
 
-    const VerifyContent = () => (
-        <>
-            <DialogContentText gutterBottom>
-                {verifyOrManualDialogText.verifyMessage}
-            </DialogContentText>
-            <div className="grid grid-cols-2 mb-5">
-                <Typography variant="h6" className='col-span-2'>
-                    {verifyOrManualDialogText.detail}
-                </Typography>
-                <div className='pt-3'>
-                    <a
-                        href={fetchData.picture ? imageUrl + fetchData.picture : '#'}
-                        target={fetchData?.picture ? "_blank" : ''}
-                    >
-                        <div
-                            className='ratio-16-9'
+    const VerifyContent = () => {
+        const [verifyNominalValue, setverifyNominalValue] = useState(0)
+        useEffect(() => {
+            var updatedValue = setTimeout(() => {
+                nominalValue = verifyNominalValue
+            }, 1000);
+            return () => {
+                clearInterval(updatedValue)
+            }
+        }, [verifyNominalValue])
+        
+        return(
+            <>
+                <DialogContentText gutterBottom>
+                    {verifyOrManualDialogText.verifyMessage}
+                </DialogContentText>
+                <div className="grid grid-cols-2 mb-5">
+                    <Typography variant="h6" className='col-span-2'>
+                        {verifyOrManualDialogText.detail}
+                    </Typography>
+                    <div className='pt-3'>
+                        <a
+                            href={fetchData.picture ? imageUrl + fetchData.picture : '#'}
+                            target={fetchData?.picture ? "_blank" : ''}
                         >
-                            <Paper className='ratio-content rounded-none opacity-60'>
-                                <img className="w-full h-full" src={fetchData.picture ? imageUrl + fetchData.picture : imageUrl + 'not-found.jpg'}/>
-                            </Paper>
-                            <div className="ratio-content flex items-center">
-                                <span className="mx-auto">
-                                    <span className='block md:hidden'>
-                                        <Tooltip title={verifyOrManualDialogText.clickToView}>
-                                            <Fab color='default'>
-                                                <ZoomInIcon/>
-                                            </Fab>
-                                        </Tooltip>
+                            <div
+                                className='ratio-16-9'
+                            >
+                                <Paper className='ratio-content rounded-none opacity-60'>
+                                    <img className="w-full h-full" src={fetchData.picture ? imageUrl + fetchData.picture : imageUrl + 'not-found.jpg'}/>
+                                </Paper>
+                                <div className="ratio-content flex items-center">
+                                    <span className="mx-auto">
+                                        <span className='block md:hidden'>
+                                            <Tooltip title={verifyOrManualDialogText.clickToView}>
+                                                <Fab color='default'>
+                                                    <ZoomInIcon/>
+                                                </Fab>
+                                            </Tooltip>
+                                        </span>
+                                        <Paper className='hidden md:block p-1'>
+                                            {fetchData?.picture ? verifyOrManualDialogText.clickToView : errorText.imageNotFound}
+                                        </Paper>
                                     </span>
-                                    <Paper className='hidden md:block p-1'>
-                                        {fetchData?.picture ? verifyOrManualDialogText.clickToView : errorText.imageNotFound}
-                                    </Paper>
-                                </span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+                    <div className="grid grid-cols-1 p-3">
+                        <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.accountNumber} value={fetchData?.accountNumber  || 'No data'} aria-readonly/>
+                        <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.sender} value={fetchData?.sender  || 'No data'} aria-readonly/>
+                        <TextField fullWidth className="capitalize mb-2" variant='standard' label={verifyOrManualDialogText.refNumber} value={fetchData?.refNumber || 'No data'} aria-readonly/>
+                    </div>
+                    <Typography className="col-span-2 mb-4" variant='h6' gutterBottom>
+                        {verifyOrManualDialogText.verifyOptionsText}
+                    </Typography>
+                    <div className="col-span-2 grid grid-cols-2 gap-1">
+                        <FormControl>
+                            <InputLabel>{verifyOrManualDialogText.paymentMethodText}</InputLabel>
+                            <Select
+                                label={verifyOrManualDialogText.paymentMethodText}
+                                value={formVerify.paymentMethod}
+                                name="paymentMethod"
+                                onChange={handleFormVerifyOnChange}
+                            >
+                                <MenuItem value="manual">{verifyOrManualDialogText.paymentMethodManualText}</MenuItem>
+                                <MenuItem value="transfer">{verifyOrManualDialogText.paymentMethodTransferText}</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {/* <FormControl>
+                            <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
+                            <
+                        </FormControl> */}
+                        <FormControl error={verifyNominalValue < 1 || verifyNominalValue > fetchData?.remainingPaymentHistory}>
+                            <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
+                            <OutlinedInput
+                                error={verifyNominalValue < 1 || verifyNominalValue > fetchData?.remainingPaymentHistory}
+                                type="number"
+                                inputProps={{
+                                    min:1
+                                }}
+                                label={verifyOrManualDialogText.verifyNominal}
+                                value={verifyNominalValue}
+                                name="nominal"
+                                onChange={e => setverifyNominalValue(e.target.value)}
+                                startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
+                            />
+                            <FormHelperText>[MAKSIMAL NOMINAL] {fetchData?.remainingPaymentHistory}</FormHelperText>
+                        </FormControl>
+                    </div>
                 </div>
-                <div className="grid grid-cols-1 p-3">
-                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.accountNumber} value={fetchData?.accountNumber  || 'No data'} aria-readonly/>
-                    <TextField fullWidth className="mb-2" variant='standard' label={verifyOrManualDialogText.sender} value={fetchData?.sender  || 'No data'} aria-readonly/>
-                    <TextField fullWidth className="capitalize mb-2" variant='standard' label={verifyOrManualDialogText.refNumber} value={fetchData?.refNumber || 'No data'} aria-readonly/>
-                </div>
-                <Typography className="col-span-2 mb-4" variant='h6' gutterBottom>
-                    {verifyOrManualDialogText.verifyOptionsText}
-                </Typography>
-                <FormControl>
-                    <InputLabel>{verifyOrManualDialogText.paymentMethodText}</InputLabel>
-                    <Select
-                        label={verifyOrManualDialogText.paymentMethodText}
-                        value={formVerify.paymentMethod}
-                        name="paymentMethod"
-                        onChange={handleFormVerifyOnChange}
-                    >
-                        <MenuItem value="manual">{verifyOrManualDialogText.paymentMethodManualText}</MenuItem>
-                        <MenuItem value="transfer">{verifyOrManualDialogText.paymentMethodTransferText}</MenuItem>
-                    </Select>
-                </FormControl>
-            </div>
-        </>
-    )
+            </>
+        )
+    }
 
     const ViewContent = () => (
         <>

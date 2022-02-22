@@ -120,6 +120,7 @@ export default function indonesian() {
                 verifyConfirmingVerify: "Apakah Anda yakin ingin ingin verifikasi tagihan?",
                 verifyButton: "Verifikasi",
                 verifyOptionsText: "Opsi Verifikasi",
+                verifyNominal: "Nominal",
                 manualTitle: "Pembayaran Manual",
                 paymentMethodText:"Metode Pembayaran",
                 paymentMethodManualText:"Manual",
