@@ -19,6 +19,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
     var nominalValue = 0
     const dispatch = useDispatch()
     const { authToken } = useSelector(selectAuth)
+    const manualContentRef = useRef(null)
 
     const { default:defaultText, errors: errorText, components: {verifyOrManualDialog: verifyOrManualDialogText} } = useLocalization()
     const confirmVerifyDialogRef = useRef(null)
@@ -221,10 +222,103 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         )
     }
 
+    const ManualContent = forwardRef(({data}, ref) => {
+
+        const [manualData, setmanualData] = useState({
+            paymentMethod: 'manual',
+            nominal: 0,
+            payer: ''
+        })
+
+        if (process.env.NODE_ENV == 'development') {
+            useEffect(() => {
+                console.log('Component > VerifyOrManualDialog > ManualContent > manualData = ', manualData)
+            }, [manualData])
+        }
+
+        const [isManualFormError, setisManualFormError] = useState(false)
+
+        useImperativeHandle(ref, () => ({
+            manualData,
+            isError: isManualFormError
+        }));
+
+        const formChangeHandler = event => {
+            let { name, value } = event.target
+            if (!event.target.validity.valid) return false
+            setmanualData(prevValue => ({
+                ...prevValue,
+                [name]: value
+            }))
+        }
+
+        return(
+            <div className="grid grid-cols-2 gap-2 mt-2">
+                <FormControl error={isManualFormError}>
+                    <InputLabel>[Nominal]</InputLabel>
+                    <OutlinedInput
+                        label="[Nominal]"
+                        name="nominal"
+                        type="text"
+                        inputProps={{
+                            pattern:"[0-9]+"
+                        }}
+                        value={manualData.nominal}
+                        onChange={formChangeHandler}
+                        startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
+                    />
+                    <FormHelperText>[ERROR DUMMY]</FormHelperText>
+                </FormControl>
+                <TextField
+                    label="[PEMBAYAR]"
+                    name="payer"
+                    type="text"
+                    value={manualData.payer}
+                    error={isManualFormError}
+                    onChange={formChangeHandler}
+                />
+            </div>
+        )
+    })
+
+    const handleManualSubmit = event => {
+        const getData = manualContentRef.current.manualData
+        if (!getData) return
+        if (getData.payer.length < 1) return
+        if (getData.nominal > fetchData?.remainingPaymentHistory) return
+        fetchAPI(fetchWithToken({
+            url: '/administrasi/getInvoice?code=' + invoiceCode,
+            method: "PATCH",
+            token: authToken,
+            data: getData
+        })).then(result => {
+            closeDialog()
+            dispatch(openSnackbar({
+                position: 'top-right',
+                message: defaultText.savedText,
+                severity: 'success'
+            }))
+            executeCallback(false)
+            dispatch(hideSpinner())
+        })
+        .catch(error => {
+            dispatch(openSnackbar({
+                position: 'top-right',
+                message: errorText.failedToSaveText,
+                severity: 'error'
+            }))
+            executeCallback(true)
+            dispatch(hideSpinner())
+        })
+    }
+
     const ViewContent = () => (
         <>
-            {fetchData.status == 'confirming' ?
-                <VerifyContent/> : <div className="test">test</div>
+            {fetchData.status == 'confirming' &&
+                <VerifyContent/>
+            }
+            {(fetchData.status == 'unpaid' || fetchData.status == 'pending' || fetchData.status == 'invalid') &&
+                <ManualContent ref={manualContentRef} data={fetchData}/>
             }
         </>
     )
@@ -259,9 +353,11 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
             <DialogActions>
                 {(!loading && !fetchError) &&
                     <>
-                    {fetchData.status == 'confirming' ?
-                        <Button onClick={() => confirmVerifyDialogRef.current.openConfirm()}>{verifyOrManualDialogText.verifyButton}</Button> :
-                        <Button>{defaultText.saveText}</Button>
+                    {fetchData.status == 'confirming' &&
+                        <Button onClick={() => confirmVerifyDialogRef.current.openConfirm()}>{verifyOrManualDialogText.verifyButton}</Button>
+                    }
+                    {(fetchData.status == 'unpaid' || fetchData.status == 'pending' || fetchData.status == 'invalid') &&
+                        <Button onClick={handleManualSubmit}>{defaultText.saveText}</Button>
                     }
                     </>
                 }
@@ -271,14 +367,12 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         {!fetchError &&
             // verify confirm dialog
             <>
-                {
-                    fetchData.status == 'confirming' ? 
+                {fetchData.status == 'confirming' &&
                     <ConfirmDialog
                         ref={confirmVerifyDialogRef}
                         dialogText={verifyOrManualDialogText.verifyConfirmingVerify}
                         onConfirm={handleSubmitVerify}
-                    /> : 
-                    <ConfirmDialog/>
+                    />
                 }
             </>
         }
