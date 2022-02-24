@@ -258,7 +258,14 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                 {
                                     field:'price',
                                     headerName: invoiceDetailDialog.paymentPrice,
-                                    width:170
+                                    flex:1,
+                                    valueGetter: params => {
+                                        let nominal = tools.rupiahFormatting(fetchData?.payment?.price || 0)
+                                        if (fetchData?.status == 'pending') {
+                                            nominal = nominal + ` (${invoiceDetailDialog.invoiceRemaining} ${tools.rupiahFormatting(fetchData?.remainingPaymentHistory || 0)})`
+                                        }
+                                        return nominal
+                                    }
                                 },
                             ]}
                             rows={[
@@ -314,10 +321,12 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                     <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
                                         {defaultText.helpButtonLabel}
                                     </Button>
-                                    <Button variant="contained" color="info" onClick={handleOpenHistory}>[TRANSAKSI]</Button>
-                                    <Button variant="contained" onClick={openReceiptDialog}>
-                                        {invoiceDetailDialog.actionSendPaymentDetail}
-                                    </Button>
+                                    <Button variant="contained" color="info" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
+                                    {fetchData?.status !== 'paid' &&
+                                        <Button variant="contained" onClick={openReceiptDialog}>
+                                            {invoiceDetailDialog.actionSendPaymentDetail}
+                                        </Button>
+                                    }
                                     <Button variant="contained" onClick={handleInvoicePrint}>
                                         {invoiceDetailDialog.actionPrint}
                                     </Button>

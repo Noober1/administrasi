@@ -1,5 +1,6 @@
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useState } from 'react';
 import { forwardRef } from 'react';
 import { useImperativeHandle } from 'react';
@@ -9,7 +10,7 @@ import useLocalization from '../../../lib/useLocalization';
 
 const History = forwardRef((props, ref) => {
 
-	const {default: defaultText} = useLocalization()
+	const {default: defaultText, components: {invoiceDetailDialog}} = useLocalization()
 	const [open, setopen] = useState(false)
 
 	const closeDialog = () => setopen(false)
@@ -29,7 +30,7 @@ const History = forwardRef((props, ref) => {
 			maxWidth="sm"
 		>
 			<DialogTitle className='pb-0'>
-				[RIWAYAT TRANSAKSI]
+				{invoiceDetailDialog.paymentHistoryButtonText}
 			</DialogTitle>
 			<DialogContent className='px-1 py-0'>
 				{props.data.length > 0 ?
@@ -40,7 +41,7 @@ const History = forwardRef((props, ref) => {
 									<Avatar sx={{
 										bgcolor:item.paymentMethod == 'transfer' ? green[500] : blue[500]
 									}}>
-										<SendIcon/>
+										{item.paymentMethod == 'transfer' ? <SendIcon/> : <AccountBalanceWalletIcon/>}
 									</Avatar>
 								</ListItemAvatar>
 								<ListItemText
@@ -51,8 +52,8 @@ const History = forwardRef((props, ref) => {
 							</ListItem>
 						))}
 					</List> : 
-					<Typography align='center' className='capitalize'>
-						[Tidak ada riwayat]
+					<Typography align='center' className='capitalize py-5'>
+						{invoiceDetailDialog.emptyPaymentHistory}
 					</Typography>
 				}
 			</DialogContent>

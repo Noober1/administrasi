@@ -94,6 +94,8 @@ export default function english() {
                 destinationAccount: "Destination account",
                 chooseDestinationAccount: "Choose destination account",
                 invoiceDate: "Invoice date",
+                paymentHistoryButtonText:"Payment History",
+                emptyPaymentHistory:"No payment history",
                 transactionDate: "Transaction date",
                 verificationDate: "Verification date",
                 refNumber: "Ref number",
@@ -107,7 +109,8 @@ export default function english() {
                 senderNameHelper: "Account owner name",
                 sendReceiptSuccess: "Send receipt success",
                 sendReceiptFailed: "Send receipt failed",
-                pickImage: "Choose image"
+                pickImage: "Choose image",
+                invoiceRemaining: "Remaining"
             },
             uploader: {
                 uploadFileSuccess: "Uploading file success",
@@ -130,6 +133,7 @@ export default function english() {
                 clickToView: "Click to view image",
                 accountNumber: "Account Number",
                 sender: "From",
+                payer: "Payer",
                 administrator: "Administrator",
                 refNumber: "Ref Number"
             }

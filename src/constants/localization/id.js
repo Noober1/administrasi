@@ -94,6 +94,8 @@ export default function indonesian() {
                 destinationAccount: "Tujuan rekening",
                 chooseDestinationAccount: "Pilih Tujuan rekening",
                 invoiceDate: "Tanggal tagihan",
+                paymentHistoryButtonText:"Riwayat Transaksi",
+                emptyPaymentHistory:"Tidak ada riwayat transaksi",
                 transactionDate: "Tanggal transaksi",
                 verificationDate: "Tanggal verifikasi",
                 refNumber: "No. Ref",
@@ -107,7 +109,8 @@ export default function indonesian() {
                 senderNameHelper: "Nama pemilik nomor rekening",
                 sendReceiptSuccess: "Pengiriman bukti berhasil",
                 sendReceiptFailed: "Pengiriman bukti gagal",
-                pickImage: "Pilih gambar"
+                pickImage: "Pilih gambar",
+                invoiceRemaining: "Tersisa"
             },
             uploader: {
                 uploadFileSuccess: "Unggah berkas berhasil",
@@ -130,6 +133,7 @@ export default function indonesian() {
                 clickToView: "Click untuk melihat gambar",
                 accountNumber: "Nomor Rekening",
                 sender: "Atas Nama",
+                payer: "Pembayar",
                 administrator: "Administrator",
                 refNumber: "No. Ref"
             }

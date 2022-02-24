@@ -255,9 +255,9 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         return(
             <div className="grid grid-cols-2 gap-2 mt-2">
                 <FormControl error={isManualFormError}>
-                    <InputLabel>[Nominal]</InputLabel>
+                    <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
                     <OutlinedInput
-                        label="[Nominal]"
+                        label={verifyOrManualDialogText.verifyNominal}
                         name="nominal"
                         type="text"
                         inputProps={{
@@ -270,7 +270,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                     <FormHelperText>[ERROR DUMMY]</FormHelperText>
                 </FormControl>
                 <TextField
-                    label="[PEMBAYAR]"
+                    label={verifyOrManualDialogText.payer}
                     name="payer"
                     type="text"
                     value={manualData.payer}
@@ -286,6 +286,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         if (!getData) return
         if (getData.payer.length < 1) return
         if (getData.nominal > fetchData?.remainingPaymentHistory) return
+        dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
             url: '/administrasi/getInvoice?code=' + invoiceCode,
             method: "PATCH",
