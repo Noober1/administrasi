@@ -233,7 +233,19 @@ export default function indonesian() {
             pages:{
                 dashboard:{
                     titlePage: "Beranda",
-                    welcomeMessage: "Selamat Datang"
+                    welcomeMessage: "Selamat Datang",
+                    paidText: "Lunas",
+                    verifyingText: "Verifikasi",
+                    pendingText: "Pending",
+                    invalidText: "Invalid",
+                    unpaidText: "Belum dibayar",
+                    totalText: "Total",
+                    paidDescriptionText: "Jumlah tagihan lunas",
+                    verifyingDescriptionText: "Jumlah tagihan menunggu verifikasi",
+                    pendingDescriptionText: "Jumlah tagihan dibayar sebagian",
+                    invalidDescriptionText: "Jumlah tagihan invalid",
+                    unpaidDescriptionText: "Jumlah tagihan belum dibayar",
+                    totalDescriptionText: "Jumlah semua tagihan"
                 },
                 student:{
                     titlePage:"Daftar Mahasiswa",

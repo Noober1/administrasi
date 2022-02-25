@@ -233,7 +233,19 @@ export default function english() {
             pages:{
                 dashboard:{
                     titlePage: "Dashboard",
-                    welcomeMessage: "Welcome back"
+                    welcomeMessage: "Welcome",
+                    paidText: "Paid",
+                    verifyingText: "Verifying",
+                    pendingText: "Pending",
+                    invalidText: "Invalid",
+                    unpaidText: "Unpaid",
+                    totalText: "Total",
+                    paidDescriptionText: "Paid invoice(s)",
+                    verifyingDescriptionText: "Verifying invoice(s)",
+                    pendingDescriptionText: "Partially paid invoice(s)",
+                    invalidDescriptionText: "Invalid invoice(s)",
+                    unpaidDescriptionText: "Unpaid invoice(s)",
+                    totalDescriptionText: "All invoice(s)"
                 },
                 student:{
                     titlePage:"Student List",
