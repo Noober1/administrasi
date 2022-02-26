@@ -9,6 +9,7 @@ export default function indonesian() {
             nameOfMonths: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
             alertDialogConfirmButtonText: "Oke",
             cancelText: "Batal",
+            loadingText: "Memuat...",
             alertLogoutTitleText: "Keluar dari sistem",
             alertLogoutBodyText: "Apakah Anda yakin keluar?",
             alertLogoutText: "Keluar",
@@ -42,10 +43,14 @@ export default function indonesian() {
             noDataSelected: "Tidak ada data yang dipilih",
             deleteItemsError: 'Gagal menghapus data',
             dataExist: 'Data telah ada di database',
+            imageNotFound: 'Gambar tidak ditemukan',
             ERR_PAYMENT_HAVE_INVOICE: 'Pembayaran mempunyai data tagihan'
         },
         success:{
-            deleteItemsSuccess: 'Data berhasil dihapus'
+            deleteItemsSuccess: 'Data berhasil dihapus',
+            deleteItemSuccessWithRange: (deleted,total) => {
+                return `${deleted || 0} data telah dihapus dari ${total || 0} data dipilih`
+            }
         },
         appBar: {
             notificationTooltipText: "Pemberitahuan",
@@ -79,6 +84,7 @@ export default function indonesian() {
                 statusInvalid:"Invalid",
                 statusUnpaid:"Belum Lunas",
                 statusUnknown: "Tidak diketahui",
+                statusPending: "Pending",
                 paymentMethod: "Metode Pembayaran",
                 paymentType: "Nama Pembayaran",
                 paymentDescription: "Deskripsi Pembayaran",
@@ -88,6 +94,8 @@ export default function indonesian() {
                 destinationAccount: "Tujuan rekening",
                 chooseDestinationAccount: "Pilih Tujuan rekening",
                 invoiceDate: "Tanggal tagihan",
+                paymentHistoryButtonText:"Riwayat Transaksi",
+                emptyPaymentHistory:"Tidak ada riwayat transaksi",
                 transactionDate: "Tanggal transaksi",
                 verificationDate: "Tanggal verifikasi",
                 refNumber: "No. Ref",
@@ -101,12 +109,33 @@ export default function indonesian() {
                 senderNameHelper: "Nama pemilik nomor rekening",
                 sendReceiptSuccess: "Pengiriman bukti berhasil",
                 sendReceiptFailed: "Pengiriman bukti gagal",
-                pickImage: "Pilih gambar"
+                pickImage: "Pilih gambar",
+                invoiceRemaining: "Tersisa"
             },
             uploader: {
                 uploadFileSuccess: "Unggah berkas berhasil",
                 uploadFileFailed: "Unggah berkas gagal",
                 uploadText: "Unggah"
+            },
+            verifyOrManualDialog: {
+                verifyTitle: "Verifikasi Pembayaran",
+                verifyMessage: "Pastikan untuk memeriksa data yang diterima sebelum melakukan verifikasi.",
+                verifyConfirmingVerify: "Apakah Anda yakin ingin ingin verifikasi tagihan?",
+                verifyButton: "Verifikasi",
+                verifyOptionsText: "Opsi Verifikasi",
+                verifyNominal: "Nominal",
+                manualTitle: "Pembayaran Manual",
+                paymentMethodText:"Metode Pembayaran",
+                paymentMethodManualText:"Manual",
+                paymentMethodTransferText:"Transfer",
+                detail: "Rincian",
+                picture: "Gambar",
+                clickToView: "Click untuk melihat gambar",
+                accountNumber: "Nomor Rekening",
+                sender: "Atas Nama",
+                payer: "Pembayar",
+                administrator: "Administrator",
+                refNumber: "No. Ref"
             }
         },
         login: {
@@ -174,9 +203,13 @@ export default function indonesian() {
                     statusInvalid:"Invalid",
                     statusUnpaid:"Belum Lunas",
                     statusUnknown: "Tidak diketahui",
+                    statusPending: "Pending",
                     status: "Status",
                     price: "Nominal",
                     action: "Aksi",
+                    actionPrint: "Cetak",
+                    actionVerify: "Verifikasi",
+                    actionManualPay: "Bayar Manual",
                     actionDetail: "Rincian"
                 }
             }
@@ -200,7 +233,19 @@ export default function indonesian() {
             pages:{
                 dashboard:{
                     titlePage: "Beranda",
-                    welcomeMessage: "Selamat Datang"
+                    welcomeMessage: "Selamat Datang",
+                    paidText: "Lunas",
+                    verifyingText: "Verifikasi",
+                    pendingText: "Pending",
+                    invalidText: "Invalid",
+                    unpaidText: "Belum dibayar",
+                    totalText: "Total",
+                    paidDescriptionText: "Jumlah tagihan lunas",
+                    verifyingDescriptionText: "Jumlah tagihan menunggu verifikasi",
+                    pendingDescriptionText: "Jumlah tagihan dibayar sebagian",
+                    invalidDescriptionText: "Jumlah tagihan invalid",
+                    unpaidDescriptionText: "Jumlah tagihan belum dibayar",
+                    totalDescriptionText: "Jumlah semua tagihan"
                 },
                 student:{
                     titlePage:"Daftar Mahasiswa",

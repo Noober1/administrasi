@@ -8,6 +8,7 @@ export default function english() {
         default:{
             nameOfMonths: ['January','February','March','April','May','June','July','August','September','October','November','December'],
             alertDialogConfirmButtonText: "OK",
+            loadingText: "Loading...",
             cancelText: "Cancel",
             alertLogoutTitleText: "Logout from system",
             alertLogoutBodyText: "Are you sure want to logout?",
@@ -42,10 +43,14 @@ export default function english() {
             deleteUrlInvalid: "Delete URL not valid",
             deleteItemsError: 'Deleting item(s) failed',
             dataExist: 'Data already exist in database',
-            ERR_PAYMENT_HAVE_INVOICE: 'Payment have invoice(s)'
+            imageNotFound: 'Image not found',
+            ERR_PAYMENT_HAVE_INVOICE: 'Payment have invoice(s)',
         },
         success:{
-            deleteItemsSuccess: 'Item(s) has been deleted'
+            deleteItemsSuccess: 'Item(s) has been deleted',
+            deleteItemSuccessWithRange: (deleted,total) => {
+                return `${deleted || 0} data deleted from ${total || 0} data selected`
+            }
         },
         appBar: {
             notificationTooltipText: "Notification",
@@ -78,6 +83,7 @@ export default function english() {
                 statusConfirming:"Verifying",
                 statusInvalid:"Invalid",
                 statusUnpaid:"Unpaid",
+                statusPending: "Pending",
                 statusUnknown: "Unknown",
                 paymentMethod: "Payment Method",
                 accountNumber: "Account number",
@@ -88,6 +94,8 @@ export default function english() {
                 destinationAccount: "Destination account",
                 chooseDestinationAccount: "Choose destination account",
                 invoiceDate: "Invoice date",
+                paymentHistoryButtonText:"Payment History",
+                emptyPaymentHistory:"No payment history",
                 transactionDate: "Transaction date",
                 verificationDate: "Verification date",
                 refNumber: "Ref number",
@@ -101,12 +109,33 @@ export default function english() {
                 senderNameHelper: "Account owner name",
                 sendReceiptSuccess: "Send receipt success",
                 sendReceiptFailed: "Send receipt failed",
-                pickImage: "Choose image"
+                pickImage: "Choose image",
+                invoiceRemaining: "Remaining"
             },
             uploader: {
                 uploadFileSuccess: "Uploading file success",
                 uploadFileFailed: "Uploading file failed",
                 uploadText: "Upload"
+            },
+            verifyOrManualDialog: {
+                verifyTitle: "Verify Payment",
+                verifyMessage: "Make sure to check the data carefully before verifying.",
+                verifyConfirmingVerify: "Are you sure want to verify?",
+                verifyButton: "Verify",
+                verifyOptionsText: "Verification Options",
+                verifyNominal: "Nominal",
+                manualTitle: "Manual Payment",
+                paymentMethodText:"Payment Method",
+                paymentMethodManualText:"Manual",
+                paymentMethodTransferText:"Transfer",
+                detail: "Detail",
+                picture: "Picture",
+                clickToView: "Click to view image",
+                accountNumber: "Account Number",
+                sender: "From",
+                payer: "Payer",
+                administrator: "Administrator",
+                refNumber: "Ref Number"
             }
         },
         login: {
@@ -173,10 +202,14 @@ export default function english() {
                     statusConfirming:"Verifying",
                     statusInvalid:"Invalid",
                     statusUnpaid:"Unpaid",
+                    statusPending: "Pending",
                     statusUnknown: "Unknown",
                     status: "Status",
                     price: "Price",
                     action: "Action",
+                    actionPrint: "Print",
+                    actionVerify: "Verify",
+                    actionManualPay: "Manual Pay",
                     actionDetail: "Detail"
                 }
             }
@@ -200,7 +233,19 @@ export default function english() {
             pages:{
                 dashboard:{
                     titlePage: "Dashboard",
-                    welcomeMessage: "Welcome back"
+                    welcomeMessage: "Welcome",
+                    paidText: "Paid",
+                    verifyingText: "Verifying",
+                    pendingText: "Pending",
+                    invalidText: "Invalid",
+                    unpaidText: "Unpaid",
+                    totalText: "Total",
+                    paidDescriptionText: "Paid invoice(s)",
+                    verifyingDescriptionText: "Verifying invoice(s)",
+                    pendingDescriptionText: "Partially paid invoice(s)",
+                    invalidDescriptionText: "Invalid invoice(s)",
+                    unpaidDescriptionText: "Unpaid invoice(s)",
+                    totalDescriptionText: "All invoice(s)"
                 },
                 student:{
                     titlePage:"Student List",

@@ -1,5 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
-import { Button, ButtonGroup, Paper, Typography } from '@mui/material'
+import { Alert, Button, ButtonGroup, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 import { PanelContentHead } from '../../../src/components/atoms/dashboard'
@@ -15,9 +15,11 @@ import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
 import Link from 'next/link'
+import VerifyOrManualDialog from '../../../src/components/organisms/VerifyOrManualDialog'
 
 const PaymentWithId = ({paymentId}) => {
     const tableRef = useRef(null)
+    const verifyOrManualDialogRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
@@ -25,6 +27,7 @@ const PaymentWithId = ({paymentId}) => {
     const { invoice:invoiceTableText } = strings.table.columns
     const [paymentDetailData, setpaymentDetailData] = useState({})
     const [refreshCount, setrefreshCount] = useState(0)
+    
 
     const [formOpen, setformOpen] = useState(false)
 
@@ -38,6 +41,11 @@ const PaymentWithId = ({paymentId}) => {
 
     const handleEditButton = id => {
         setformOpen(true)
+    }
+
+    const handleOpenVerifyOrManualDialog = invoiceCode => {
+        verifyOrManualDialogRef.current.setInvoiceCode(invoiceCode)
+        verifyOrManualDialogRef.current.openDialog()
     }
 
     const handleFormCallback = (error, data) => {
@@ -89,7 +97,9 @@ const PaymentWithId = ({paymentId}) => {
                         params.value == 'paid' ? invoiceTableText.statusPaid :
                         params.value == 'unpaid' ? invoiceTableText.statusUnpaid : 
                         params.value == 'confirming' ? invoiceTableText.statusConfirming : 
-                        params.value == 'invalid' ? invoiceTableText.statusInvalid : invoiceTableText.statusUnknown
+                        params.value == 'invalid' ? invoiceTableText.statusInvalid : 
+                        params.value == 'pending' ? invoiceTableText.statusPending :
+                        invoiceTableText.statusUnknown
                     }
                 </div>
             )
@@ -109,8 +119,15 @@ const PaymentWithId = ({paymentId}) => {
                     <ButtonGroup>
                         <Button size="small" variant="contained">
                             <Link href={`/invoice?code=${params.row.code}`}>
-                                {strings.default.detailText}
+                                {invoiceTableText.actionPrint}
                             </Link>
+                        </Button>
+                        <Button onClick={() => handleOpenVerifyOrManualDialog(params.row.code)} size='small'>
+                            {
+                                params.row.status == 'confirming' ? invoiceTableText.actionVerify :
+                                params.row.status == 'paid' ? strings.default.editText :
+                                invoiceTableText.actionManualPay
+                            }
                         </Button>
                     </ButtonGroup>
                 )
@@ -165,10 +182,22 @@ const PaymentWithId = ({paymentId}) => {
                 <ServerSideTable
                     perPage="30"
                     ref={tableRef}
-                    enableCheckbox={false}
-                    showDeleteButton={false}
+                    deleteUrl='/administrasi/invoice'
+                    deleteAdditionalMessage={(
+                        <Alert severity='warning'>
+                            [DATA YANG SUDAH MEMILIKI RIWAYAT TRANSAKSI TIDAK DAPAT DIHAPUS]
+                        </Alert>
+                    )}
                     url={`/administrasi/payment/${paymentId}/invoices`}
                     columns={columns}
+                />
+                <VerifyOrManualDialog
+                    ref={verifyOrManualDialogRef}
+                    callback={isError => {
+                        if (typeof tableRef.current.refresh == 'function') {
+                            tableRef.current.refresh()
+                        }
+                    }}
                 />
             </Box>
         </>

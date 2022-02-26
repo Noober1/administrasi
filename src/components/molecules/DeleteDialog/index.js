@@ -4,6 +4,7 @@ import useLocalization from '../../../lib/useLocalization'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
+import { DraggablePaperComponent } from '../../atoms'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 
@@ -66,14 +67,13 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
             dispatch(openSnackbar({
                 position: 'top-right',
                 severity: 'success',
-                message: strings.success.deleteItemsSuccess
+                message: result?.result ? strings.success.deleteItemSuccessWithRange(result.result.deleted, result.result.from) : strings.success.deleteItemsSuccess
             }))
             dispatch(hideSpinner())
         })
         .catch(error =>{
             const error_code = error?.response?.data?.code ? error.response.data.code : ''
             const labelError = strings.errors[error_code] || `[${error_code}]`
-            console.log('fuck', strings.errors[error_code], error_code)
             closeHandle()
             dispatch(openSnackbar({
                 ...snackbarErrorOptions,
@@ -87,8 +87,9 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
         <Dialog
             open={dialogOpen}
             onClose={closeHandle}
+            PaperComponent={DraggablePaperComponent}
         >
-            <DialogTitle>{strings.table.dialogDeleteTitle}</DialogTitle>
+            <DialogTitle className='cursor-move'>{strings.table.dialogDeleteTitle}</DialogTitle>
             <DialogContent>
                 <DialogContentText gutterBottom color="InfoText">
                     {strings.table.dialogDeleteConfirmMessage}

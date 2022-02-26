@@ -186,6 +186,7 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                             <Select
                                 name="semester"
                                 value={formValue.semester}
+                                label={classTable.semester}
                                 onChange={handleInputChange}
                                 required
                             >
@@ -211,6 +212,7 @@ const ClassForm = ({open, handleClose, mode, callback, id}) => {
                             <InputLabel>{classTable.status}</InputLabel>
                             <Select
                                 name="isActive"
+                                label={classTable.status}
                                 value={formValue.isActive}
                                 onChange={handleInputChange}
                                 required

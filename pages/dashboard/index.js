@@ -3,6 +3,8 @@ import { Box } from '@mui/system'
 import React from 'react'
 import { PageHead } from '../../src/components/atoms'
 import { Panel } from '../../src/components/templates'
+import StudentDashboard from '../../src/components/templates/pages/StudentDashboard'
+import AdminDashboard from '../../src/components/templates/pages/AdminDashboard'
 import useLocalization from '../../src/lib/useLocalization'
 import useProfile from '../../src/lib/useProfile'
 
@@ -27,6 +29,7 @@ const Dashboard = () => {
                 >
                     {profile.fullName}
                 </Typography>
+                {profile.accountType == 'student' ? <StudentDashboard/> : <AdminDashboard/>}
             </Box>
         </>
     )

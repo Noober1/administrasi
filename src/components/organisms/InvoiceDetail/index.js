@@ -14,9 +14,11 @@ import { ServerSideSelect } from '../../molecules'
 import SendReceipt from '../SendReceipt'
 import { DraggablePaperComponent } from '../../atoms'
 import { useReactToPrint } from 'react-to-print'
+import History from './History'
 
 const InvoiceDetail = forwardRef((props,ref) => {
     const receiptDialog = useRef(null)
+    const historyRef = useRef(null)
     const [refreshCount, setrefreshCount] = useState(0)
     const { default:defaultText, components: {invoiceDetailDialog} } = useLocalization()
     const [open, setopen] = useState(false)
@@ -62,6 +64,13 @@ const InvoiceDetail = forwardRef((props,ref) => {
     // print invoice
     const invoiceBoxRef = useRef()
     const handleInvoicePrint = useReactToPrint({
+        documentTitle:'Cetak Invoice',
+        pageStyle:`
+            @page {
+                orientation: landscape;
+                size: 9,5cm 11cm;
+            }
+        `,
         content: () => invoiceBoxRef.current,
     });
 
@@ -87,13 +96,20 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 setfetchLoading(false)
                 setfetchData(result)
                 setdetailList([
-                    {title: invoiceDetailDialog.paymentMethod, content: result.paymentMethod},
                     {title: invoiceDetailDialog.refNumber, content: result.refNumber || '-'},
                     {title: invoiceDetailDialog.accountNumber, content: result.accountNumber || '-'},
                     {title: invoiceDetailDialog.transactionDate, content: result.date.transaction ? tools.dateFormatting(result.date.transaction, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                     {title: invoiceDetailDialog.destinationAccount, content: result.destinationAccount || '-'},
-                    {title: invoiceDetailDialog.verificationDate, content: result.date.verification || '-'}
+                    {title: invoiceDetailDialog.verificationDate, content: result.date.verification ? tools.dateFormatting(result.date.verification, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                 ])
+                if (result.sender) {
+                    setdetailList(prevValue => {
+                        return [
+                            ...prevValue,
+                            {title: invoiceDetailDialog.senderName, content: result.sender},
+                        ]
+                    })
+                }
             })
             .catch(error => {
                 setfetchError(true)
@@ -119,7 +135,11 @@ const InvoiceDetail = forwardRef((props,ref) => {
         }
     }
 
-    const InvoiceBox = forwardRef((propx, ref) => {
+    const handleOpenHistory = () => {
+        historyRef.current.openDialog()
+    }
+
+    const InvoiceBox = forwardRef((props, ref) => {
         return(
             <DialogContent
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
@@ -143,11 +163,17 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                 </div>
                             </div> :
                             <div>
-                                <Typography variant="h5" align="center" className="uppercase font-bold" color={fetchData.status == 'unpaid' ? 'red' : 'green'}>
+                                <Typography
+                                    variant="h5"
+                                    align="center"
+                                    className="uppercase font-bold"
+                                    color={fetchData.status == 'paid' ? 'green' : fetchData.status == 'pending' ? 'orange' : 'green'}
+                                >
                                     {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
-                                    fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid :
+                                    fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${fetchData.paymentMethod})` :
                                     fetchData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                     fetchData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
+                                    fetchData.status == 'pending' ? invoiceDetailDialog.statusPending :
                                     invoiceDetailDialog.statusUnknown
                                     }
                                 </Typography>
@@ -164,8 +190,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                             {loading ? <Skeleton width="50%"/> : invoiceDetailDialog.sentTo}
                         </Typography>
                         <Typography className="capitalize">
-                            {loading ? <Skeleton/> : fetchData?.student?.fullName
-                            }
+                            {loading ? <Skeleton/> : fetchData?.student?.fullName}
                         </Typography>
                     </div>
                     <div className="text-right">
@@ -233,7 +258,14 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                 {
                                     field:'price',
                                     headerName: invoiceDetailDialog.paymentPrice,
-                                    width:170
+                                    flex:1,
+                                    valueGetter: params => {
+                                        let nominal = tools.rupiahFormatting(fetchData?.payment?.price || 0)
+                                        if (fetchData?.status == 'pending') {
+                                            nominal = nominal + ` (${invoiceDetailDialog.invoiceRemaining} ${tools.rupiahFormatting(fetchData?.remainingPaymentHistory || 0)})`
+                                        }
+                                        return nominal
+                                    }
                                 },
                             ]}
                             rows={[
@@ -289,9 +321,12 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                     <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
                                         {defaultText.helpButtonLabel}
                                     </Button>
-                                    <Button variant="contained" onClick={openReceiptDialog}>
-                                        {invoiceDetailDialog.actionSendPaymentDetail}
-                                    </Button>
+                                    <Button variant="contained" color="info" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
+                                    {fetchData?.status !== 'paid' &&
+                                        <Button variant="contained" onClick={openReceiptDialog}>
+                                            {invoiceDetailDialog.actionSendPaymentDetail}
+                                        </Button>
+                                    }
                                     <Button variant="contained" onClick={handleInvoicePrint}>
                                         {invoiceDetailDialog.actionPrint}
                                     </Button>
@@ -305,15 +340,21 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 }
             </Dialog>
             {Object.keys(fetchData).length > 0 &&
-                <SendReceipt
-                    ref={receiptDialog}
-                    invoiceId={fetchData?.id || 0}
-                    transactionDate={fetchData?.date?.transaction}
-                    accountNumber={fetchData?.accountNumber}
-                    sender={fetchData?.sender}
-                    refNumber={fetchData?.refNumber}
-                    callback={callbackSendReceipt}
-                />
+                <>
+                    <SendReceipt
+                        ref={receiptDialog}
+                        invoiceId={fetchData?.id || 0}
+                        transactionDate={fetchData?.date?.transaction}
+                        accountNumber={fetchData?.accountNumber}
+                        sender={fetchData?.sender}
+                        refNumber={fetchData?.refNumber}
+                        callback={callbackSendReceipt}
+                    />
+                    <History
+                        ref={historyRef}
+                        data={fetchData?.paymentHistory || []}
+                    />
+                </>
             }
         </>
     )

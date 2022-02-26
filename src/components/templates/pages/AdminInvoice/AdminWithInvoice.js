@@ -12,15 +12,24 @@ import { useUpdateEffect } from 'react-use'
 import { useRouter } from 'next/router'
 import { useReactToPrint } from 'react-to-print'
 import { useRef } from 'react'
+import useProfile from '../../../../lib/useProfile'
 
 const AdminWithInvoice = ({code}) => {
     const {panel:{pages:{invoiceWithCode}}, components: {invoiceDetailDialog}, default: defaultText} = useLocalization()
     const [data, fetchLoading, fetchError, errorMessage] = useFetchApi(`/administrasi/getInvoice?code=${code}`)
     const router = useRouter()
+    const profile = useProfile()
 
     // invoice box
     const invoiceBoxRef = useRef();
     const handleInvoicePrint = useReactToPrint({
+        documentTitle:'Cetak Invoice',
+        pageStyle:`
+            @page {
+                orientation: landscape;
+                size: 9,5cm 11cm;
+            }
+        `,
         content: () => invoiceBoxRef.current,
     });
 
@@ -46,13 +55,20 @@ const AdminWithInvoice = ({code}) => {
         if (!fetchError && !loading) {
             setinvoiceData(data)
             setdetailList([
-                {title: invoiceDetailDialog.paymentMethod, content: data.paymentMethod},
                 {title: invoiceDetailDialog.refNumber, content: data.refNumber || '-'},
                 {title: invoiceDetailDialog.accountNumber, content: data.accountNumber || '-'},
                 {title: invoiceDetailDialog.transactionDate, content: data.date.transaction ? tools.dateFormatting(data.date.transaction, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'},
                 {title: invoiceDetailDialog.destinationAccount, content: data.destinationAccount || '-'},
-                {title: invoiceDetailDialog.verificationDate, content: data.date.verification || '-'}
+                {title: invoiceDetailDialog.verificationDate, content: data.date.verification ? tools.dateFormatting(data.date.verification, 'd M y - h:i:s', defaultText.nameOfMonths) : '-'}
             ])
+            if (data.sender) {
+                setdetailList(prevValue => {
+                    return [
+                        ...prevValue,
+                        {title: invoiceDetailDialog.senderName, content: data.sender},
+                    ]
+                })
+            }
         }
     }, [loading])
 
@@ -65,7 +81,7 @@ const AdminWithInvoice = ({code}) => {
     const InvoiceBox = forwardRef((props, ref) => {
         return (
             <Paper
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 invoice-print-area shadow-lg print:shadow-none"
                 elevation={0}
                 ref={ref}
             >
@@ -91,13 +107,14 @@ const AdminWithInvoice = ({code}) => {
                                     variant="h5"
                                     align="center"
                                     className="uppercase font-bold"
-                                    color={invoiceData.status == 'unpaid' ? 'red' : 'green'}
+                                    color={invoiceData.status == 'paid' ? 'green' : invoiceData.status == 'pending' ? 'orange' : 'red'}
                                 >
                                     {
                                         invoiceData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
-                                        invoiceData.status == 'paid' ? invoiceDetailDialog.statusPaid :
+                                        invoiceData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${invoiceData.paymentMethod})` :
                                         invoiceData.status == 'confirming' ? invoiceDetailDialog.statusConfirming :
                                         invoiceData.status == 'invalid' ? invoiceDetailDialog.statusInvalid :
+                                        invoiceData.status == 'pending' ? invoiceDetailDialog.statusPending :
                                         invoiceDetailDialog.statusUnknown
                                     }
                                 </Typography>
@@ -155,6 +172,7 @@ const AdminWithInvoice = ({code}) => {
                             disableColumnMenu
                             disableSelectionOnClick
                             disableColumnSelector
+                            disableExtendRowFullWidth
                             disableDensitySelector
                             autoHeight
                             columns={[
@@ -182,7 +200,7 @@ const AdminWithInvoice = ({code}) => {
                                 {
                                     field:'price',
                                     headerName: invoiceDetailDialog.paymentPrice,
-                                    width:170
+                                    flex:1
                                 },
                             ]}
                             rows={[
@@ -203,6 +221,19 @@ const AdminWithInvoice = ({code}) => {
                         list={detailList}
                     />
                 </div>
+                <div className="col-span-3 mt-10">
+                    <div className="grid grid-cols-2">
+                        <div> </div>
+                        <div className="text-center">
+                            <Typography className="mb-16" variant='h6'>
+                                Administrator,
+                            </Typography>
+                            <Typography className="underline font-bold capitalize" variant='h6'>
+                                {profile.fullName}
+                            </Typography>
+                        </div>
+                    </div>
+                </div>
             </Paper>
         );
     });
@@ -216,31 +247,18 @@ const AdminWithInvoice = ({code}) => {
                 <PanelContentHead
                     title={invoiceWithCode.titlePage}
                     buttonGroup={(
-                        <ButtonGroup>
+                        <>
                             <BackButton onClick={backButtonClickHandler}/>
-                        </ButtonGroup>
+                            <Button variant="contained" onClick={handleInvoicePrint}>
+                                {invoiceWithCode.printText}
+                            </Button>
+                        </>
                     )}
                     helpButtonHandler={event => console.log('triggered help button panel_content_head_title')}
                 />
                 {!fetchError ?
                     <div>
                         <InvoiceBox ref={invoiceBoxRef}/>
-                        {(!loading && !fetchError) &&
-                            <Paper className='mt-5 p-5' elevation={0}>
-                                <Typography variant="h5">
-                                    Menu
-                                </Typography>
-                                <Divider/>
-                                <div className='flex gap-2 mt-2'>
-                                    <Button variant="contained" onClick={handleInvoicePrint}>
-                                        {invoiceWithCode.printText}
-                                    </Button>
-                                    <Button variant='contained' color="success">
-                                        [VERIFIKASI/MANUAL]
-                                    </Button>
-                                </div>
-                            </Paper>
-                        }
                     </div> : 
                     <Paper>
                         <div className="text-center block py-10">

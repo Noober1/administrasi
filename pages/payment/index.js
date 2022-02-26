@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, Button, ButtonGroup } from '@mui/material'
 import { Box } from '@mui/system'
-import { PageHead } from '../../src/components/atoms'
+import { PageHead, Tooltip } from '../../src/components/atoms'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization';
 import { PanelContentHead } from '../../src/components/atoms/dashboard';
@@ -10,6 +10,9 @@ import { tools } from '../../src/lib';
 import { DeleteDialog } from '../../src/components/molecules';
 import PaymentForm from '../../src/components/templates/forms/paymentForm';
 import SendBatchInvoice from '../../src/components/templates/forms/SendBatchInvoice';
+import SendIcon from '@mui/icons-material/Send';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Payment = (props) => {
     const {panel:{pages:{payment:paymentPage}},table:{columns:{payment}},...strings} = useLocalization()
@@ -63,13 +66,13 @@ const Payment = (props) => {
             field:'registerDate',
             headerName:payment.registerDate,
             valueGetter: params => tools.dateFormatting(params.value,'d M y', strings.default.nameOfMonths),
-            width: 200
+            width: 150
         },
         {
             field: 'admin',
             headerName: payment.admin,
             valueGetter: params => params.row.admin.fullName,
-            width:250
+            width:150
         },
         {
             field: 'type',
@@ -89,18 +92,28 @@ const Payment = (props) => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button variant="contained" onClick={() => {
-                            setpaymentId(params.value)
-                            setpaymentName(params.row.type)
-                            sendBatchInvoiceRef.current.openDialog()
-                        }}>
-                            {payment.sendBatchInvoiceButton}
+                        <Button
+                            size="small"
+                            variant="contained"
+                            onClick={() => {
+                                setpaymentId(params.value)
+                                setpaymentName(params.row.type)
+                                sendBatchInvoiceRef.current.openDialog()
+                            }}
+                        >
+                            <Tooltip title={payment.sendBatchInvoiceButton}>
+                                <SendIcon/>
+                            </Tooltip>
                         </Button>
                         <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
-                            {strings.default.editText}
+                            <Tooltip title={strings.default.editText}>
+                                <EditIcon/>
+                            </Tooltip>
                         </Button>
-                        <Button variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
-                            {strings.default.deleteText}
+                        <Button size="small" variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
+                            <Tooltip title={strings.default.deleteText}>
+                                <DeleteIcon/>
+                            </Tooltip>
                         </Button>
                     </ButtonGroup>
                 )
