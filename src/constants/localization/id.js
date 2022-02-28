@@ -74,6 +74,19 @@ export default function indonesian() {
                 includeBeasiswaLabel: "Dengan status 'Beasiswa'",
                 includeBeasiswaHelper: "Jika dihidupkan maka mahasiswa yang berjenis 'Mahasiswa'akan dimasukan kedalam daftar penerima tagihan"
             },
+            findInvoiceDialog: {
+                dialogTitle: "Cari Tagihan",
+                dialogContentText: "Anda bisa mencari tagihan disini",
+                searchInputPlaceholder: "Masukan nomor tagihan, panjang minimal 3 karakter",
+                errorTooShort: "Nomor tagihan yang anda masukan telalu pendek, panjang minimal 3 karakter",
+                invoiceTable: {
+                    code: "No. Tagihan",
+                    student: "Nama mahasiswa",
+                    status: "Status",
+                    detailButton: "Rincian",
+                    action: "Aksi"
+                }
+            },
             invoiceDetailDialog: {
                 dialogTitle: "Rincian Tagihan",
                 code: "No. Tagihan",
@@ -240,6 +253,9 @@ export default function indonesian() {
                     invalidText: "Invalid",
                     unpaidText: "Belum dibayar",
                     totalText: "Total",
+                    statisticTitle: "Statistik",
+                    toolsTitle: "Peralatan",
+                    toolsFindInvoice: "Cari tagihan",
                     paidDescriptionText: "Jumlah tagihan lunas",
                     verifyingDescriptionText: "Jumlah tagihan menunggu verifikasi",
                     pendingDescriptionText: "Jumlah tagihan dibayar sebagian",

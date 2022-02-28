@@ -9,6 +9,7 @@ import MainSnackbar from './MainSnackbar'
 import BackButton from './backButton'
 import PageHead from './PageHead'
 import DraggablePaperComponent  from './DraggablePaperComponent'
+import useFocus from './useFocus'
 
 export {
     Link,
@@ -21,5 +22,6 @@ export {
     MainSnackbar,
     BackButton,
     PageHead,
-    DraggablePaperComponent
+    DraggablePaperComponent,
+    useFocus
 }

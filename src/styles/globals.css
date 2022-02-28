@@ -48,8 +48,10 @@
 	font-display: swap;
 }
 
-.invoice-print-area {
-	@apply print:text-black print:bg-white;
+@media print {
+	.invoice-print-area {
+		@apply print:text-black print:bg-white bg-red-500;
+	}	
 }
 
 .ratio-16-9,.ratio-1-1 {

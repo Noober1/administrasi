@@ -74,6 +74,19 @@ export default function english() {
                 includeBeasiswaLabel: "With 'Beasiswa' student type",
                 includeBeasiswaHelper: "If turned on, the student of the type 'Mahasiswa' will be added to the list of invoice recipients"
             },
+            findInvoiceDialog: {
+                dialogTitle: "Find Invoice(s)",
+                dialogContentText: "You can find invoice here with invoice number",
+                searchInputPlaceholder: "Type your invoice here, minimal 3 characters for search invoice",
+                errorTooShort: "Character you typed is too short, minimal 3 characters",
+                invoiceTable: {
+                    code: "Invoice",
+                    student: "Student Name",
+                    status: "Status",
+                    detailButton: "Detail",
+                    action: "Action"
+                }
+            },
             invoiceDetailDialog: {
                 dialogTitle: "Invoice Detail",
                 code: "Invoice",
@@ -240,6 +253,9 @@ export default function english() {
                     invalidText: "Invalid",
                     unpaidText: "Unpaid",
                     totalText: "Total",
+                    statisticTitle: "Statistic",
+                    toolsTitle: "Tools",
+                    toolsFindInvoice: "Find invoice",
                     paidDescriptionText: "Paid invoice(s)",
                     verifyingDescriptionText: "Verifying invoice(s)",
                     pendingDescriptionText: "Partially paid invoice(s)",

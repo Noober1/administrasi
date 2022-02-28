@@ -201,7 +201,7 @@ SendReceipt.defaultProps = {
 }
 
 SendReceipt.propTypes = {
-    invoiceId:PropTypes.oneOf([
+    invoiceId:PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
     ]).isRequired,

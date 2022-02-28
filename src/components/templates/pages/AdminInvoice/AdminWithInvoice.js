@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { useReactToPrint } from 'react-to-print'
 import { useRef } from 'react'
 import useProfile from '../../../../lib/useProfile'
+import History from '../../../organisms/InvoiceDetail/History'
 
 const AdminWithInvoice = ({code}) => {
     const {panel:{pages:{invoiceWithCode}}, components: {invoiceDetailDialog}, default: defaultText} = useLocalization()
@@ -22,6 +23,14 @@ const AdminWithInvoice = ({code}) => {
 
     // invoice box
     const invoiceBoxRef = useRef();
+    // history dialog
+    const historyRef = useRef();
+    const handleOpenHistory = event => {
+        if (typeof historyRef?.current?.openDialog == 'function') {
+            historyRef.current.openDialog()
+        }
+    }
+
     const handleInvoicePrint = useReactToPrint({
         documentTitle:'Cetak Invoice',
         pageStyle:`
@@ -81,7 +90,7 @@ const AdminWithInvoice = ({code}) => {
     const InvoiceBox = forwardRef((props, ref) => {
         return (
             <Paper
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 invoice-print-area shadow-lg print:shadow-none"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 shadow-lg print:shadow-none invoice-print-area"
                 elevation={0}
                 ref={ref}
             >
@@ -200,7 +209,14 @@ const AdminWithInvoice = ({code}) => {
                                 {
                                     field:'price',
                                     headerName: invoiceDetailDialog.paymentPrice,
-                                    flex:1
+                                    flex:1,
+                                    valueGetter: params => {
+                                        let nominal = params.value
+                                        if (params.row.status == 'pending') {
+                                            nominal = nominal + ` (${invoiceDetailDialog.invoiceRemaining} ${params.row.remaining})`
+                                        }
+                                        return nominal
+                                    }
                                 },
                             ]}
                             rows={[
@@ -208,7 +224,9 @@ const AdminWithInvoice = ({code}) => {
                                     id: 1,
                                     date: invoiceData?.date?.invoice,
                                     description: invoiceData?.payment?.type || '',
-                                    price: tools.rupiahFormatting(invoiceData?.payment?.price || 0)
+                                    status: invoiceData?.status,
+                                    price: tools.rupiahFormatting(invoiceData?.payment?.price || 0),
+                                    remaining: tools.rupiahFormatting(invoiceData?.remainingPaymentHistory || 0)
                                 }
                             ]}
                             hideFooter
@@ -252,6 +270,7 @@ const AdminWithInvoice = ({code}) => {
                             <Button variant="contained" onClick={handleInvoicePrint}>
                                 {invoiceWithCode.printText}
                             </Button>
+                            <Button variant="contained" className="mx-2" color="success" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
                         </>
                     )}
                     helpButtonHandler={event => console.log('triggered help button panel_content_head_title')}
@@ -259,6 +278,7 @@ const AdminWithInvoice = ({code}) => {
                 {!fetchError ?
                     <div>
                         <InvoiceBox ref={invoiceBoxRef}/>
+                        {!loading && <History ref={historyRef} data={invoiceData?.paymentHistory || []}/>}
                     </div> : 
                     <Paper>
                         <div className="text-center block py-10">
