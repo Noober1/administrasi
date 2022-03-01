@@ -74,6 +74,15 @@ export default function english() {
                 includeBeasiswaLabel: "With 'Beasiswa' student type",
                 includeBeasiswaHelper: "If turned on, the student of the type 'Mahasiswa' will be added to the list of invoice recipients"
             },
+            templateUploader: {
+                allowedFormatText: "Allowed format",
+                helperText: "Click here or drag and drop file(s) here to choose file",
+                dropFileHereText: "Drop your file(s) here!",
+                closeImporterText: "Close file importer",
+                fileTemplateDownloadText: "Click here to download sample template",
+                uploadButtonText: "Upload",
+                fileFormatErrorText: "Some file(s) format not allowed, please try again"
+            },
             findInvoiceDialog: {
                 dialogTitle: "Find Invoice(s)",
                 dialogContentText: "You can find invoice here with invoice number",
@@ -269,7 +278,9 @@ export default function english() {
                     addStudentTitle:"Add Student",
                     addStudentDescription: "Please fill this form below",
                     editStudentTitle:"Edit Student",
-                    editStudentDescription: "Please edit these fields below"
+                    editStudentDescription: "Please edit these fields below",
+                    templateUploaderTitle: "Upload student template",
+                    templateUploaderDescription: "You can insert student with template here. When you see 'CODE' field in student template, please fill it with 'class code' from class list"
                 },
                 class:{
                     titlePage: "Class / Angkatan List",

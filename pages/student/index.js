@@ -16,6 +16,7 @@ const Student = () => {
     const [formStudentOpen, setformStudentOpen] = useState(false)
     const [formStudentEditId, setformStudentEditId] = useState(null)
     const tableRef = useRef(null)
+    const importerRef = useRef(null)
 
     const handleAddStudentButton = event => {
         setformStudentMode('add')
@@ -31,6 +32,10 @@ const Student = () => {
     const handleFormCallback = (error, data) => {
         if (error || typeof tableRef.current.refresh === 'undefined') return
         tableRef.current.refresh()
+    }
+
+    const handleOpenImporter = event => {
+        importerRef.current.openDialog()
     }
 
     const columns = [
@@ -88,7 +93,7 @@ const Student = () => {
                                 handleClose={() => setformStudentOpen(false)}
                                 callback={handleFormCallback}
                             />
-                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
+                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>} onClick={handleOpenImporter}>
                                 {strings.default.importText}
                             </Button>
                         </ButtonGroup>
@@ -101,7 +106,13 @@ const Student = () => {
                     columns={columns}
                     deleteUrl='/student'
                 />
-                <TemplateImporter/>
+                <TemplateImporter
+                    title={studentPage.templateUploaderTitle}
+                    alertMessage={studentPage.templateUploaderDescription}
+                    sampleUrl="/templates/test.txt"
+                    allowedFormat={['xlsx','xls']}
+                    ref={importerRef}
+                />
             </Box>
         </>
     )

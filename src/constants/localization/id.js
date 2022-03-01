@@ -74,6 +74,15 @@ export default function indonesian() {
                 includeBeasiswaLabel: "Dengan status 'Beasiswa'",
                 includeBeasiswaHelper: "Jika dihidupkan maka mahasiswa yang berjenis 'Mahasiswa'akan dimasukan kedalam daftar penerima tagihan"
             },
+            templateUploader: {
+                allowedFormatText: "Format yang didukung",
+                helperText: "Klik disini atau seret berkas anda ke sini untuk memilih berkas",
+                dropFileHereText: "Jatuhkan berkas anda disini!",
+                closeImporterText: "Tutup file importer",
+                fileTemplateDownloadText: "Klik disini untuk unduh sampel template",
+                uploadButtonText: "Unggah",
+                fileFormatErrorText: "Ada format berkas pada berkas yang dipilih tidak didukung, silahkan coba kembali"
+            },
             findInvoiceDialog: {
                 dialogTitle: "Cari Tagihan",
                 dialogContentText: "Anda bisa mencari tagihan disini",
@@ -269,7 +278,9 @@ export default function indonesian() {
                     addStudentTitle:"Tambah Mahasiswa",
                     addStudentDescription: "Silahkan isi form dibawah ini",
                     editStudentTitle:"Sunting Mahasiswa",
-                    editStudentDescription: "Silahkan sunting isian dibawah ini"
+                    editStudentDescription: "Silahkan sunting isian dibawah ini",
+                    templateUploaderTitle: "Unggah template mahasiswa",
+                    templateUploaderDescription: "Anda dapat menambah mahasiswa dengan template disini. Ketika anda melihat kolom isian 'CODE' pada template mahasiswa, silahkan isi dengan 'kode kelas' pada daftar kelas yang terdaftar sebelumnya"
                 },
                 class:{
                     titlePage: "Daftar Kelas / Angkatan",
