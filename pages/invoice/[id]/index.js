@@ -119,7 +119,7 @@ const PaymentWithId = ({paymentId}) => {
                     <ButtonGroup>
                         <Button size="small" variant="contained">
                             <Link href={`/invoice?code=${params.row.code}`}>
-                                {invoiceTableText.actionPrint}
+                                {invoiceTableText.actionDetail}
                             </Link>
                         </Button>
                         <Button onClick={() => handleOpenVerifyOrManualDialog(params.row.code)} size='small'>
@@ -185,7 +185,7 @@ const PaymentWithId = ({paymentId}) => {
                     deleteUrl='/administrasi/invoice'
                     deleteAdditionalMessage={(
                         <Alert severity='warning'>
-                            [DATA YANG SUDAH MEMILIKI RIWAYAT TRANSAKSI TIDAK DAPAT DIHAPUS]
+                            {paymentWithId.deleteWarningMessage}
                         </Alert>
                     )}
                     url={`/administrasi/payment/${paymentId}/invoices`}

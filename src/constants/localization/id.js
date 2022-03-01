@@ -148,7 +148,8 @@ export default function indonesian() {
                 sender: "Atas Nama",
                 payer: "Pembayar",
                 administrator: "Administrator",
-                refNumber: "No. Ref"
+                refNumber: "No. Ref",
+                maxNominal: "Maks. Nominal"
             }
         },
         login: {
@@ -289,14 +290,19 @@ export default function indonesian() {
                 paymentWithId: {
                     titlePage: "Rincian Pembayaran",
                     invoiceTableTitle: "Daftar Tagihan",
-                    sendBatchInvoice: "Kirim tagihan massal"
+                    sendBatchInvoice: "Kirim tagihan massal",
+                    deleteWarningMessage: "Data yang sudah memiliki riwayat transaksi tidak dapat dihapus"
                 },
                 invoice:{
                     titlePage: "Daftar Transaksi"
                 },
                 invoiceWithCode: {
                     titlePage: "Rincian Tagihan",
-                    printText: "Cetak"
+                    printText: "Cetak",
+                    detailText: "Rincian",
+                    settingText: "Sunting",
+                    verificationText: "Verifikasi",
+                    manualPayText: "Bayar manual"
                 }
             }
         },

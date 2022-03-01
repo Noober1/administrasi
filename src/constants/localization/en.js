@@ -148,7 +148,8 @@ export default function english() {
                 sender: "From",
                 payer: "Payer",
                 administrator: "Administrator",
-                refNumber: "Ref Number"
+                refNumber: "Ref Number",
+                maxNominal: "Max. Nominal"
             }
         },
         login: {
@@ -289,14 +290,19 @@ export default function english() {
                 paymentWithId: {
                     titlePage: "Payment detail",
                     invoiceTableTitle: "Invoices",
-                    sendBatchInvoice: "Send Batch Invoice"
+                    sendBatchInvoice: "Send Batch Invoice",
+                    deleteWarningMessage: "Data with transaction history will not be deleted"
                 },
                 invoice:{
                     titlePage: "Invoices"
                 },
                 invoiceWithCode: {
                     titlePage: "Invoice Detail",
-                    printText: "Print"
+                    printText: "Print",
+                    detailText: "Detail",
+                    settingText: "Setting",
+                    verificationText: "Verification",
+                    manualPayText: "Manual payment"
                 }
             }
         },

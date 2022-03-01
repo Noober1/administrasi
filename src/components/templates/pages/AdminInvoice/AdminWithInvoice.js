@@ -14,15 +14,23 @@ import { useReactToPrint } from 'react-to-print'
 import { useRef } from 'react'
 import useProfile from '../../../../lib/useProfile'
 import History from '../../../organisms/InvoiceDetail/History'
+import VerifyOrManualDialog from '../../../organisms/VerifyOrManualDialog'
 
 const AdminWithInvoice = ({code}) => {
     const {panel:{pages:{invoiceWithCode}}, components: {invoiceDetailDialog}, default: defaultText} = useLocalization()
-    const [data, fetchLoading, fetchError, errorMessage] = useFetchApi(`/administrasi/getInvoice?code=${code}`)
+    const [refreshCount, setrefreshCount] = useState(0)
+    const [data, fetchLoading, fetchError, errorMessage] = useFetchApi(`/administrasi/getInvoice?code=${code}&refresh=${refreshCount}`)
     const router = useRouter()
     const profile = useProfile()
 
     // invoice box
     const invoiceBoxRef = useRef();
+    // verify or manual dialog
+    const verifyOrManualDialogRef = useRef()
+    const handleOpenVerifyOrManualDialog = invoiceCode => {
+        verifyOrManualDialogRef.current.setInvoiceCode(invoiceCode)
+        verifyOrManualDialogRef.current.openDialog()
+    }
     // history dialog
     const historyRef = useRef();
     const handleOpenHistory = event => {
@@ -85,6 +93,14 @@ const AdminWithInvoice = ({code}) => {
         useEffect(() => {
             console.log('Component > AdminWithInvoice: invoiceData', invoiceData)
         }, [invoiceData])
+    }
+
+    const handleClickActionButton = (event, code) => {
+        if(setinvoiceData.status !== 'paid') {
+            handleOpenVerifyOrManualDialog(code)
+        } else {
+            console.log('open setting')
+        }
     }
 
     const InvoiceBox = forwardRef((props, ref) => {
@@ -267,19 +283,53 @@ const AdminWithInvoice = ({code}) => {
                     buttonGroup={(
                         <>
                             <BackButton onClick={backButtonClickHandler}/>
-                            <Button variant="contained" onClick={handleInvoicePrint}>
-                                {invoiceWithCode.printText}
-                            </Button>
-                            <Button variant="contained" className="mx-2" color="success" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
+                            
                         </>
                     )}
                     helpButtonHandler={event => console.log('triggered help button panel_content_head_title')}
                 />
                 {!fetchError ?
-                    <div>
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-5">
+                        {!loading ?
+                            <>
+                                <Button variant="contained" onClick={handleInvoicePrint}>
+                                    {invoiceWithCode.printText}
+                                </Button>
+                                <Button variant="contained" color="success" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
+                                
+                                    <Button variant="outlined" onClick={event => handleClickActionButton(event, invoiceData.code)}>
+                                        {
+                                            invoiceData.status === 'paid' ? invoiceWithCode.settingText :
+                                            invoiceData.status === 'confirming' ? invoiceWithCode.verificationText :
+                                            invoiceData.status === 'pending' ? invoiceWithCode.manualPayText :
+                                            invoiceData.status === 'invalid' ? invoiceWithCode.verificationText :
+                                            invoiceWithCode.manualPayText
+                                        }
+                                    </Button>
+                            </> : 
+                            <>
+                                <Skeleton variant='rectangular' className='h-10'/>
+                                <Skeleton variant='rectangular' className='h-10'/>
+                                <Skeleton variant='rectangular' className='h-10'/>
+                                <Skeleton variant='rectangular' className='h-10'/>
+                            </>
+                            
+                        }
+                        </div>
                         <InvoiceBox ref={invoiceBoxRef}/>
-                        {!loading && <History ref={historyRef} data={invoiceData?.paymentHistory || []}/>}
-                    </div> : 
+                        {!loading && 
+                            <>
+                                <History ref={historyRef} data={invoiceData?.paymentHistory || []}/>
+                                <VerifyOrManualDialog
+                                    ref={verifyOrManualDialogRef}
+                                    callback={() => {
+                                        setrefreshCount(prevValue => prevValue + 1)
+                                    }}
+                                />
+                            </>
+                        }
+                    </> : 
                     <Paper>
                         <div className="text-center block py-10">
                             <Typography variant="h5" className="mb-5">

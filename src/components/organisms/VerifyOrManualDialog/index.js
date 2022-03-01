@@ -196,10 +196,6 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                                 <MenuItem value="transfer">{verifyOrManualDialogText.paymentMethodTransferText}</MenuItem>
                             </Select>
                         </FormControl>
-                        {/* <FormControl>
-                            <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
-                            <
-                        </FormControl> */}
                         <FormControl error={verifyNominalValue < 1 || verifyNominalValue > fetchData?.remainingPaymentHistory}>
                             <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
                             <OutlinedInput
@@ -214,7 +210,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                                 onChange={e => setverifyNominalValue(e.target.value)}
                                 startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
                             />
-                            <FormHelperText>[MAKSIMAL NOMINAL] {fetchData?.remainingPaymentHistory}</FormHelperText>
+                            <FormHelperText>{verifyOrManualDialogText.maxNominal}: {fetchData?.remainingPaymentHistory}</FormHelperText>
                         </FormControl>
                     </div>
                 </div>
@@ -259,15 +255,16 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                     <OutlinedInput
                         label={verifyOrManualDialogText.verifyNominal}
                         name="nominal"
-                        type="text"
+                        type="number"
                         inputProps={{
-                            pattern:"[0-9]+"
+                            pattern:"[0-9]+",
+                            max: fetchData?.remainingPaymentHistory || 0
                         }}
                         value={manualData.nominal}
                         onChange={formChangeHandler}
                         startAdornment={<InputAdornment position="start">Rp</InputAdornment>}
                     />
-                    <FormHelperText>[ERROR DUMMY]</FormHelperText>
+                    <FormHelperText>{verifyOrManualDialogText.maxNominal}: {fetchData?.remainingPaymentHistory}</FormHelperText>
                 </FormControl>
                 <TextField
                     label={verifyOrManualDialogText.payer}
@@ -276,6 +273,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                     value={manualData.payer}
                     error={isManualFormError}
                     onChange={formChangeHandler}
+                    required
                 />
             </div>
         )

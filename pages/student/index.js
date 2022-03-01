@@ -8,6 +8,7 @@ import { PageHead } from '../../src/components/atoms'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import StudentForm from '../../src/components/templates/forms/studentForm';
+import TemplateImporter from '../../src/components/organisms/TemplateImporter';
 
 const Student = () => {
     const {panel:{pages:{student:studentPage}},table:{columns:{student}},...strings} = useLocalization()
@@ -100,6 +101,7 @@ const Student = () => {
                     columns={columns}
                     deleteUrl='/student'
                 />
+                <TemplateImporter/>
             </Box>
         </>
     )
