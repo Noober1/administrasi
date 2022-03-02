@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, IconButton, Link, Paper, Typography } from '@mui/material'
+import { Alert, Chip, Dialog, DialogContent, DialogTitle, Fab, IconButton, Link, Paper, Typography } from '@mui/material'
 import { DraggablePaperComponent, Tooltip } from '../../atoms'
 import { forwardRef } from 'react'
 import { useState } from 'react'
@@ -36,6 +36,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 	const fileDropHandler = useCallback((acceptedFiles, fileRejections) => {
 		let filenames = acceptedFiles.reduce((prev,item) => `${prev}${item.name}, `, '')
 		setfilename(filenames.replace(new RegExp(", " + "*$"),''))
+		setfileToUpload([])
 		if (fileRejections.length > 0) {
 			setfileFormatError(true)
 			setfileFormatErrorList(fileRejections)
@@ -65,7 +66,10 @@ const TemplateImporter = forwardRef((props, ref) => {
 				default:
 					return prev
 			}
-		}, '')
+		}, ''),
+		multiple: props.multiple,
+		maxSize: 1048576,
+		disabled: uploadingFile
 	})
 	useImperativeHandle(
 		ref,
@@ -76,13 +80,16 @@ const TemplateImporter = forwardRef((props, ref) => {
 	)
 	const handleSubmitForm = event => {
 		event.preventDefault()
+		setUploadingFile(true)
 		const formData = new FormData();
-		formData.append('multiple', props.multiple)
+		if (props.multiple) {
+			formData.append('multiple', 'true')
+		}
 		const fileObjects = fileToUpload.map(file => {
 			formData.append('file', file, file.name)
 		})
 		fetchAPI(fetchWithToken({
-			url: '/administrasi',
+			url: props?.url || '/',
 			method: "POST",
 			token: authToken,
 			data: formData
@@ -90,16 +97,21 @@ const TemplateImporter = forwardRef((props, ref) => {
 		.then(result => {
 			console.log(result)
 			setUploadingFile(false)
+			setfileToUpload([])
+			setfilename('')
 		})
 		.catch(error => {
 			console.error(error)
 			setUploadingFile(false)
+			setfileToUpload([])
+			setfilename('')
 		})
 	}
 
 	return (
 		<Dialog
 			open={open}
+			scroll="body"
 			PaperComponent={DraggablePaperComponent}
 			fullWidth
 			maxWidth="md"
@@ -128,7 +140,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 				}
 				<form onSubmit={handleSubmitForm}>
 					<Paper
-						className={`border-4 border-dashed border-blue-${isDragActive ? '300' : '700'} rounded-md flex text-center items-center py-10 cursor-pointer`}
+						className={`border-4 border-dashed border-blue-${isDragActive ? '300' : '700'} rounded-md flex text-center items-center py-10 cursor-pointer shadow-none`}
 						{...getRootProps()}
 					>
 						<div className="mx-auto">
@@ -152,10 +164,13 @@ const TemplateImporter = forwardRef((props, ref) => {
 									templateUploaderText.helperText
 								}
 							</Typography>
-							<Typography variant="caption">
+							<Typography>
 								{templateUploaderText.allowedFormatText}: {props.allowedFormat.map(item => (
 									<Chip key={item} label={'.' + item} size="small" color="primary" className="mr-1"/>
 								))}
+							</Typography>
+							<Typography className="mt-2">
+								{templateUploaderText.maxSizeText}: <Chip color="success" size="small" label="1MB(MegaByte)"/>
 							</Typography>
 						</div>
 					</Paper>
@@ -169,8 +184,9 @@ const TemplateImporter = forwardRef((props, ref) => {
 							loading={uploadingFile}
 							loadingPosition="start"
 							startIcon={<UploadIcon/>}
+							disabled={fileToUpload.length < 1}
 						>
-							{uploadingFile ? '[UPLOADING]' : templateUploaderText.uploadButtonText}
+							{uploadingFile ? templateUploaderText.uploadingText : templateUploaderText.uploadButtonText}
 						</LoadingButton>
 					</div>
 				</form>
@@ -191,6 +207,7 @@ TemplateImporter.defaultProps = {
 
 TemplateImporter.propTypes = {
 	title: PropTypes.string,
+	url: PropTypes.string.isRequired,
 	allowedFormat: PropTypes.arrayOf(PropTypes.string),
 	alertMessage: PropTypes.string,
 	alertSeverity: PropTypes.oneOf(['error','warning','info','error']),

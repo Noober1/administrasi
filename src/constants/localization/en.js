@@ -81,7 +81,9 @@ export default function english() {
                 closeImporterText: "Close file importer",
                 fileTemplateDownloadText: "Click here to download sample template",
                 uploadButtonText: "Upload",
-                fileFormatErrorText: "Some file(s) format not allowed, please try again"
+                fileFormatErrorText: "Some file(s) doen't meet criteria(file size, file format, etc)",
+                uploadingText: "Uploading",
+                maxSizeText: "Maximum file size"
             },
             findInvoiceDialog: {
                 dialogTitle: "Find Invoice(s)",
@@ -132,7 +134,8 @@ export default function english() {
                 sendReceiptSuccess: "Send receipt success",
                 sendReceiptFailed: "Send receipt failed",
                 pickImage: "Choose image",
-                invoiceRemaining: "Remaining"
+                invoiceRemaining: "Remaining",
+                otherDetail: "Other detail"
             },
             uploader: {
                 uploadFileSuccess: "Uploading file success",

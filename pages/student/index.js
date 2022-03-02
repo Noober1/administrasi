@@ -107,6 +107,7 @@ const Student = () => {
                     deleteUrl='/student'
                 />
                 <TemplateImporter
+                    url="/student/upload"
                     title={studentPage.templateUploaderTitle}
                     alertMessage={studentPage.templateUploaderDescription}
                     sampleUrl="/templates/test.txt"

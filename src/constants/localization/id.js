@@ -81,7 +81,9 @@ export default function indonesian() {
                 closeImporterText: "Tutup file importer",
                 fileTemplateDownloadText: "Klik disini untuk unduh sampel template",
                 uploadButtonText: "Unggah",
-                fileFormatErrorText: "Ada format berkas pada berkas yang dipilih tidak didukung, silahkan coba kembali"
+                fileFormatErrorText: "Ada berkas yang tidak sesuai dengan ketentuan (ukuran berkas, format berkas, dll)",
+                maxSizeText: "Maksimal ukuran berkas",
+                uploadingText: "Menggunggah",
             },
             findInvoiceDialog: {
                 dialogTitle: "Cari Tagihan",
@@ -132,7 +134,8 @@ export default function indonesian() {
                 sendReceiptSuccess: "Pengiriman bukti berhasil",
                 sendReceiptFailed: "Pengiriman bukti gagal",
                 pickImage: "Pilih gambar",
-                invoiceRemaining: "Tersisa"
+                invoiceRemaining: "Tersisa",
+                otherDetail: "Rincian lainnya"
             },
             uploader: {
                 uploadFileSuccess: "Unggah berkas berhasil",
