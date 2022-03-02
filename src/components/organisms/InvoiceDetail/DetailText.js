@@ -11,7 +11,7 @@ const DetailText = ({list, loading}) => {
                 {list.map((item, index) => (
                     <ListItemButton key={item.title || index} className="p-0 pl-2">
                         <ListItemIcon classes={{
-                            root:"min-w-0 mr-3"
+                            root:"min-w-0 mr-3 print:text-black"
                         }}>
                             {loading ?
                                 <Skeleton variant="rectangular" width={50} height={50}/> : 
@@ -23,7 +23,9 @@ const DetailText = ({list, loading}) => {
                                 <Skeleton variant="text" width="50%"/>
                                 <Skeleton variant="text" width="100%"/>
                             </div>:
-                            <ListItemText className="capitalize" primary={item.title} secondary={item.content}/>
+                            <ListItemText className="capitalize" classes={{
+                                secondary:"print:text-black"
+                            }} primary={item.title} secondary={item.content}/>
                         }
                     </ListItemButton>
                 ))}

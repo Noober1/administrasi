@@ -41,12 +41,6 @@ const AdminWithInvoice = ({code}) => {
 
     const handleInvoicePrint = useReactToPrint({
         documentTitle:'Cetak Invoice',
-        pageStyle:`
-            @page {
-                orientation: landscape;
-                size: 9,5cm 11cm;
-            }
-        `,
         content: () => invoiceBoxRef.current,
     });
 
@@ -192,64 +186,43 @@ const AdminWithInvoice = ({code}) => {
                         <div className="block">
                             <Skeleton height="150px"/>
                         </div> :
-                        <DataGrid
-                            disableColumnFilter
-                            disableColumnMenu
-                            disableSelectionOnClick
-                            disableColumnSelector
-                            disableExtendRowFullWidth
-                            disableDensitySelector
-                            autoHeight
-                            columns={[
-                                {
-                                    field: 'date',
-                                    headerName: invoiceDetailDialog.invoiceDate,
-                                    width:150,
-                                    valueGetter: params => tools.dateFormatting(params.value || new Date(), 'd M y', defaultText.nameOfMonths)
-                                },
-                                {
-                                    field:'description',
-                                    headerName: invoiceDetailDialog.paymentType,
-                                    flex:1,
-                                    renderCell: params => (
-                                        <>
-                                            <Typography variant="body1">
-                                                {params.value}<br/>
-                                                <Typography variant="caption" noWrap>
-                                                    {invoiceData?.payment?.description || ''}
-                                                </Typography>
+                        <table className="w-full table-invoice">
+                            <thead>
+                                <tr>
+                                    <th>{invoiceDetailDialog.invoiceDate}</th>
+                                    <th>{invoiceDetailDialog.paymentType}</th>
+                                    <th>{invoiceDetailDialog.paymentPrice}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{tools.dateFormatting(invoiceData?.date?.invoice || new Date(), 'd M y', defaultText.nameOfMonths)}</td>
+                                    <td>
+                                        <Typography variant="body1" className="capitalize">
+                                            {invoiceData?.payment?.type || ''}<br/>
+                                            <Typography variant="caption" noWrap>
+                                                {invoiceData?.payment?.description || ''}
                                             </Typography>
-                                        </>
-                                    )
-                                },
-                                {
-                                    field:'price',
-                                    headerName: invoiceDetailDialog.paymentPrice,
-                                    flex:1,
-                                    valueGetter: params => {
-                                        let nominal = params.value
-                                        if (params.row.status == 'pending') {
-                                            nominal = nominal + ` (${invoiceDetailDialog.invoiceRemaining} ${params.row.remaining})`
-                                        }
-                                        return nominal
-                                    }
-                                },
-                            ]}
-                            rows={[
-                                {
-                                    id: 1,
-                                    date: invoiceData?.date?.invoice,
-                                    description: invoiceData?.payment?.type || '',
-                                    status: invoiceData?.status,
-                                    price: tools.rupiahFormatting(invoiceData?.payment?.price || 0),
-                                    remaining: tools.rupiahFormatting(invoiceData?.remainingPaymentHistory || 0)
-                                }
-                            ]}
-                            hideFooter
-                        />
+                                        </Typography>
+                                    </td>
+                                    <td>
+                                        {(() => {
+                                            let nominal = tools.rupiahFormatting(invoiceData?.payment?.price || 0)
+                                            if (invoiceData?.status == 'pending') {
+                                                nominal = nominal + ` (${invoiceDetailDialog.invoiceRemaining} ${tools.rupiahFormatting(invoiceData?.remainingPaymentHistory || 0)})`
+                                            }
+                                            return nominal
+                                        })()}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     }
                 </div>
                 <div className="col-span-3">
+                    <Typography variant="h6" className="mt-2">
+                        {invoiceDetailDialog.otherDetail}
+                    </Typography>
                     <DetailText
                         loading={loading}
                         list={detailList}

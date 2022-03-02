@@ -50,8 +50,8 @@
 
 @media print {
 	.invoice-print-area {
-		@apply print:text-black print:bg-white bg-red-500;
-	}	
+		@apply print:text-black print:bg-white;
+	}
 }
 
 .ratio-16-9,.ratio-1-1 {
@@ -70,4 +70,19 @@
 
 .ratio-content {
 	@apply absolute top-0 left-0 right-0 bottom-0 h-full;
+}
+
+.table-invoice {
+	@apply table-auto border-2 border-gray-600;
+}
+.table-invoice thead {
+	@apply rounded-t-md;
+}
+.table-invoice td,
+.table-invoice th {
+	@apply p-2;
+}
+
+.table-invoice thead {
+	@apply bg-gray-500 text-left text-white;
 }
