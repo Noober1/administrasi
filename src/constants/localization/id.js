@@ -29,9 +29,11 @@ export default function indonesian() {
             retryText: "Coba Lagi",
             detailText: "Rincian",
             returnText: "Kembali",
-            closeText: "Tutup"
+            closeText: "Tutup",
+            noMessageText: "Tidak ada pesan"
         },
         errors:{
+            unknownError: "Error tidak diketahui",
             failedToSaveText: "Data gagal disimpan",
             failedToDelete: "Data gagal dihapus",
             internalError: 'Internal server error, silahkan laporkan ini ke admin aplikasi ini',
@@ -84,6 +86,11 @@ export default function indonesian() {
                 fileFormatErrorText: "Ada berkas yang tidak sesuai dengan ketentuan (ukuran berkas, format berkas, dll)",
                 maxSizeText: "Maksimal ukuran berkas",
                 uploadingText: "Menggunggah",
+                successUploadTitle: "Unggah berhasil",
+                successUploadText: "Template berhasil diunggah",
+                errorUploadTitle: "Unggah gagal",
+                errorUploadText: "Template gagal diunggah, lihat pesan error dibawah ini:",
+                errorDataText: "Error data"
             },
             findInvoiceDialog: {
                 dialogTitle: "Cari Tagihan",

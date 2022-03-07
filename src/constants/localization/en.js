@@ -29,9 +29,11 @@ export default function english() {
             retryText: "Try again",
             detailText: "Detail",
             returnText: "Back",
-            closeText: "Close"
+            closeText: "Close",
+            noMessageText: "No message"
         },
         errors:{
+            unknownError: "Unknown error",
             failedToSaveText: "Data failed to save",
             failedToDelete: "Data failed to delete",
             internalError: 'Internal server error, please report to your administrator',
@@ -82,8 +84,13 @@ export default function english() {
                 fileTemplateDownloadText: "Click here to download sample template",
                 uploadButtonText: "Upload",
                 fileFormatErrorText: "Some file(s) doen't meet criteria(file size, file format, etc)",
+                maxSizeText: "Maximum file size",
                 uploadingText: "Uploading",
-                maxSizeText: "Maximum file size"
+                successUploadTitle: "Upload success",
+                successUploadText: "Template has been uploaded",
+                errorUploadTitle: "Upload failed",
+                errorUploadText: "Template failed to upload, see message below:",
+                errorDataText: "Error data"
             },
             findInvoiceDialog: {
                 dialogTitle: "Find Invoice(s)",

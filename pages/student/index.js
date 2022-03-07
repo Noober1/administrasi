@@ -107,11 +107,14 @@ const Student = () => {
                     deleteUrl='/student'
                 />
                 <TemplateImporter
-                    url="/student/upload"
+                    url="/template/student"
                     title={studentPage.templateUploaderTitle}
                     alertMessage={studentPage.templateUploaderDescription}
-                    sampleUrl="/templates/test.txt"
+                    sampleUrl="/templates/Student template.xlsx"
                     allowedFormat={['xlsx','xls']}
+                    callback={() => {
+                        tableRef.current.refresh()
+                    }}
                     ref={importerRef}
                 />
             </Box>

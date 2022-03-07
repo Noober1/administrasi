@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Chip, Dialog, DialogContent, DialogTitle, Fab, IconButton, Link, Paper, Typography } from '@mui/material'
+import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Fab, IconButton, Link, Paper, Typography } from '@mui/material'
 import { DraggablePaperComponent, Tooltip } from '../../atoms'
 import { forwardRef } from 'react'
 import { useState } from 'react'
@@ -17,20 +17,29 @@ import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import { useEffect } from 'react'
+import tools from '../../../lib/tools'
 
 
 const TemplateImporter = forwardRef((props, ref) => {
 	const { authToken } = useSelector(selectAuth)
-	const {components: { templateUploader: templateUploaderText }} = useLocalization()
+	const {errors, default: defaultText, components: { templateUploader: templateUploaderText }} = useLocalization()
 	const [open, setopen] = useState(true)
 	const [uploadingFile, setUploadingFile] = useState(false)
 	const [fileToUpload, setfileToUpload] = useState([])
 	const [fileFormatErrorList, setfileFormatErrorList] = useState([])
 	const [fileFormatError, setfileFormatError] = useState(false)
+
+	// post-upload states
+	const [dialogResultOpen, setdialogResultOpen] = useState(false)
+	const [uploadingError, setuploadingError] = useState(false)
+	const [uploadingMessage, setuploadingMessage] = useState('Uploading...')
+	const [uploadingErrorData, setuploadingErrorData] = useState([])
 	const openDialog = () => setopen(true)
+
 	const closeDialog = () => {
 		if (uploadingFile) return
 		setopen(false)
+
 	}
 	const [filename, setfilename] = useState('')
 	const fileDropHandler = useCallback((acceptedFiles, fileRejections) => {
@@ -68,7 +77,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 			}
 		}, ''),
 		multiple: props.multiple,
-		maxSize: 1048576,
+		maxSize: props.maxSize,
 		disabled: uploadingFile
 	})
 	useImperativeHandle(
@@ -95,103 +104,155 @@ const TemplateImporter = forwardRef((props, ref) => {
 			data: formData
 		}))
 		.then(result => {
-			console.log(result)
 			setUploadingFile(false)
 			setfileToUpload([])
 			setfilename('')
+			// uploading states
+			setuploadingError(false)
+			setuploadingMessage(result?.response?.data.message || defaultText.noMessageText)
+			setuploadingErrorData([])
+		})
+		.then(() => {
+			setdialogResultOpen(true)
+			setopen(false)
+			if (typeof props.callback === 'function') {
+				props.callback(uploadingError)
+			}
 		})
 		.catch(error => {
-			console.error(error)
 			setUploadingFile(false)
 			setfileToUpload([])
 			setfilename('')
+			setdialogResultOpen(true)
+			// uploading states
+			setuploadingMessage(error?.response?.data?.message || errors.unknownError)
+			setuploadingError(true)
+			setuploadingErrorData(error?.response?.data?.data || [])
+			if (typeof props.callback === 'function') {
+				props.callback(uploadingError, uploadingErrorData)
+			}
 		})
 	}
 
 	return (
-		<Dialog
-			open={open}
-			scroll="body"
-			PaperComponent={DraggablePaperComponent}
-			fullWidth
-			maxWidth="md"
-			disableEscapeKeyDown
-		>
-			<DialogTitle className='cursor-move'>
-				{props.title}
-				<Tooltip arrow title={<Typography>{templateUploaderText.closeImporterText}</Typography>}>
-					<IconButton className="absolute top-2 right-2" onClick={closeDialog}>
-						<CloseIcon/>
-					</IconButton>
-				</Tooltip>
-			</DialogTitle>
-			<DialogContent>
-				{props.alertMessage &&
-					<Alert severity={props.alertSeverity} className="mb-2">
-						{props.alertMessage}
-					</Alert>
-				}
-				{props.sampleUrl &&
-					<Alert severity="info" className="mb-2">
-						<Link component="a" href={props.sampleUrl} target="_blank">
-							{templateUploaderText.fileTemplateDownloadText}
-						</Link>
-					</Alert>
-				}
-				<form onSubmit={handleSubmitForm}>
-					<Paper
-						className={`border-4 border-dashed border-blue-${isDragActive ? '300' : '700'} rounded-md flex text-center items-center py-10 cursor-pointer shadow-none`}
-						{...getRootProps()}
-					>
-						<div className="mx-auto">
-							<Fab
-								color={fileFormatError ? "secondary" : "primary"}
-								size="large"
-								className={isDragActive ? 'my-3 animate-bounce shadow-none' : 'mb-6 shadow-none'}
-							>
-								{
-									isDragActive ? <WhereToVoteIcon fontSize="large"/> : 
-									filename.length > 0 ? <CheckRoundedIcon fontSize="large"/> :
-									fileFormatError ? <CloseIcon/> :
-									<UploadIcon fontSize="large"/>
-								}
-							</Fab>
-							<Typography gutterBottom>
-								{
-									isDragActive ? templateUploaderText.dropFileHereText : 
-									filename.length > 0 ? filename :
-									fileFormatError ? templateUploaderText.fileFormatErrorText :
-									templateUploaderText.helperText
-								}
-							</Typography>
-							<Typography>
-								{templateUploaderText.allowedFormatText}: {props.allowedFormat.map(item => (
-									<Chip key={item} label={'.' + item} size="small" color="primary" className="mr-1"/>
-								))}
-							</Typography>
-							<Typography className="mt-2">
-								{templateUploaderText.maxSizeText}: <Chip color="success" size="small" label="1MB(MegaByte)"/>
-							</Typography>
-						</div>
-					</Paper>
-					<input type="file" className="sr-only" name="file-upload" {...getInputProps()}/>
-					<div className="mt-5 flex justify-center">
-						<LoadingButton
-							className="shadow-none"
-							type="submit"
-							variant="contained"
-							color="success"
-							loading={uploadingFile}
-							loadingPosition="start"
-							startIcon={<UploadIcon/>}
-							disabled={fileToUpload.length < 1}
+		<>
+			<Dialog
+				open={open}
+				scroll="body"
+				PaperComponent={DraggablePaperComponent}
+				fullWidth
+				maxWidth="md"
+				disableEscapeKeyDown
+			>
+				<DialogTitle className='cursor-move'>
+					{props.title}
+					<Tooltip arrow title={<Typography>{templateUploaderText.closeImporterText}</Typography>}>
+						<IconButton className="absolute top-2 right-2" onClick={closeDialog}>
+							<CloseIcon/>
+						</IconButton>
+					</Tooltip>
+				</DialogTitle>
+				<DialogContent>
+					{props.alertMessage &&
+						<Alert severity={props.alertSeverity} className="mb-2">
+							{props.alertMessage}
+						</Alert>
+					}
+					{props.sampleUrl &&
+						<Alert severity="info" className="mb-2">
+							<Link component="a" href={props.sampleUrl} target="_blank">
+								{templateUploaderText.fileTemplateDownloadText}
+							</Link>
+						</Alert>
+					}
+					<form onSubmit={handleSubmitForm}>
+						<Paper
+							className={`border-4 border-dashed border-blue-${isDragActive ? '300' : '700'} rounded-md flex text-center items-center py-10 cursor-pointer shadow-none`}
+							{...getRootProps()}
 						>
-							{uploadingFile ? templateUploaderText.uploadingText : templateUploaderText.uploadButtonText}
-						</LoadingButton>
-					</div>
-				</form>
-			</DialogContent>
-		</Dialog>
+							<div className="mx-auto">
+								<Fab
+									color={fileFormatError ? "secondary" : "primary"}
+									size="large"
+									className={isDragActive ? 'my-3 animate-bounce shadow-none' : 'mb-6 shadow-none'}
+								>
+									{
+										isDragActive ? <WhereToVoteIcon fontSize="large"/> : 
+										filename.length > 0 ? <CheckRoundedIcon fontSize="large"/> :
+										fileFormatError ? <CloseIcon/> :
+										<UploadIcon fontSize="large"/>
+									}
+								</Fab>
+								<Typography gutterBottom>
+									{
+										isDragActive ? templateUploaderText.dropFileHereText : 
+										filename.length > 0 ? filename :
+										fileFormatError ? templateUploaderText.fileFormatErrorText :
+										templateUploaderText.helperText
+									}
+								</Typography>
+								<Typography component="div">
+									{templateUploaderText.allowedFormatText}: {props.allowedFormat.map(item => (
+										<Chip key={item} label={'.' + item} size="small" color="primary" className="mr-1"/>
+									))}
+								</Typography>
+								<Typography className="mt-2" component="div">
+									{templateUploaderText.maxSizeText}: <Chip color="success" size="small" label={`${tools.byteToMegaByte(props.maxSize)} MB(MegaByte)`}/>
+								</Typography>
+							</div>
+						</Paper>
+						<input type="file" className="sr-only" name="file-upload" {...getInputProps()}/>
+						<div className="mt-5 flex justify-center">
+							<LoadingButton
+								className="shadow-none"
+								type="submit"
+								variant="contained"
+								color="success"
+								loading={uploadingFile}
+								loadingPosition="start"
+								startIcon={<UploadIcon/>}
+								disabled={fileToUpload.length < 1}
+							>
+								{uploadingFile ? templateUploaderText.uploadingText : templateUploaderText.uploadButtonText}
+							</LoadingButton>
+						</div>
+					</form>
+				</DialogContent>
+			</Dialog>
+			<Dialog
+				open={dialogResultOpen}
+			>
+				<DialogTitle>
+					{uploadingError ? templateUploaderText.errorUploadTitle : templateUploaderText.successUploadTitle}
+				</DialogTitle>
+				<DialogContent>
+					<Typography gutterBottom>
+						{uploadingError ? templateUploaderText.errorUploadText : templateUploaderText.successUploadText}
+					</Typography>
+					{uploadingError &&
+						<Alert severity="error" className="mb-2">
+							{/* TODO: showing error message with custom message based by error code instead error message from server */}
+							{uploadingMessage}
+						</Alert>
+					}
+					{(uploadingError && uploadingErrorData.length > 0) &&
+						<>
+							<Typography gutterBottom>
+								{templateUploaderText.errorDataText}:
+							</Typography>
+							{uploadingErrorData.map((item, index) => (
+								<Chip key={index} label={item} size="small" color="error" className="mr-1 mb-1"/>
+							))}
+						</>
+					}
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={() => setdialogResultOpen(false)}>
+						{defaultText.closeText}
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</>
 	)
 })
 
@@ -201,6 +262,7 @@ TemplateImporter.defaultProps = {
 	alertMessage: null,
 	alertSeverity: 'warning',
 	sampleUrl: null,
+	maxSize: 1048576,
 	callback: () => {},
 	multiple: false
 }
@@ -213,6 +275,7 @@ TemplateImporter.propTypes = {
 	alertSeverity: PropTypes.oneOf(['error','warning','info','error']),
 	sampleUrl: PropTypes.string,
 	callback: PropTypes.func,
+	maxSize: PropTypes.number,
 	multiple: PropTypes.bool
 }
 

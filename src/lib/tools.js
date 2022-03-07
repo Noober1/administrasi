@@ -79,8 +79,13 @@ const randomString = (length) => {
    return result;
 }
 
+const byteToMegaByte = (byte) => {
+    return (byte / 1024 / 1024).toFixed(2)
+}
+
 export default { 
     dateFormatting,
     rupiahFormatting,
-    randomString
+    randomString,
+    byteToMegaByte
 }
