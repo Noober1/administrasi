@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { DataGrid } from '@mui/x-data-grid'
 import useLocalization from '../../../lib/useLocalization'
 import { tableLocalization } from '../../../constants'
+import clsx from 'clsx'
 
 const FindInvoiceDialog = forwardRef((props, ref) => {
 	const {default: defautText, languange, table: {columns: {invoice: invoiceTableText}}, components: {findInvoiceDialog: findInvoiceDialogText}} = useLocalization()
@@ -73,7 +74,7 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 		} else {
 			seterrorMessage('')
 		}
-		settempSearchText(event.target.value.toUpperCase())
+		settempSearchText(event.target.value)
 	}
 
 	return (
@@ -91,13 +92,13 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 			</DialogTitle>
 			<div className="mx-6">
 				<DialogContentText gutterBottom>{findInvoiceDialogText.dialogContentText}</DialogContentText>
-				<Paper className='flex px-1 py-2'>
+				<Paper className={clsx('flex px-1 py-2', isError ? 'border border-red-500' : '')}>
 					<FormControl className="flex-1" error={isError}>
 						<InputBase
 							sx={{color:theme => isError ? theme.palette.error.main : theme.palette.text.primary}}
 							type='text'
 							className='flex-1 ml-3'
-							inputProps={{className:'uppercase', maxLength:'50',ref:searchInputRef}}
+							inputProps={{maxLength:'50',ref:searchInputRef}}
 							value={tempSearchText}
 							placeholder={findInvoiceDialogText.searchInputPlaceholder}
 							onChange={handleChangeInput}

@@ -88,8 +88,8 @@ export default function indonesian() {
             findInvoiceDialog: {
                 dialogTitle: "Cari Tagihan",
                 dialogContentText: "Anda bisa mencari tagihan disini",
-                searchInputPlaceholder: "Masukan nomor tagihan, panjang minimal 3 karakter",
-                errorTooShort: "Nomor tagihan yang anda masukan telalu pendek, panjang minimal 3 karakter",
+                searchInputPlaceholder: "Masukan nomor tagihan, nama depan ataupun nama belakang dengan panjang minimal 3 karakter",
+                errorTooShort: "Data telalu pendek, panjang minimal 3 karakter",
                 invoiceTable: {
                     code: "No. Tagihan",
                     student: "Nama mahasiswa",

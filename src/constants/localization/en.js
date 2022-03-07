@@ -88,7 +88,7 @@ export default function english() {
             findInvoiceDialog: {
                 dialogTitle: "Find Invoice(s)",
                 dialogContentText: "You can find invoice here with invoice number",
-                searchInputPlaceholder: "Type your invoice here, minimal 3 characters for search invoice",
+                searchInputPlaceholder: "Type your invoice, first name or last name here with 3 characters or more for search invoice",
                 errorTooShort: "Character you typed is too short, minimal 3 characters",
                 invoiceTable: {
                     code: "Invoice",
