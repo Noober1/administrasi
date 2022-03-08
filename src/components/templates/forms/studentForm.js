@@ -1,15 +1,18 @@
 import React, { memo, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
 import { MainSpinner, ServerSideSelect } from '../../molecules'
+import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideSpinner, openSnackbar, showSpinner } from '../../../lib/redux/slices/noPersistConfigSlice'
 import { useUpdateEffect, useEffectOnce } from 'react-use'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
+import { DraggablePaperComponent } from '../../atoms'
 
 const StudentForm = ({open, handleClose, mode, callback, id}) => {
+    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
     // edit this, make sure compare it with edit form structure
     let formStructure = {
@@ -215,15 +218,26 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
     return (
         <Dialog
             open={open}
+            PaperComponent={DraggablePaperComponent}
             onClose={handleCloseFromDismiss}
-            scroll="body"
+            fullScreen={isSmallScreen}
+            scroll={isSmallScreen ? 'paper' : 'body'}
             maxWidth="sm"
             fullWidth
         >
             <form onSubmit={handleSubmitForm}>
-                <DialogTitle>{strings.panel.pages.student.addStudentTitle}</DialogTitle>
+                <DialogTitle className="flex">
+                    <div className="flex-1">
+                        {strings.panel.pages.student.addStudentTitle}
+                    </div>
+                    {isSmallScreen &&
+                        <IconButton>
+                            <CloseIcon onClick={handleCloseFromDismiss}/>
+                        </IconButton>
+                    }
+                </DialogTitle>
                 <DialogContent>
-                    <DialogContentText className="mb-5">
+                    <DialogContentText className="mb-5 flex">
                         {strings.panel.pages.student.addStudentDescription}
                     </DialogContentText>
                     {/* FORM START HERE */}
@@ -330,6 +344,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                                 name="status"
                                 value={formValue.status}
                                 onChange={handleInputChange}
+                                label={student.status}
                                 required
                             >
                                 <MenuItem value="aktif">Aktif</MenuItem>
@@ -343,6 +358,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                             <Select
                                 name="type"
                                 value={formValue.type}
+                                label={student.type}
                                 onChange={handleInputChange}
                                 required
                             >

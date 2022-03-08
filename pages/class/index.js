@@ -2,13 +2,15 @@ import React, { useRef, useState } from 'react'
 import { Alert, Button, ButtonGroup, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import AddIcon from '@mui/icons-material/Add';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { PanelContentHead, PanelContentTitle } from '../../src/components/atoms/dashboard'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { PanelContentHead } from '../../src/components/atoms/dashboard'
 import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import { DeleteDialog } from '../../src/components/molecules'
 import ClassForm from '../../src/components/templates/forms/classForm';
 import { PageHead } from '../../src/components/atoms';
+import ButtonResponsive from '../../src/components/atoms/ButtonResponsive';
 
 const Class = () => {
     const tableRef = useRef(null)
@@ -84,12 +86,12 @@ const Class = () => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained" color="info" onClick={() => handleEditButton(params.value)}>
+                        <ButtonResponsive size="small" iconFromScreen="md" variant="contained" startIcon={<EditIcon/>} color="info" onClick={() => handleEditButton(params.value)}>
                             {strings.default.editText}
-                        </Button>
-                        <Button size="small" variant="contained" color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
+                        </ButtonResponsive>
+                        <ButtonResponsive size="small" iconFromScreen="md" variant="contained" startIcon={<DeleteIcon/>} color="error" onClick={() => handleOpenDeleteDialog(params.value)}>
                             {strings.default.deleteText}
-                        </Button>
+                        </ButtonResponsive>
                     </ButtonGroup>
                 )
             }
@@ -106,12 +108,9 @@ const Class = () => {
                     title={classPage.titlePage}
                     buttonGroup={(
                         <ButtonGroup>
-                            <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddButton}>
+                            <ButtonResponsive variant="contained" color="primary" iconFromScreen="lg" startIcon={<AddIcon/>} onClick={handleAddButton}>
                                 {strings.default.addText}
-                            </Button>
-                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>}>
-                                {strings.default.importText}
-                            </Button>
+                            </ButtonResponsive>
                         </ButtonGroup>
                     )}
                     helpButtonHandler={event => console.log('click tombol bantuan pembayaran')}

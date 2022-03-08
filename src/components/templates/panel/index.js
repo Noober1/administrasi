@@ -21,7 +21,7 @@ import { ButtonSwitchLanguage, ButtonToggleDarkMode, Copyright, SpinnerBackdrop,
 import PropTypes from 'prop-types'
 import useLocalization from '../../../lib/useLocalization';
 import useFetchApi from '../../../lib/useFetchApi';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, useMediaQuery } from '@mui/material';
 import { MenuDropdown } from '../../organisms';
 import { useSelector } from 'react-redux';
 import { clearAuthToken, selectAuth } from '../../../lib/redux/slices/authSlice';
@@ -66,7 +66,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 			duration: theme.transitions.duration.enteringScreen,
 		}),
 		boxSizing: 'border-box',
-		...(!open && {
+		...((!open) && {
 			overflowX: 'hidden',
 			transition: theme.transitions.create('width', {
 			easing: theme.transitions.easing.sharp,
@@ -85,6 +85,7 @@ const Panel = ({children}) => {
 	const noPersistConfig = useSelector(selectNoPersistConfig)
 	const auth = useSelector(selectAuth)
 	const profile = useProfile()
+	const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
 
 	const { panelOpen:open } = useSelector(selectConfig)
 	const [loadingAuth, setloadingAuth] = useState(true)
@@ -188,7 +189,7 @@ const Panel = ({children}) => {
 
 	return (
 		<Box className="flex">
-			<AppBar position="absolute" open={open}>
+			<AppBar position="absolute" open={!isMediumScreen ? open : false}>
 				<Toolbar className="pr-6">
 					<Tooltip
 						title={strings.appBar.showMenuTooltipText}
@@ -229,7 +230,7 @@ const Panel = ({children}) => {
 					<MenuDropdown/>
 				</Toolbar>
 			</AppBar>
-			<Drawer variant="permanent" open={open}>
+			<Drawer variant="permanent" open={!isMediumScreen ? open : false}>
 				<Toolbar
 					sx={{
 						display: 'flex',

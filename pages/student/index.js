@@ -9,6 +9,7 @@ import { Panel, ServerSideTable } from '../../src/components/templates'
 import useLocalization from '../../src/lib/useLocalization'
 import StudentForm from '../../src/components/templates/forms/studentForm';
 import TemplateImporter from '../../src/components/organisms/TemplateImporter';
+import ButtonResponsive from '../../src/components/atoms/ButtonResponsive';
 
 const Student = () => {
     const {panel:{pages:{student:studentPage}},table:{columns:{student}},...strings} = useLocalization()
@@ -83,9 +84,9 @@ const Student = () => {
                     title={studentPage.titlePage}
                     buttonGroup={(
                         <ButtonGroup>
-                            <Button variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddStudentButton}>
+                            <ButtonResponsive variant="contained" color="primary" startIcon={<AddIcon/>} onClick={handleAddStudentButton}>
                                 {strings.default.addText}
-                            </Button>
+                            </ButtonResponsive>
                             <StudentForm
                                 open={formStudentOpen}
                                 mode={formStudentMode}
@@ -93,9 +94,9 @@ const Student = () => {
                                 handleClose={() => setformStudentOpen(false)}
                                 callback={handleFormCallback}
                             />
-                            <Button variant="contained" color="secondary" startIcon={<FileUploadIcon/>} onClick={handleOpenImporter}>
+                            <ButtonResponsive variant="contained" color="secondary" startIcon={<FileUploadIcon/>} onClick={handleOpenImporter}>
                                 {strings.default.importText}
-                            </Button>
+                            </ButtonResponsive>
                         </ButtonGroup>
                     )}
                     helpButtonHandler={event => console.log('click tombol bantuan siswa')}

@@ -5,10 +5,10 @@ import { useMediaQuery, useTheme } from '@mui/material'
 
 const PanelContentTitle = ({title = 'No Title'}) => {
     const theme = useTheme()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'))
 
     return (
-        <Typography variant="h4" className="capitalize" align={isSmallScreen ? 'center' : 'left'} gutterBottom>
+        <Typography variant={isMediumScreen ? "h5" : "h4"} className="capitalize" gutterBottom>
             {title}
         </Typography>
     )
