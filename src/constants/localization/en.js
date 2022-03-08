@@ -290,7 +290,7 @@ export default function english() {
                     editStudentTitle:"Edit Student",
                     editStudentDescription: "Please edit these fields below",
                     templateUploaderTitle: "Upload student template",
-                    templateUploaderDescription: "You can insert student with template here. When you see 'CODE' field in student template, please fill it with 'class code' from class list"
+                    templateUploaderDescription: "You can insert student with template here. Note: 'kelas' and 'prodi' should be filled with the class code and prodi code respectively. You can find the 'kelas' code and 'prodi' code in Class and Prodi menu. 'tahun' field should be filled with 'tahun_masuk' based on the selected class.",
                 },
                 class:{
                     titlePage: "Class / Angkatan List",

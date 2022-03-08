@@ -290,7 +290,7 @@ export default function indonesian() {
                     editStudentTitle:"Sunting Mahasiswa",
                     editStudentDescription: "Silahkan sunting isian dibawah ini",
                     templateUploaderTitle: "Unggah template mahasiswa",
-                    templateUploaderDescription: "Anda dapat menambah mahasiswa dengan template disini. Ketika anda melihat kolom isian 'CODE' pada template mahasiswa, silahkan isi dengan 'kode kelas' pada daftar kelas yang terdaftar sebelumnya"
+                    templateUploaderDescription: "Anda dapat menambah mahasiswa dengan template disini. Catatan: Untuk kolom 'kelas' dan 'prodi' harus diisi dengan kode yang sudah ditentukan. Kode 'kelas' dan 'prodi' dapat ditemukan pada menu 'Kelas' dan 'Prodi'. Kolom 'tahun masuk' harus diisi dengan tahun masuk sesuai dengan kelas yang diisi. Pastikan semua kolom terisi dengan benar.",
                 },
                 class:{
                     titlePage: "Daftar Kelas / Angkatan",
