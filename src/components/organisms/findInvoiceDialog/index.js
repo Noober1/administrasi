@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, use } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, IconButton, InputBase, Paper } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, useMediaQuery, DialogTitle, FormControl, FormHelperText, IconButton, InputBase, Paper } from '@mui/material'
 import { DraggablePaperComponent, Link, useFocus } from '../../atoms'
 import SearchIcon from '@mui/icons-material/Search'
 import AutorenewIcon from '@mui/icons-material/Autorenew';
@@ -8,32 +8,34 @@ import { useDebounce } from 'react-use'
 import { useEffect } from 'react'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { DataGrid } from '@mui/x-data-grid'
 import useLocalization from '../../../lib/useLocalization'
 import { tableLocalization } from '../../../constants'
 import clsx from 'clsx'
+import { selectNoPersistConfig, setDialogOpen } from '../../../lib/redux/slices/noPersistConfigSlice'
 
 const FindInvoiceDialog = forwardRef((props, ref) => {
 	const {default: defautText, languange, table: {columns: {invoice: invoiceTableText}}, components: {findInvoiceDialog: findInvoiceDialogText}} = useLocalization()
 	const [searchInputRef, setFocusToSearchInput] = useFocus()
-	const [open, setopen] = useState(false)
 	const { authToken } = useSelector(selectAuth)
+	const { dialogsOpen: { findInvoiceDialog: open } } = useSelector(selectNoPersistConfig)
 	const [tempSearchText, settempSearchText] = useState('')
 	const [searchText, setsearchText] = useState('')
 	const [errorMessage, seterrorMessage] = useState('')
 	const localeText = tableLocalization(languange.initial)
 	const [isLoading, setisLoading] = useState(false)
 	const [searchResult, setsearchResult] = useState([])
-	const closeDialog = () => setopen(false)
+	const dispatch = useDispatch()
+	const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'))
+	const toggleDialogOpen = open => dispatch(setDialogOpen({dialogName: 'findInvoiceDialog', open}))
+	const closeDialog = () => toggleDialogOpen(false)
 	const openDialog = () => {
-		setopen(true)
+		toggleDialogOpen(true)
 		setFocusToSearchInput()
 	}
 
-	const isError = (
-		errorMessage.length > 0
-	)
+	const isError = (errorMessage.length > 0)
 
 	useDebounce(() => {
 		if (tempSearchText.length > 2) {
@@ -82,7 +84,8 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 			open={open}
 			maxWidth="md"
 			scroll="paper"
-			fullWidth
+			fullWidth={true}
+			fullScreen={isSmallScreen}
 			PaperComponent={DraggablePaperComponent}
 			onClose={closeDialog}
 			

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Fab, IconButton, Link, Paper, Typography } from '@mui/material'
+import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Fab, IconButton, Link, Paper, Typography, useMediaQuery } from '@mui/material'
 import { DraggablePaperComponent, Tooltip } from '../../atoms'
 import { forwardRef } from 'react'
 import { useState } from 'react'
@@ -22,8 +22,9 @@ import tools from '../../../lib/tools'
 
 const TemplateImporter = forwardRef((props, ref) => {
 	const { authToken } = useSelector(selectAuth)
+	const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
 	const {errors, default: defaultText, components: { templateUploader: templateUploaderText }} = useLocalization()
-	const [open, setopen] = useState(true)
+	const [open, setopen] = useState(false)
 	const [uploadingFile, setUploadingFile] = useState(false)
 	const [fileToUpload, setfileToUpload] = useState([])
 	const [fileFormatErrorList, setfileFormatErrorList] = useState([])
@@ -141,6 +142,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 				scroll="body"
 				PaperComponent={DraggablePaperComponent}
 				fullWidth
+				fullScreen={isMediumScreen}
 				maxWidth="md"
 				disableEscapeKeyDown
 			>

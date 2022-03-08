@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Paper, Select, TextField, Typography } from '@mui/material'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Paper, Select, TextField, Typography, useMediaQuery } from '@mui/material'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
 import { useEffect } from 'react'
 import useLocalization from '../../../lib/useLocalization'
@@ -17,6 +17,7 @@ const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/media/`
 const VerifyOrManualDialog = forwardRef((props,ref) => {
 
     var nominalValue = 0
+    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'))
     const dispatch = useDispatch()
     const { authToken } = useSelector(selectAuth)
     const manualContentRef = useRef(null)
@@ -249,7 +250,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         }
 
         return(
-            <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                 <FormControl error={isManualFormError}>
                     <InputLabel>{verifyOrManualDialogText.verifyNominal}</InputLabel>
                     <OutlinedInput
@@ -331,6 +332,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         <Dialog
             open={open}
             fullWidth={true}
+            fullScreen={isSmallScreen}
             maxWidth="sm"
             onClose={closeDialog}
             PaperComponent={DraggablePaperComponent}
