@@ -1,20 +1,28 @@
-import { styled } from '@mui/material/styles'
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
+import { createStyles, makeStyles } from '@mui/styles';
+import MuiTooltip from '@mui/material/Tooltip';
 
-const HtmlTooltip = styled(({ className, ...props }) => (
-	<Tooltip {...props} classes={{ popper: className}} />
-))(({ theme }) => ({
-	[`& .${tooltipClasses.tooltip}`]: {
-		backgroundColor: theme.palette.background.paper,
-		color: theme.palette.text.primary,
-		maxWidth: 350,
-		fontSize: theme.typography.pxToRem(16),
-		borderRadius: 5
-	},
-	[`& .${tooltipClasses.arrow}`]: {
-		borderColor: theme.palette.background.paper,
-		color: theme.palette.background.paper
+// TODO: need to fix this
+const useStyles = makeStyles(theme =>
+	{
+		console.log(theme)
 	}
-}));
+);
 
-export default HtmlTooltip
+const Tooltip = ({children,classes,...props}) => {
+	const style = useStyles()
+
+	return(
+		<MuiTooltip
+			classes={{
+				tooltip: style.tooltip,
+				arrow: style.arrow,
+				tooltipPlacementTop: style.tooltipPlacementTop
+			}}
+			{...props}
+		>
+			{children}
+		</MuiTooltip>
+	)
+}
+
+export default Tooltip
