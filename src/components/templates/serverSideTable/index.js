@@ -21,7 +21,10 @@ const ServerSideTable = forwardRef(({
     customButtons,
     deleteUrl = null,
     showDeleteButton = true,
-    deleteAdditionalMessage
+    deleteAdditionalMessage,
+    tableProps,
+    searchFromParam,
+    showToolbar = true
 }, ref) => {
     const strings = useLocalization()
     const { authToken } = useSelector(selectAuth)
@@ -33,6 +36,9 @@ const ServerSideTable = forwardRef(({
     urlParam.append('limit', perPage)
     urlParam.append('page', (page + 1).toString())
     urlParam.append('refresh', refreshCount)
+    if(searchFromParam) {
+        urlParam.append('search', searchFromParam)
+    }
 
     const [data,loading,isError,errorMessage] = useFetchApi(`${url}?${urlParam.toString()}`, {
         url: `${url}?${urlParam.toString()}`,
@@ -151,7 +157,7 @@ const ServerSideTable = forwardRef(({
     }
 
     return (
-        <div className="w-full" style={{ height: 400 }}>
+        <div className="w-full" style={{ height: tableProps?.autoHeight ? 'auto' : 400 }}>
             <div className="flex h-full">
                 <div className="flex-1">
                     <DataGrid
@@ -170,7 +176,8 @@ const ServerSideTable = forwardRef(({
                                 customButton: customButtons,
                                 deleteLabel: strings.table.dialogDeleteTitle,
                                 showDeleteButton: showDeleteButton,
-                                setdialogOpen: event => setdialogOpen(true)
+                                setdialogOpen: event => setdialogOpen(true),
+                                showToolbar: showToolbar
                             }
                         }}
                         checkboxSelection={enableCheckbox}
@@ -187,6 +194,7 @@ const ServerSideTable = forwardRef(({
                         columns={columns}
                         rows={rows}
                         loading={loading}
+                        {...tableProps}
                     />
                     <DeleteDialog
                         dialogOpen={dialogOpen}
@@ -210,7 +218,10 @@ ServerSideTable.propTypes = {
     enableCheckbox: PropTypes.bool,
     customButtons: PropTypes.element,
     deleteUrl: PropTypes.string,
-    showDeleteButton: PropTypes.bool
+    showDeleteButton: PropTypes.bool,
+    tableProps: PropTypes.object,
+    searchFromParam: PropTypes.string,
+    showToolbar: PropTypes.bool
 }
 
 export default ServerSideTable

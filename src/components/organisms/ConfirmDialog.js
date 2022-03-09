@@ -40,7 +40,6 @@ const ConfirmDialog = forwardRef((props, ref) => {
                 {props.alertText.length > 0 &&
                     <Alert severity={props.alertSeverity} variant="filled">
                         {props?.alertText}
-                        {/* [SISWA YANG TELAH MENERIMA TAGIHAN DENGAN DATA PEMBAYARAN INI TIDAK AKAN MENERIMA TAGIHAN] */}
                     </Alert>
                 }
             </DialogContent>

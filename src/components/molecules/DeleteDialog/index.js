@@ -89,9 +89,9 @@ const DeleteDialog = ({dialogOpen, closeHandle, additionalMessage, data, url, re
             onClose={closeHandle}
             PaperComponent={DraggablePaperComponent}
         >
-            <DialogTitle className='cursor-move'>{strings.table.dialogDeleteTitle}</DialogTitle>
+            <DialogTitle>{strings.table.dialogDeleteTitle}</DialogTitle>
             <DialogContent>
-                <DialogContentText gutterBottom color="InfoText">
+                <DialogContentText gutterBottom>
                     {strings.table.dialogDeleteConfirmMessage}
                 </DialogContentText>
                 {additionalMessage ?? ''}

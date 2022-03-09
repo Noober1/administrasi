@@ -1,15 +1,18 @@
 import { Button, Typography } from '@mui/material'
-import React, { useRef } from 'react'
 import { PageHead } from '../../atoms'
 import Statistic from './Statistic'
-import FindInvoiceDialog from '../../organisms/findInvoiceDialog'
 import useLocalization from '../../../lib/useLocalization'
+import { setDialog } from '../../../lib/redux/slices/noPersistConfigSlice'
+import { useDispatch } from 'react-redux'
 
 const AdminDashboard = () => {
 	const {panel:{pages:{dashboard:dashboardText}}} = useLocalization()
-	const searchInvoiceDialogRef = useRef(null)
-	const handleOpenSearchInvoice = event => {
-		searchInvoiceDialogRef.current.openDialog()
+	const dispatch = useDispatch()
+	const handleOpenSearchInvoice = () => {
+		dispatch(setDialog({
+			name: 'findInvoiceDialog',
+			open:true
+		}))
 	}
 
 	return (
@@ -28,7 +31,6 @@ const AdminDashboard = () => {
 				<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2'>
 					<Button onClick={handleOpenSearchInvoice} variant='contained'>{dashboardText.toolsFindInvoice}</Button>
 				</div>
-				<FindInvoiceDialog ref={searchInvoiceDialogRef}/>
 			</div>
 		</div>
 	)

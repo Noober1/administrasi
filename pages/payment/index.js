@@ -150,7 +150,7 @@ const Payment = (props) => {
                     closeHandle={() => setdeleteDialogOpen(false)}
                     data={[dataToDelete]}
                     additionalMessage={(
-                        <Alert severity="warning">
+                        <Alert severity="warning" variant="filled">
                             {paymentPage.warningDeleteItem}
                         </Alert>
                     )}

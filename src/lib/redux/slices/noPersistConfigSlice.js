@@ -18,8 +18,11 @@ const noPersistConfig = createSlice({
 				vertical:'top'
 			}
 		},
-		dialogsOpen: {
-			findInvoiceDialog: false,
+		dialogs: {
+			findInvoiceDialog: {
+				open:false,
+				searchValue:''
+			},
 		},
 		profile:{}
 	},
@@ -30,8 +33,13 @@ const noPersistConfig = createSlice({
 				state.spinner.hideOnClick = false
 			}
 		},
-		setDialogOpen(state,actions) {
-			state.dialogsOpen[actions.payload.dialogName] = actions.payload.open
+		setDialog(state,actions) {
+			const { name, ...states } = actions.payload
+			if (!name ) return
+			state.dialogs[name] = {
+				...state.dialogs[name],
+				...states
+			}
 		},
 		hideSpinner(state) {
 			state.spinner.showSpinner = false
@@ -90,7 +98,7 @@ export const {
 	setSnackbarMessage,
 	openSnackbar,
 	setProfile,
-	setDialogOpen
+	setDialog
 } = noPersistConfig.actions
 
 export const selectNoPersistConfig = state => state.noPersistConfig

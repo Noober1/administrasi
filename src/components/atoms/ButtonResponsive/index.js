@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, useMediaQuery } from '@mui/material'
 
@@ -6,31 +5,29 @@ import { IconButton } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Tooltip from '../tooltip'
 
-const ButtonResponsive = props => {
-	const screenBreakpoint = useMediaQuery(theme => theme.breakpoints.down(props.iconFromScreen))
+const ButtonResponsive = ({
+	children, tooltipArrow, arrow, startIcon, iconFromScreen, ...props
+}) => {
+	const screenBreakpoint = useMediaQuery(theme => theme.breakpoints.down(iconFromScreen))
+	
 
 	if (screenBreakpoint) {
-		console.log('typeof children', typeof props.children)
-		const { startIcon, ...rest } = props
-		const IconButtonComponent = () => (
-			<IconButton {...rest}>
-				{startIcon}
-			</IconButton>
+		const { disableElevation, fullWidth, ...iconButtonProps } = props
+		return(
+			<Tooltip
+				arrow={arrow}
+				title={children}
+			>
+				<IconButton {...iconButtonProps}>
+					{startIcon}
+				</IconButton>
+			</Tooltip>
 		)
-
-		if(typeof props.children == 'string') {
-			return(
-				<Tooltip title={(<span>{props.children}</span>)}>
-					<div><IconButtonComponent/></div>
-				</Tooltip>
-			)
-		}
-		return <IconButtonComponent/>
 	}
 	
 	return (
-		<Button {...props}>
-			{props.children}
+		<Button {...props} startIcon={startIcon}>
+			{children}
 		</Button>
 	)
 }
@@ -38,13 +35,17 @@ const ButtonResponsive = props => {
 ButtonResponsive.defaultProps = {
 	startIcon: <HelpOutlineIcon/>,
 	children: 'Button',
-	iconFromScreen: 'sm'
+	iconFromScreen: 'sm',
+	color: 'primary',
+	arrow: true
 }
 
 ButtonResponsive.propTypes = {
 	startIcon: PropTypes.element.isRequired,
 	children: PropTypes.node.isRequired,
-	iconFromScreen: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl'])
+	iconFromScreen: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+	color: PropTypes.oneOf(['inherit', 'primary', 'secondary', 'default','info', 'success', 'warning', 'error']),
+	arrow: PropTypes.bool
 }
 
 export default ButtonResponsive

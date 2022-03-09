@@ -333,6 +333,7 @@ export default function indonesian() {
             switchToLightText: "Ganti ke modus terang",
             switchToDarkText: "Ganti ke modus gelap"
         },
+        findInvoiceButtonText: "Cari tagihan",
         buttonSwitchLanguageTooltipText:"Switch Language",
         accountInformationButtonText:"Informasi akun",
         loginBoxTopMessage: "Silahkan masuk untuk melanjutkan",

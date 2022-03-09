@@ -127,7 +127,7 @@ const Class = () => {
                     closeHandle={() => setdeleteDialogOpen(false)}
                     data={[dataToDelete]}
                     additionalMessage={(
-                        <Alert severity="warning">
+                        <Alert severity="warning" variant="filled">
                             {classPage.warningDeleteItem}
                         </Alert>
                     )}

@@ -32,6 +32,7 @@ const SendBatchInvoice = forwardRef((props, ref) => {
     }));
 
     const handleSubmitForm = event => {
+        if (!props.paymentId) return
         event.preventDefault()
         dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
@@ -208,7 +209,7 @@ SendBatchInvoice.propTypes = {
     paymentId: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.string
-    ]).isRequired,
+    ]),
     callback: PropTypes.func
 }
 

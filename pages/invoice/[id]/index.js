@@ -184,7 +184,7 @@ const PaymentWithId = ({paymentId}) => {
                     ref={tableRef}
                     deleteUrl='/administrasi/invoice'
                     deleteAdditionalMessage={(
-                        <Alert severity='warning'>
+                        <Alert severity='warning' variant="filled">
                             {paymentWithId.deleteWarningMessage}
                         </Alert>
                     )}

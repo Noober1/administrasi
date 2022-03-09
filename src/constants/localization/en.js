@@ -333,6 +333,7 @@ export default function english() {
             switchToLightText: "Switch to light mode",
             switchToDarkText: "Switch to dark mode"
         },
+        findInvoiceButtonText: "Find Invoice",
         buttonSwitchLanguageTooltipText:"Ubah bahasa",
         accountInformationButtonText:"Account information",
         loginBoxTopMessage: "Please login to continue",

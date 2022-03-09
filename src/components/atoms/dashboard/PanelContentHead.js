@@ -7,7 +7,7 @@ import useLocalization from '../../../lib/useLocalization'
 
 const PanelContentHead = ({title,buttonGroup,helpButtonHandler}) => {
     const strings = useLocalization()
-    const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
+    const isLargeScreen = useMediaQuery(theme => theme.breakpoints.down('lg'))
     
     return (
         <div className="flex my-2">
@@ -17,7 +17,7 @@ const PanelContentHead = ({title,buttonGroup,helpButtonHandler}) => {
             <div className="flex items-center justify-end sm:justify-end">
                 {buttonGroup}
                 <div className="ml-2">
-                    {!isMediumScreen ?
+                    {!isLargeScreen ?
                         <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
                             {strings.default.helpButtonLabel}
                         </Button> :

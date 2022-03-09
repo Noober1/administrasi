@@ -287,7 +287,7 @@ const StudentForm = ({open, handleClose, mode, callback, id}) => {
                             required
                         />
                         {mode === 'edit' &&
-                            <Alert severity="info" className="col-span-2">
+                            <Alert severity="info" className="col-span-2" variant="filled">
                                 Jika ingin merubah kata sandi, silahkan isi 2 kolom kata sandi dibawah
                             </Alert>
                         }

@@ -10,6 +10,7 @@ import useLocalization from '../../src/lib/useLocalization'
 import StudentForm from '../../src/components/templates/forms/studentForm';
 import TemplateImporter from '../../src/components/organisms/TemplateImporter';
 import ButtonResponsive from '../../src/components/atoms/ButtonResponsive';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Student = () => {
     const {panel:{pages:{student:studentPage}},table:{columns:{student}},...strings} = useLocalization()
@@ -65,9 +66,9 @@ const Student = () => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained" color="info" onClick={() => handleEditStudent(params.value)}>
+                        <ButtonResponsive size="small" variant="contained" startIcon={<EditIcon/>} color="info" onClick={() => handleEditStudent(params.value)}>
                             {strings.default.editText}
-                        </Button>
+                        </ButtonResponsive>
                     </ButtonGroup>
                 )
             }

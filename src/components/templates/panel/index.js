@@ -33,7 +33,8 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import { selectConfig, togglePanelOpen } from '../../../lib/redux/slices/configSlice';
 import useProfile from '../../../lib/useProfile';
 import pathnames from '../../../constants/accessList'
-
+import ButtonFindInvoiceDialog from '../../atoms/ButtonFindInvoiceDialog';
+import FindInvoiceDialog from '../../organisms/FindInvoiceDialog';
 
 const drawerWidth = 300;
 
@@ -191,22 +192,23 @@ const Panel = ({children}) => {
 		<Box className="flex">
 			<AppBar position="absolute" open={!isMediumScreen ? open : false}>
 				<Toolbar className="pr-6">
-					<Tooltip
-						title={strings.appBar.showMenuTooltipText}
-					>
-						<IconButton
-							edge="start"
-							color="inherit"
-							aria-label="open drawer"
-							onClick={toggleDrawer}
-							className="mr-9"
-							sx={{
-								...(open && { display: 'none' }),
-							}}
+					{!open && !isMediumScreen && 
+						<Tooltip
+							arrow
+							placement="right"
+							title={strings.appBar.showMenuTooltipText}
 						>
-							<MenuIcon />
-						</IconButton>
-					</Tooltip>
+							<IconButton
+								edge="start"
+								color="inherit"
+								aria-label="open drawer"
+								onClick={toggleDrawer}
+								className="mr-9"
+							>
+								<MenuIcon />
+							</IconButton>
+						</Tooltip>
+					}
 					<Typography
 						component="h1"
 						variant="h6"
@@ -225,6 +227,9 @@ const Panel = ({children}) => {
 							</Badge>
 						</IconButton>
 					</Tooltip> */}
+					{profile?.accountType == 'admin' &&
+						<ButtonFindInvoiceDialog/>
+					}
 					<ButtonSwitchLanguage />
 					<ButtonToggleDarkMode variant="icon"/>
 					<MenuDropdown/>
@@ -251,6 +256,7 @@ const Panel = ({children}) => {
 					</div>
 					<Tooltip
 						title={strings.appBar.hideMenuTooltipText}
+						placement="right"
 					>
 						<IconButton onClick={toggleDrawer}>
 							<ChevronLeftIcon />
@@ -259,7 +265,7 @@ const Panel = ({children}) => {
 				</Toolbar>
 				<Divider />
 				<Menus
-					menuOpen={open}
+					open={!isMediumScreen ? open : false}
 				/>
 			</Drawer>
 			<Box
@@ -282,6 +288,7 @@ const Panel = ({children}) => {
 					<Copyright sx={{ pt: 4 }} />
 				</Container>
 			</Box>
+			<FindInvoiceDialog/>
 		</Box>
 	);
 }

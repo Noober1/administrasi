@@ -156,7 +156,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 				</DialogTitle>
 				<DialogContent>
 					{props.alertMessage &&
-						<Alert severity={props.alertSeverity} className="mb-2">
+						<Alert severity={props.alertSeverity} className="mb-2" variant="filled">
 							{props.alertMessage}
 						</Alert>
 					}
@@ -232,7 +232,7 @@ const TemplateImporter = forwardRef((props, ref) => {
 						{uploadingError ? templateUploaderText.errorUploadText : templateUploaderText.successUploadText}
 					</Typography>
 					{uploadingError &&
-						<Alert severity="error" className="mb-2">
+						<Alert severity="error" className="mb-2" variant="filled">
 							{/* TODO: showing error message with custom message based by error code instead error message from server */}
 							{uploadingMessage}
 						</Alert>
