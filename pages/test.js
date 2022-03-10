@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { SpinnerBackdrop } from '../src/components/atoms'
 import { AlertDialog } from '../src/components/organisms'
 import Panel from '../src/components/templates/panel'
-import { hideSpinner, showSpinner } from '../src/lib/redux/slices/noPersistConfigSlice'
+import { hideSpinner, openSnackbar, showSpinner } from '../src/lib/redux/slices/noPersistConfigSlice'
 import { useSWR } from '../src/lib'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../src/lib/redux/slices/authSlice'
@@ -13,6 +13,15 @@ const TestPage = () => {
     const dispatch = useDispatch()
     const auth = useSelector(selectAuth)
     const { data, error } = useSWR('/auth/profile', auth.authToken)
+
+    // open snackbar
+    const handleOpenSnackbar = () => {
+        dispatch(openSnackbar({
+            severity: "warning",
+            message:"This is a warning message!",
+            position: "top-right"
+        }))
+    }
 
     return (
         <div>
@@ -45,7 +54,7 @@ const TestPage = () => {
             <Typography
                 variant="h4"
             >
-                Main spinner
+                Alert
             </Typography>
             <div className="grid grid-cols-4">
                 <AlertDialog
@@ -58,6 +67,16 @@ const TestPage = () => {
                         AlertDialog
                     </Button>
                 </AlertDialog>
+            </div>
+            <Typography
+                variant="h4"
+            >
+                Snackbar
+            </Typography>
+            <div className="grid grid-cols-4">
+                <Button onClick={handleOpenSnackbar}>
+                    Open Snackbar
+                </Button>
             </div>
         </div>
     )

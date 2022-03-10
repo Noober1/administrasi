@@ -14,7 +14,7 @@ const locale = {
     EN: enLocale
 }
 
-const DateTimePicker = ({value, label, valueGetter}) => {
+const DateTimePicker = ({value, label, valueGetter, helperText}) => {
     const { languange, default:defaultText } = useLocalization()
     const [dateValue, setDateValue] = useState(value);
 
@@ -25,7 +25,7 @@ const DateTimePicker = ({value, label, valueGetter}) => {
                 cancelText={defaultText.cancelText}
                 okText={defaultText.alertDialogConfirmButtonText}
                 renderInput={(props) => (
-                    <TextField {...props}/>
+                    <TextField helperText={helperText} {...props}/>
                 )}
                 label={label || defaultText.chooseDateAndTime}
                 value={dateValue}

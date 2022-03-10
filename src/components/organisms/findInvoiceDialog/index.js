@@ -8,6 +8,7 @@ import useLocalization from '../../../lib/useLocalization'
 import clsx from 'clsx'
 import { selectNoPersistConfig, setDialog } from '../../../lib/redux/slices/noPersistConfigSlice'
 import { ServerSideTable } from '../../templates'
+import ButtonResponsive from '../../atoms/ButtonResponsive'
 
 const FindInvoiceDialog = forwardRef((props, ref) => {
 	const {default: defautText, table: {columns: {invoice: invoiceTableText}}, components: {findInvoiceDialog: findInvoiceDialogText}} = useLocalization()
@@ -16,7 +17,7 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 	const [tempSearchText, settempSearchText] = useState('')
 	const [inputErrorMessage, setinputErrorMessage] = useState('')
 	const dispatch = useDispatch()
-	const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'))
+	const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
 	const toggleDialogOpen = open => dispatch(setDialog({name: 'findInvoiceDialog', open}))
 	const closeDialog = () => toggleDialogOpen(false)
 	const openDialog = () => {
@@ -53,7 +54,7 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 			maxWidth="md"
 			scroll="paper"
 			fullWidth={true}
-			fullScreen={isSmallScreen}
+			fullScreen={isMediumScreen}
 			PaperComponent={DraggablePaperComponent}
 			onClose={closeDialog}
 			
@@ -134,7 +135,9 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 							headerName: findInvoiceDialogText.invoiceTable.action,
 							renderCell: params => (
 								<Link href={`/invoice?code=${params.row.code}`} className="no-underline flex-1" onClick={closeDialog}>
-									<Button size="small" disableElevation variant="contained" className="w-full">{findInvoiceDialogText.invoiceTable.detailButton}</Button>
+									<ButtonResponsive size="small" disableElevation variant="contained" className="w-full">
+										{findInvoiceDialogText.invoiceTable.detailButton}
+									</ButtonResponsive>
 								</Link>
 							),
 							flex:1

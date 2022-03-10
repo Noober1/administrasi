@@ -128,6 +128,7 @@ export default function english() {
                 paymentHistoryButtonText:"Payment History",
                 emptyPaymentHistory:"No payment history",
                 transactionDate: "Transaction date",
+                transactionDateHelper: "Transaction date from bank transfer proof",
                 verificationDate: "Verification date",
                 refNumber: "Ref number",
                 refNumberHelper: "The Ref number is listed in the transaction details when you make a transfer",

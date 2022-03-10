@@ -128,6 +128,7 @@ export default function indonesian() {
                 paymentHistoryButtonText:"Riwayat Transaksi",
                 emptyPaymentHistory:"Tidak ada riwayat transaksi",
                 transactionDate: "Tanggal transaksi",
+                transactionDateHelper: "Tanggal transaksi yang tertera pada bukti transfer",
                 verificationDate: "Tanggal verifikasi",
                 refNumber: "No. Ref",
                 refNumberHelper: "Nomor Ref tercantum pada rincian transaksi ketika Anda melakukan transfer",

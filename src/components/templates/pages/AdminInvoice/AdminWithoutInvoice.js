@@ -6,6 +6,8 @@ import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import ServerSideTable from '../../serverSideTable'
 import tools from '../../../../lib/tools'
+import ButtonResponsive from '../../../atoms/ButtonResponsive'
+import InfoIcon from '@mui/icons-material/Info';
 import { PageHead } from '../../../atoms'
 import Link from 'next/link'
 
@@ -18,12 +20,6 @@ const AdminWithoutInvoice = () => {
             headerName:payment.registerDate,
             valueGetter: params => tools.dateFormatting(params.value,'d M y', stringDef.nameOfMonths),
             width: 200
-        },
-        {
-            field: 'admin',
-            headerName: payment.admin,
-            valueGetter: params => params.row.admin.fullName,
-            width:250
         },
         {
             field: 'type',
@@ -43,11 +39,11 @@ const AdminWithoutInvoice = () => {
             renderCell: params => {
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained">
+                        <ButtonResponsive size="small" variant="contained" iconFromScreen="md" startIcon={<InfoIcon/>}>
                             <Link href={`/invoice/${params.value}`}>
                                 {stringDef.detailText}
                             </Link>
-                        </Button>
+                        </ButtonResponsive>
                     </ButtonGroup>
                 )
             }

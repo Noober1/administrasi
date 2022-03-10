@@ -288,7 +288,9 @@ const Panel = ({children}) => {
 					<Copyright sx={{ pt: 4 }} />
 				</Container>
 			</Box>
-			<FindInvoiceDialog/>
+			{profile.accountType == 'admin' &&
+				<FindInvoiceDialog/>
+			}
 		</Box>
 	);
 }

@@ -1,4 +1,3 @@
-import EditIcon from '@mui/icons-material/Edit'
 import { Alert, Button, ButtonGroup, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -14,10 +13,16 @@ import { BackButton, PageHead } from '../../../src/components/atoms'
 import PaymentForm from '../../../src/components/templates/forms/paymentForm'
 import { connect } from 'react-redux'
 import fetchAPI from '../../../src/lib/fetchApi'
-import Link from 'next/link'
 import VerifyOrManualDialog from '../../../src/components/organisms/VerifyOrManualDialog'
+import ButtonResponsive from '../../../src/components/atoms/ButtonResponsive'
+import InfoIcon from '@mui/icons-material/Info';
+import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from 'next/router'
 
 const PaymentWithId = ({paymentId}) => {
+    const router = useRouter()
     const tableRef = useRef(null)
     const verifyOrManualDialogRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
@@ -82,12 +87,6 @@ const PaymentWithId = ({paymentId}) => {
             width:230
         },
         {
-            field:'paymentMethod',
-            headerName:invoiceText.paymentMethod,
-            width:130,
-            renderCell: params => <span className='capitalize'>{params.value}</span>
-        },
-        {
             field: 'status',
             headerName: invoiceText.status,
             width: 150,
@@ -115,20 +114,35 @@ const PaymentWithId = ({paymentId}) => {
             headerName: invoiceText.action,
             flex:1,
             renderCell: params => {
+                var text;
+                var icon;
+                switch (params.row.status) {
+                    case 'confirming':
+                        text = invoiceTableText.actionConfirming
+                        icon = <CheckIcon/>
+                        break;
+                    case 'paid':
+                        text = strings.default.editText
+                        icon = <EditIcon/>
+                        break;
+                    default:
+                        text = invoiceTableText.actionManualPay
+                        icon = <AddIcon/>
+                        break;
+                }
                 return(
                     <ButtonGroup>
-                        <Button size="small" variant="contained">
-                            <Link href={`/invoice?code=${params.row.code}`}>
-                                {invoiceTableText.actionDetail}
-                            </Link>
-                        </Button>
-                        <Button onClick={() => handleOpenVerifyOrManualDialog(params.row.code)} size='small'>
-                            {
-                                params.row.status == 'confirming' ? invoiceTableText.actionVerify :
-                                params.row.status == 'paid' ? strings.default.editText :
-                                invoiceTableText.actionManualPay
-                            }
-                        </Button>
+                        <ButtonResponsive size="small" variant="contained" startIcon={<InfoIcon/>} iconFromScreen="lg" onClick={() => router.push(`/invoice?code=${params.row.code}`)}>
+                            {invoiceTableText.actionDetail}
+                        </ButtonResponsive>
+                        <ButtonResponsive
+                            onClick={() => handleOpenVerifyOrManualDialog(params.row.code)}
+                            size='small'
+                            iconFromScreen="lg"
+                            startIcon={icon}
+                        >
+                            {text}
+                        </ButtonResponsive>
                     </ButtonGroup>
                 )
             }

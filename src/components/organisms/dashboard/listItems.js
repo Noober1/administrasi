@@ -6,7 +6,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import PersonIcon from '@mui/icons-material/Person';
 import PeopleIcon from '@mui/icons-material/People';
 import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
-import { Divider, List, ListItemButton } from '@mui/material';
+import { Divider, List, ListItemButton, useMediaQuery } from '@mui/material';
 import useLocalization from '../../../lib/useLocalization';
 import { useRouter } from 'next/router';
 import { Link, Tooltip } from '../../atoms';
@@ -15,8 +15,9 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectNoPersistConfig } from '../../../lib/redux/slices/noPersistConfigSlice';
 
-const Menus = ({menuOpen}) => {
+const Menus = ({open}) => {
 	const {panel:{menu}} = useLocalization()
+	const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
 	const { profile } = useSelector(selectNoPersistConfig)
 	const router = useRouter()
 	const firstRoute = '/' + router.pathname.split('/')[1] || '/'
@@ -30,23 +31,28 @@ const Menus = ({menuOpen}) => {
 		useEffect(() => {
 			console.log('Components > Panel > listItem: Selecting profile from redux', profile)
 		}, [profile])
+		useEffect(() => {
+			console.log('Components > Panel > listItem: menu open', open)
+		}, [open])
 	}
 
 	const MenuLink = ({link,text,icon}) => {
-		const listLink = (<Link noLinkStyle={true} href={link}>
-			<ListItemButton
-				selected={firstRoute == link}
-			>
-				<ListItemIcon>
-					{icon}
-				</ListItemIcon>
-				<ListItemText className="capitalize">
-					{text}
-				</ListItemText>
-			</ListItemButton>
-		</Link>)
+		const listLink = (
+			<Link noLinkStyle={true} href={link}>
+				<ListItemButton
+					selected={firstRoute == link}
+				>
+					<ListItemIcon>
+						{icon}
+					</ListItemIcon>
+					<ListItemText className="capitalize">
+						{text}
+					</ListItemText>
+				</ListItemButton>
+			</Link>
+		)
 
-		if (!menuOpen) {
+		if (!open) {
 			return (
 				<Tooltip
 					arrow
@@ -152,7 +158,7 @@ const Menus = ({menuOpen}) => {
 }
 
 Menus.propTypes = {
-	menuOpen: PropTypes.bool
+	open: PropTypes.bool
 }
 
 export default Menus

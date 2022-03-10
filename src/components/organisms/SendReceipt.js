@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, DialogContentText, TextField, Typography } from '@mui/material'
+import { Dialog, DialogTitle, useMediaQuery, DialogContent, DialogActions, Button, DialogContentText, TextField, Typography } from '@mui/material'
 import useLocalization from '../../lib/useLocalization'
 import { DraggablePaperComponent } from '../atoms'
 import { DateTimePicker, ServerSideSelect } from '../molecules'
@@ -11,9 +11,12 @@ import useProfile from '../../lib/useProfile'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../lib/redux/slices/authSlice'
 import { openSnackbar } from '../../lib/redux/slices/noPersistConfigSlice'
+import CloseIcon from '@mui/icons-material/Close'
+import IconButton from '@mui/material/IconButton'
 
 const SendReceipt = forwardRef(({invoiceId, transactionDate, accountNumber, sender, refNumber, picture, destinationAccount, callback, ...props},ref) => {
     const { authToken } = useSelector(selectAuth)
+    const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
     const dispatch = useDispatch()
     const { components: { invoiceDetailDialog }, default:textDefault, errors } = useLocalization()
     const [dialogOpen, setdialogOpen] = useState(false)
@@ -106,13 +109,20 @@ const SendReceipt = forwardRef(({invoiceId, transactionDate, accountNumber, send
     return (
         <Dialog
             fullWidth
+            fullScreen={isMediumScreen}
             onClose={closeSendReceiptDialog}
             open={dialogOpen}
+            scroll={isMediumScreen ? 'paper' : 'body'}
             PaperComponent={DraggablePaperComponent}
             aria-labelledby="send-receipt-dialog"
         >
-            <DialogTitle className="cursor-move">
-                {invoiceDetailDialog.actionSendPaymentDetail}
+            <DialogTitle className="flex justify-end">
+                <div className="flex-1">
+                    {invoiceDetailDialog.actionSendPaymentDetail}
+                </div>
+                <IconButton onClick={closeSendReceiptDialog}>
+                    <CloseIcon/>
+                </IconButton>
             </DialogTitle>
             <form onSubmit={handleFormSubmit} className="drag-cancel">
                 <DialogContent>
@@ -122,6 +132,7 @@ const SendReceipt = forwardRef(({invoiceId, transactionDate, accountNumber, send
                             value={formValue.transactionDate}
                             label={invoiceDetailDialog.transactionDate}
                             valueGetter={handleDateOnChange}
+                            helperText={invoiceDetailDialog.transactionDateHelper}
                         />
                         <TextField
                             name="accountNumber"

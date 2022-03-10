@@ -30,21 +30,13 @@ export default function MainSnackbar() {
 			autoHideDuration={6000}
 			onClose={handleClose}
 			TransitionProps={{ onExited: handleExited }}
-			// message={mainSnackbar.message}
-			action={
-				<>
-					<IconButton
-						aria-label="close"
-						color="inherit"
-						sx={{ p: 0.5 }}
-						onClick={handleClose}
-					>
-						<CloseIcon />
-					</IconButton>
-				</>
-			}
 		>
-			<Alert variant="filled" severity={mainSnackbar.severity} sx={{ width: '100%', maxWidth: '500px' }}>
+			<Alert
+				variant="filled"
+				severity={mainSnackbar.severity}
+				sx={{ width: '100%', maxWidth: '500px' }}
+				onClose={handleClose}
+			>
 				{mainSnackbar.message}
 			</Alert>
 		</Snackbar>

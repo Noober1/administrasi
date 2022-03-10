@@ -1,14 +1,18 @@
-import { useRouter } from 'next/router'
+import { PageHead } from '../../src/components/atoms'
 import { Panel, StudentInvoice } from '../../src/components/templates'
 import AdminInvoice from '../../src/components/templates/pages/AdminInvoice'
+import useLocalization from '../../src/lib/useLocalization'
 import useProfile from '../../src/lib/useProfile'
 
 const Invoice = ({code}) => {
     const profile = useProfile()
-    const router = useRouter()
+    const { panel: {pages: {invoice:{titlePage}}} } = useLocalization()
 
     return (
         <>
+            <PageHead
+                title={titlePage}
+            />
             {profile.accountType == 'admin' ?
                 <AdminInvoice
                     code={code}

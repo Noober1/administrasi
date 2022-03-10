@@ -8,6 +8,8 @@ import { BackButton } from '../../atoms'
 import { ServerSideTable } from '..'
 import { tools } from '../../../lib'
 import { InvoiceDetail } from '../../organisms'
+import ButtonResponsive from '../../atoms/ButtonResponsive'
+import InfoIcon from '@mui/icons-material/Info';
 
 const StudentInvoice = props => {
     const invoiceDetailRef = useRef(null)
@@ -81,7 +83,7 @@ const StudentInvoice = props => {
                         break;
                 }
                 return(
-                    <Button variant="contained" color={color} fullWidth>
+                    <Button size="small" variant="contained" color={color} fullWidth>
                         {label}
                     </Button>
                 )
@@ -112,9 +114,9 @@ const StudentInvoice = props => {
                 }
                 return(
                     <ButtonGroup>
-                        <Button variant="contained" color="primary" onClick={() => openInvoiceDetail(params.row.code)}>
+                        <ButtonResponsive variant="contained" size="small" color="primary" startIcon={<InfoIcon/>} onClick={() => openInvoiceDetail(params.row.code)}>
                             {invoiceTable.actionDetail}
-                        </Button>
+                        </ButtonResponsive>
                     </ButtonGroup>
                 )
             }

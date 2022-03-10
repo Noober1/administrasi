@@ -85,6 +85,11 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         }
     }
 
+    const handleOpenVerifyConfirm = () => {
+        if (nominalValue < 1) return
+        confirmVerifyDialogRef.current.openConfirm()
+    }
+
     const handleSubmitVerify = () => {
         if (
             !invoiceCode ||
@@ -284,7 +289,10 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         const getData = manualContentRef.current.manualData
         if (!getData) return
         if (getData.payer.length < 1) return
-        if (getData.nominal > fetchData?.remainingPaymentHistory) return
+        if (
+            getData.nominal < 1 ||
+            getData.nominal > fetchData?.remainingPaymentHistory
+        ) return
         dispatch(showSpinner(true))
         fetchAPI(fetchWithToken({
             url: '/administrasi/getInvoice?code=' + invoiceCode,
@@ -355,7 +363,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
                 {(!loading && !fetchError) &&
                     <>
                     {fetchData.status == 'confirming' &&
-                        <Button onClick={() => confirmVerifyDialogRef.current.openConfirm()}>{verifyOrManualDialogText.verifyButton}</Button>
+                        <Button onClick={handleOpenVerifyConfirm}>{verifyOrManualDialogText.verifyButton}</Button>
                     }
                     {(fetchData.status == 'unpaid' || fetchData.status == 'pending' || fetchData.status == 'invalid') &&
                         <Button onClick={handleManualSubmit}>{defaultText.saveText}</Button>
@@ -368,7 +376,7 @@ const VerifyOrManualDialog = forwardRef((props,ref) => {
         {!fetchError &&
             // verify confirm dialog
             <>
-                {fetchData.status == 'confirming' &&
+                {(fetchData.status == 'confirming') &&
                     <ConfirmDialog
                         ref={confirmVerifyDialogRef}
                         dialogText={verifyOrManualDialogText.verifyConfirmingVerify}

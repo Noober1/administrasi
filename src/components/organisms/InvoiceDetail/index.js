@@ -1,12 +1,18 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Skeleton, Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Skeleton, Typography, useMediaQuery } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
 import { selectAuth } from '../../../lib/redux/slices/authSlice'
 import { useSelector } from 'react-redux'
-import { useUpdateEffect } from 'react-use'
+import { useMedia, useUpdateEffect } from 'react-use'
 import fetchAPI, { fetchWithToken } from '../../../lib/fetchApi'
+// icons
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HistoryIcon from '@mui/icons-material/History';
+import SendIcon from '@mui/icons-material/Send';
+import PrintIcon from '@mui/icons-material/Print';
+import CloseIcon from '@mui/icons-material/Close';
+
 import { tools } from '../../../lib'
 import DetailText from './DetailText'
 import { DataGrid } from '@mui/x-data-grid'
@@ -34,6 +40,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
         }))
     })
     const { authToken } = useSelector(selectAuth)
+    const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
 
     const loading = fetchLoading
     const url = `/administrasi/getInvoice/?code=${invoiceCode}`
@@ -161,7 +168,7 @@ const InvoiceDetail = forwardRef((props,ref) => {
                                     variant="h5"
                                     align="center"
                                     className="uppercase font-bold"
-                                    color={fetchData.status == 'paid' ? 'green' : fetchData.status == 'pending' ? 'orange' : 'green'}
+                                    color={fetchData.status == 'paid' ? 'green' : fetchData.status == 'pending' ? 'orange' : 'red'}
                                 >
                                     {fetchData.status == 'unpaid' ? invoiceDetailDialog.statusUnpaid :
                                     fetchData.status == 'paid' ? invoiceDetailDialog.statusPaid + ` (${fetchData.paymentMethod})` :
@@ -274,9 +281,13 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 onClose={closeDialog}
                 scroll="body"
                 fullWidth
+                fullScreen={isMediumScreen}
                 PaperComponent={DraggablePaperComponent}
+                PaperProps={{
+                    smallScreen: "md",
+                }}
             >
-                <DialogTitle className="cursor-move"></DialogTitle>
+                <DialogTitle></DialogTitle>
                 {fetchError &&
                     <div className="text-center block py-10">
                         <Typography variant="h5" className="mb-5">
@@ -290,26 +301,28 @@ const InvoiceDetail = forwardRef((props,ref) => {
                 {!fetchError &&
                     <>
                         <InvoiceBox ref={invoiceBoxRef}/>
-                        <DialogActions className="p-5">
+                        <DialogActions>
                             {loading ?
                                 <Skeleton width="50%" height="75px"/> :
-                                <>
-                                    <Button variant="contained" color="secondary" onClick={helpButtonHandler} startIcon={<HelpOutlineIcon/>}>
+                                <div className="w-full grid grid-cols-1 gap-2 md:flex md:justify-end">
+                                    <Button startIcon={<HelpOutlineIcon/>} variant="contained" color="secondary" onClick={helpButtonHandler}>
                                         {defaultText.helpButtonLabel}
                                     </Button>
-                                    <Button variant="contained" color="info" onClick={handleOpenHistory}>{invoiceDetailDialog.paymentHistoryButtonText}</Button>
+                                    <Button startIcon={<HistoryIcon/>} variant="contained" color="info" onClick={handleOpenHistory}>
+                                        {invoiceDetailDialog.paymentHistoryButtonText}
+                                    </Button>
                                     {fetchData?.status !== 'paid' &&
-                                        <Button variant="contained" onClick={openReceiptDialog}>
+                                        <Button startIcon={<SendIcon/>} variant="contained" onClick={openReceiptDialog}>
                                             {invoiceDetailDialog.actionSendPaymentDetail}
                                         </Button>
                                     }
-                                    <Button variant="contained" onClick={handleInvoicePrint}>
+                                    <Button startIcon={<PrintIcon/>} variant="contained" onClick={handleInvoicePrint}>
                                         {invoiceDetailDialog.actionPrint}
                                     </Button>
-                                    <Button variant="contained" color="error" onClick={closeDialog}>
+                                    <Button startIcon={<CloseIcon/>} variant="contained" color="error" onClick={closeDialog}>
                                         {defaultText.closeText}
                                     </Button>
-                                </>
+                                </div>
                             }
                         </DialogActions>
                     </>
