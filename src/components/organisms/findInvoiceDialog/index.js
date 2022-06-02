@@ -10,15 +10,16 @@ import { selectNoPersistConfig, setDialog } from '../../../lib/redux/slices/noPe
 import { ServerSideTable } from '../../templates'
 import ButtonResponsive from '../../atoms/ButtonResponsive'
 
+// eslint-disable-next-line react/display-name
 const FindInvoiceDialog = forwardRef((props, ref) => {
-	const {default: defautText, table: {columns: {invoice: invoiceTableText}}, components: {findInvoiceDialog: findInvoiceDialogText}} = useLocalization()
+	const { default: defautText, table: { columns: { invoice: invoiceTableText } }, components: { findInvoiceDialog: findInvoiceDialogText } } = useLocalization()
 	const [searchInputRef, setFocusToSearchInput] = useFocus()
-	const { dialogs: { findInvoiceDialog: {open, searchValue: searchText} } } = useSelector(selectNoPersistConfig)
+	const { dialogs: { findInvoiceDialog: { open, searchValue: searchText } } } = useSelector(selectNoPersistConfig)
 	const [tempSearchText, settempSearchText] = useState('')
 	const [inputErrorMessage, setinputErrorMessage] = useState('')
 	const dispatch = useDispatch()
 	const isMediumScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
-	const toggleDialogOpen = open => dispatch(setDialog({name: 'findInvoiceDialog', open}))
+	const toggleDialogOpen = open => dispatch(setDialog({ name: 'findInvoiceDialog', open }))
 	const closeDialog = () => toggleDialogOpen(false)
 	const openDialog = () => {
 		toggleDialogOpen(true)
@@ -27,16 +28,16 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 
 	useDebounce(() => {
 		if (tempSearchText.length > 2) {
-			dispatch(setDialog({name: 'findInvoiceDialog', open:true, searchValue: tempSearchText}))
+			dispatch(setDialog({ name: 'findInvoiceDialog', open: true, searchValue: tempSearchText }))
 		}
-	}, 1000,[tempSearchText])
+	}, 1000, [tempSearchText])
 
 	const isError = (inputErrorMessage.length > 0)
 
 	useImperativeHandle(ref, () => ({
-        openDialog,
+		openDialog,
 		closeDialog
-    }))
+	}))
 
 	const handleChangeInput = event => {
 		let { value } = event.target
@@ -57,7 +58,7 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 			fullScreen={isMediumScreen}
 			PaperComponent={DraggablePaperComponent}
 			onClose={closeDialog}
-			
+
 		>
 			<DialogTitle className='cursor-move'>
 				{findInvoiceDialogText.dialogTitle}
@@ -67,10 +68,10 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 				<Paper className={clsx('flex px-1 py-2', isError ? 'border border-red-500' : '')}>
 					<FormControl className="flex-1" error={isError}>
 						<InputBase
-							sx={{color:theme => isError ? theme.palette.error.main : theme.palette.text.primary}}
+							sx={{ color: theme => isError ? theme.palette.error.main : theme.palette.text.primary }}
 							type='text'
 							className='flex-1 ml-3'
-							inputProps={{maxLength:'50',ref:searchInputRef}}
+							inputProps={{ maxLength: '50', ref: searchInputRef }}
 							value={tempSearchText}
 							placeholder={findInvoiceDialogText.searchInputPlaceholder}
 							onChange={handleChangeInput}
@@ -85,33 +86,33 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 					</FormControl>
 					<div className="h-full flex justify-start">
 						<IconButton>
-							<SearchIcon/>
+							<SearchIcon />
 						</IconButton>
 					</div>
 				</Paper>
 			</div>
 			<DialogContent className='mt-3'>
 				<ServerSideTable
-                    enableCheckbox={false}
-                    showDeleteButton={false}
+					enableCheckbox={false}
+					showDeleteButton={false}
 					perPage="5"
-                    url='/administrasi/invoice'
+					url='/administrasi/invoice'
 					searchFromParam={searchText}
 					showToolbar={false}
 					tableProps={{
-						autoHeight:true
+						autoHeight: true
 					}}
-                    columns={[
+					columns={[
 						{
-							field:'code',
+							field: 'code',
 							headerName: findInvoiceDialogText.invoiceTable.code,
-							width:230
+							width: 230
 						},
 						{
-							field:'student',
+							field: 'student',
 							headerName: findInvoiceDialogText.invoiceTable.student,
 							valueGetter: params => params.row.student.fullName,
-							width:230
+							width: 230
 						},
 						{
 							field: 'status',
@@ -121,17 +122,17 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 								<div className="capitalize">
 									{
 										params.value == 'paid' ? invoiceTableText.statusPaid :
-										params.value == 'unpaid' ? invoiceTableText.statusUnpaid : 
-										params.value == 'confirming' ? invoiceTableText.statusConfirming : 
-										params.value == 'invalid' ? invoiceTableText.statusInvalid : 
-										params.value == 'pending' ? invoiceTableText.statusPending :
-										invoiceTableText.statusUnknown
+											params.value == 'unpaid' ? invoiceTableText.statusUnpaid :
+												params.value == 'confirming' ? invoiceTableText.statusConfirming :
+													params.value == 'invalid' ? invoiceTableText.statusInvalid :
+														params.value == 'pending' ? invoiceTableText.statusPending :
+															invoiceTableText.statusUnknown
 									}
 								</div>
 							)
 						},
 						{
-							field:'id',
+							field: 'id',
 							headerName: findInvoiceDialogText.invoiceTable.action,
 							renderCell: params => (
 								<Link href={`/invoice?code=${params.row.code}`} className="no-underline flex-1" onClick={closeDialog}>
@@ -140,10 +141,10 @@ const FindInvoiceDialog = forwardRef((props, ref) => {
 									</ButtonResponsive>
 								</Link>
 							),
-							flex:1
+							flex: 1
 						},
 					]}
-                />
+				/>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={closeDialog}>{defautText.closeText}</Button>
