@@ -228,6 +228,7 @@ export default function english() {
           action: "Action",
         },
         class: {
+          code: "Class code",
           name: "Class name",
           semester: "Semester",
           angkatan: "Angkatan",

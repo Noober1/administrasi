@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import useLocalization from '../../../lib/useLocalization'
 
-const FormDialog = memo(({buttonText, confirmButtonText, buttonProps, dialogTitle, children, dialogCaption, onSubmit}) => {
+// eslint-disable-next-line react/display-name
+const FormDialog = memo(({ buttonText, confirmButtonText, buttonProps, dialogTitle, children, dialogCaption, onSubmit }) => {
     const strings = useLocalization()
     const [open, setOpen] = useState(false)
 
@@ -46,8 +47,8 @@ const FormDialog = memo(({buttonText, confirmButtonText, buttonProps, dialogTitl
 FormDialog.defaultProps = {
     buttonText: 'Button',
     buttonProps: {
-        variant:'contained',
-        color:'primary'
+        variant: 'contained',
+        color: 'primary'
     },
     dialogTitle: 'Dialog Title',
     dialogContent: 'Dialog Content',

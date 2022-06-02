@@ -21,27 +21,27 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router'
 
-const PaymentWithId = ({paymentId}) => {
+const PaymentWithId = ({ paymentId }) => {
     const router = useRouter()
     const tableRef = useRef(null)
     const verifyOrManualDialogRef = useRef(null)
     const { authToken } = useSelector(selectAuth)
     const strings = useLocalization()
     const { paymentWithId } = strings.panel.pages
-    const { payment, invoice:invoiceText } = strings.table.columns
-    const { invoice:invoiceTableText } = strings.table.columns
+    const { payment, invoice: invoiceText } = strings.table.columns
+    const { invoice: invoiceTableText } = strings.table.columns
     const [paymentDetailData, setpaymentDetailData] = useState({})
     const [refreshCount, setrefreshCount] = useState(0)
-    
+
 
     const [formOpen, setformOpen] = useState(false)
 
     const url = `/administrasi/payment/${paymentId}?refreshCount=${refreshCount}`
-    const [data, loading, fetchError, errorMessage] = useFetchApi(url,{
+    const [data, loading, fetchError, errorMessage] = useFetchApi(url, {
         url,
         headers: {
-			Authorization: 'Bearer ' + authToken
-		}
+            Authorization: 'Bearer ' + authToken
+        }
     })
 
     const handleEditButton = id => {
@@ -70,21 +70,21 @@ const PaymentWithId = ({paymentId}) => {
             console.log('Pages > useState = paymentDetailData:', paymentDetailData)
         }, [paymentDetailData])
     }
-    
+
 
     const detailList = [
-        {title: payment.registerDate, content: tools.dateFormatting(paymentDetailData?.registerDate)},
-        {title: payment.admin, content: paymentDetailData?.admin?.fullName},
-        {title: payment.type, content: paymentDetailData?.type},
-        {title: payment.price, content: tools.rupiahFormatting(paymentDetailData?.price)},
-        {title: payment.description, content: paymentDetailData?.description},
+        { title: payment.registerDate, content: tools.dateFormatting(paymentDetailData?.registerDate) },
+        { title: payment.admin, content: paymentDetailData?.admin?.fullName },
+        { title: payment.type, content: paymentDetailData?.type },
+        { title: payment.price, content: tools.rupiahFormatting(paymentDetailData?.price) },
+        { title: payment.description, content: paymentDetailData?.description },
     ]
 
     const columns = [
         {
-            field:'code',
+            field: 'code',
             headerName: invoiceText.code,
-            width:230
+            width: 230
         },
         {
             field: 'status',
@@ -94,11 +94,11 @@ const PaymentWithId = ({paymentId}) => {
                 <div className="capitalize">
                     {
                         params.value == 'paid' ? invoiceTableText.statusPaid :
-                        params.value == 'unpaid' ? invoiceTableText.statusUnpaid : 
-                        params.value == 'confirming' ? invoiceTableText.statusConfirming : 
-                        params.value == 'invalid' ? invoiceTableText.statusInvalid : 
-                        params.value == 'pending' ? invoiceTableText.statusPending :
-                        invoiceTableText.statusUnknown
+                            params.value == 'unpaid' ? invoiceTableText.statusUnpaid :
+                                params.value == 'confirming' ? invoiceTableText.statusConfirming :
+                                    params.value == 'invalid' ? invoiceTableText.statusInvalid :
+                                        params.value == 'pending' ? invoiceTableText.statusPending :
+                                            invoiceTableText.statusUnknown
                     }
                 </div>
             )
@@ -106,33 +106,33 @@ const PaymentWithId = ({paymentId}) => {
         {
             field: 'student',
             headerName: invoiceText.studentFullName,
-            flex:1,
+            flex: 1,
             renderCell: params => <div className="capitalize">{params?.value?.fullName}</div>
         },
         {
             field: 'id',
             headerName: invoiceText.action,
-            flex:1,
+            flex: 1,
             renderCell: params => {
                 var text;
                 var icon;
                 switch (params.row.status) {
                     case 'confirming':
-                        text = invoiceTableText.actionConfirming
-                        icon = <CheckIcon/>
+                        text = invoiceTableText.actionVerify
+                        icon = <CheckIcon />
                         break;
                     case 'paid':
                         text = strings.default.editText
-                        icon = <EditIcon/>
+                        icon = <EditIcon />
                         break;
                     default:
                         text = invoiceTableText.actionManualPay
-                        icon = <AddIcon/>
+                        icon = <AddIcon />
                         break;
                 }
-                return(
+                return (
                     <ButtonGroup>
-                        <ButtonResponsive size="small" variant="contained" startIcon={<InfoIcon/>} iconFromScreen="lg" onClick={() => router.push(`/invoice?code=${params.row.code}`)}>
+                        <ButtonResponsive size="small" variant="contained" startIcon={<InfoIcon />} iconFromScreen="lg" onClick={() => router.push(`/invoice?code=${params.row.code}`)}>
                             {invoiceTableText.actionDetail}
                         </ButtonResponsive>
                         <ButtonResponsive
@@ -159,12 +159,12 @@ const PaymentWithId = ({paymentId}) => {
                     title={paymentWithId.titlePage}
                     buttonGroup={(
                         <>
-                        <BackButton/>
-                        <ButtonGroup>
-                            <Button variant="contained" color="info" startIcon={<EditIcon/>} onClick={() => handleEditButton(paymentId)}>
-                                {strings.default.editText}
-                            </Button>
-                        </ButtonGroup>
+                            <BackButton />
+                            <ButtonGroup>
+                                <Button variant="contained" color="info" startIcon={<EditIcon />} onClick={() => handleEditButton(paymentId)}>
+                                    {strings.default.editText}
+                                </Button>
+                            </ButtonGroup>
                         </>
                     )}
                     helpButtonHandler={() => console.log('help button clicked')}
@@ -188,7 +188,7 @@ const PaymentWithId = ({paymentId}) => {
                     title={paymentWithId.invoiceTableTitle}
                     buttonGroup={(
                         <ButtonGroup>
-                            <BackButton/>
+                            <BackButton />
                         </ButtonGroup>
                     )}
                     helpButtonHandler={() => console.log('help button from invoices triggered')}
@@ -220,18 +220,18 @@ const PaymentWithId = ({paymentId}) => {
 
 PaymentWithId.getLayout = page => <Panel>{page}</Panel>
 
-export const getServerSideProps = async({params}) => {
+export const getServerSideProps = async ({ params }) => {
     try {
         const getDataFromApi = await fetchAPI('/administrasi/payment/' + params.id)
         return {
             props: {
-                paymentId:params.id,
-                data:getDataFromApi
+                paymentId: params.id,
+                data: getDataFromApi
             }
         }
     } catch (error) {
         return {
-            notFound:true
+            notFound: true
         }
     }
 }

@@ -66,9 +66,8 @@ export default function indonesian() {
     success: {
       deleteItemsSuccess: "Data berhasil dihapus",
       deleteItemSuccessWithRange: (deleted, total) => {
-        return `${deleted || 0} data telah dihapus dari ${
-          total || 0
-        } data dipilih`;
+        return `${deleted || 0} data telah dihapus dari ${total || 0
+          } data dipilih`;
       },
     },
     appBar: {
@@ -235,6 +234,7 @@ export default function indonesian() {
           action: "Aksi",
         },
         class: {
+          code: "Kode kelas",
           name: "Nama kelas",
           semester: "Semester",
           angkatan: "Angkatan",

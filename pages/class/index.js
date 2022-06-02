@@ -67,6 +67,11 @@ const Class = () => {
       flex: 1,
     },
     {
+      field: "code",
+      headerName: classTable.code,
+      width: 100,
+    },
+    {
       field: "semester",
       headerName: classTable.semester,
       width: 150,
