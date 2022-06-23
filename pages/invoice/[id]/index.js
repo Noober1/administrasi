@@ -122,7 +122,7 @@ const PaymentWithId = ({ paymentId }) => {
                         icon = <CheckIcon />
                         break;
                     case 'paid':
-                        text = strings.default.editText
+                        text = invoiceTableText.statusPaid
                         icon = <EditIcon />
                         break;
                     default:

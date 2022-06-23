@@ -13,7 +13,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const StudentInvoice = props => {
     const invoiceDetailRef = useRef(null)
-    const {panel: {pages: { invoiceWithCode, invoice:invoicePage }}, table: {columns:{invoice:invoiceTable}},default:{nameOfMonths}} = useLocalization()
+    const { panel: { pages: { invoiceWithCode, invoice: invoicePage } }, table: { columns: { invoice: invoiceTable } }, default: { nameOfMonths } } = useLocalization()
 
     const openInvoiceDetail = code => {
         invoiceDetailRef.current.setInvoice(code)
@@ -21,12 +21,12 @@ const StudentInvoice = props => {
     }
 
     if (props.code) {
-        return(
+        return (
             <Box>
                 <PanelContentHead
                     title={invoiceWithCode.titlePage}
                     buttonGroup={
-                        <BackButton/>
+                        <BackButton />
                     }
                     helpButtonHandler={() => console.log('should show help')}
                 />
@@ -39,20 +39,20 @@ const StudentInvoice = props => {
 
     const columns = [
         {
-            field:'code',
-            headerName:invoiceTable.code,
-            width:250
+            field: 'code',
+            headerName: invoiceTable.code,
+            width: 250
         },
         {
-            field:'date',
-            headerName:invoiceTable.date,
-            valueGetter: params => tools.dateFormatting(params.value.invoice,'d M y - h:i:s', nameOfMonths),
-            width:250
+            field: 'date',
+            headerName: invoiceTable.date,
+            valueGetter: params => tools.dateFormatting(params.value.invoice, 'd M y - h:i:s', nameOfMonths),
+            width: 250
         },
         {
-            field:'status',
-            headerName:invoiceTable.status,
-            width:175,
+            field: 'status',
+            headerName: invoiceTable.status,
+            width: 175,
             renderCell: params => {
                 let label = ''
                 let color = ''
@@ -82,7 +82,7 @@ const StudentInvoice = props => {
                         color = 'warning'
                         break;
                 }
-                return(
+                return (
                     <Button size="small" variant="contained" color={color} fullWidth>
                         {label}
                     </Button>
@@ -92,7 +92,7 @@ const StudentInvoice = props => {
         {
             field: 'id',
             headerName: invoiceTable.action,
-            flex:1,
+            flex: 1,
             renderCell: params => {
                 let label = invoiceTable.statusUnknown
                 let color = 'warning'
@@ -112,9 +112,9 @@ const StudentInvoice = props => {
                         color = 'primary'
                         break;
                 }
-                return(
+                return (
                     <ButtonGroup>
-                        <ButtonResponsive variant="contained" size="small" color="primary" startIcon={<InfoIcon/>} onClick={() => openInvoiceDetail(params.row.code)}>
+                        <ButtonResponsive variant="contained" iconFromScreen="lg" size="small" color="primary" startIcon={<InfoIcon />} onClick={() => openInvoiceDetail(params.row.code)}>
                             {invoiceTable.actionDetail}
                         </ButtonResponsive>
                     </ButtonGroup>
@@ -122,13 +122,13 @@ const StudentInvoice = props => {
             }
         }
     ]
-    
+
     return (
         <Box>
             <PanelContentHead
                 title={invoicePage.titlePage}
                 buttonGroup={
-                    <BackButton/>
+                    <BackButton />
                 }
                 helpButtonHandler={() => console.log('should show help')}
             />
